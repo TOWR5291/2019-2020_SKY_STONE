@@ -1,0 +1,3 @@
+C:/Users/Wyatt/Downloads/SkyStone-master/2019-2020_SKY_STONE/openCVLibrary411/.externalNativeBuild/cmake/debug/x86/CMakeFiles/opencv_jni_shared.dir
+C:/Users/Wyatt/Downloads/SkyStone-master/2019-2020_SKY_STONE/openCVLibrary411/.externalNativeBuild/cmake/debug/x86/CMakeFiles/edit_cache.dir
+C:/Users/Wyatt/Downloads/SkyStone-master/2019-2020_SKY_STONE/openCVLibrary411/.externalNativeBuild/cmake/debug/x86/CMakeFiles/rebuild_cache.dir
