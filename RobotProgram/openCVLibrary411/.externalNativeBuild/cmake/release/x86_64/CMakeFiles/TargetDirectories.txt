@@ -1,3 +1,3 @@
-C:/Users/Wyatt/Downloads/SkyStone-master/SkyStone-master/openCVLibrary411/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/opencv_jni_shared.dir
-C:/Users/Wyatt/Downloads/SkyStone-master/SkyStone-master/openCVLibrary411/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/edit_cache.dir
-C:/Users/Wyatt/Downloads/SkyStone-master/SkyStone-master/openCVLibrary411/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/rebuild_cache.dir
+C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/opencv_jni_shared.dir
+C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/edit_cache.dir
+C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/rebuild_cache.dir

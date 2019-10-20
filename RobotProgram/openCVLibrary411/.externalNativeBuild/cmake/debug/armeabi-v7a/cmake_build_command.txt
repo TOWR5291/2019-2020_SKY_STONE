@@ -1,10 +1,10 @@
 Executable : C:\Users\Wyatt\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe
 arguments : 
--HC:\Users\Wyatt\Downloads\SkyStone-master\2019-2020_SKY_STONE\openCVLibrary411\libcxx_helper
--BC:\Users\Wyatt\Downloads\SkyStone-master\2019-2020_SKY_STONE\openCVLibrary411\.externalNativeBuild\cmake\debug\armeabi-v7a
+-HC:\FTC Code\2019-2020_SKY_STONE\RobotProgram\openCVLibrary411\libcxx_helper
+-BC:\FTC Code\2019-2020_SKY_STONE\RobotProgram\openCVLibrary411\.externalNativeBuild\cmake\debug\armeabi-v7a
 -DANDROID_ABI=armeabi-v7a
 -DANDROID_PLATFORM=android-21
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\Wyatt\Downloads\SkyStone-master\2019-2020_SKY_STONE\openCVLibrary411\build\intermediates\cmake\debug\obj\armeabi-v7a
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\FTC Code\2019-2020_SKY_STONE\RobotProgram\openCVLibrary411\build\intermediates\cmake\debug\obj\armeabi-v7a
 -DCMAKE_BUILD_TYPE=Debug
 -DANDROID_NDK=C:\Users\Wyatt\AppData\Local\Android\Sdk\ndk-bundle
 -DCMAKE_TOOLCHAIN_FILE=C:\Users\Wyatt\AppData\Local\Android\Sdk\ndk-bundle\build\cmake\android.toolchain.cmake

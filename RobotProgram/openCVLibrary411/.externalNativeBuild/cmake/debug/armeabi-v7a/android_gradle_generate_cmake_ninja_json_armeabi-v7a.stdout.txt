@@ -12,4 +12,4 @@
 -- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/Users/Wyatt/Downloads/SkyStone-master/2019-2020_SKY_STONE/openCVLibrary411/.externalNativeBuild/cmake/debug/armeabi-v7a
+-- Build files have been written to: C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/.externalNativeBuild/cmake/debug/armeabi-v7a

@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Wyatt/Downloads/SkyStone-master/2019-2020_SKY_STONE/openCVLibrary411/libcxx_helper
+# Install script for directory: C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/libcxx_helper
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/Wyatt/Downloads/SkyStone-master/2019-2020_SKY_STONE/openCVLibrary411/.externalNativeBuild/cmake/debug/armeabi-v7a/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/.externalNativeBuild/cmake/debug/armeabi-v7a/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

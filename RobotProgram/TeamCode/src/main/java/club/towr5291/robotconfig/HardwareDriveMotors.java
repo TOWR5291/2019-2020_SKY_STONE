@@ -72,7 +72,7 @@ public class HardwareDriveMotors
 
     }
 
-    public void init(FileLogger fileloggerhandle, HardwareMap ahwMap, robotConfigSettings.robotConfigChoice baseConfig, String motor1, String motor2, String motor3, String motor4, LibraryMotorType.MotorTypes motorTypes) {
+    public void init(FileLogger fileloggerhandle, HardwareMap ahwMap, robotConfig.Bases baseConfig, String motor1, String motor2, String motor3, String motor4, robotConfig.MOTOR_KIND motorTypes) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
@@ -101,7 +101,7 @@ public class HardwareDriveMotors
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void init(FileLogger fileloggerhandle, robotConfigSettings.robotConfigChoice baseConfig, HardwareMap ahwMap, String motor1, String motor2, String motor3, String motor4, LibraryMotorType.MotorTypes motorTypes) {
+    public void init(FileLogger fileloggerhandle, robotConfig.Bases baseConfig, HardwareMap ahwMap, String motor1, String motor2, String motor3, String motor4, robotConfig.MOTOR_KIND motorTypes) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
@@ -131,7 +131,7 @@ public class HardwareDriveMotors
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(FileLogger fileloggerhandle, HardwareMap ahwMap, robotConfigSettings.robotConfigChoice baseConfig, LibraryMotorType.MotorTypes motorTypes) {
+    public void init(FileLogger fileloggerhandle, HardwareMap ahwMap, robotConfig.Bases baseConfig, robotConfig.MOTOR_KIND motorTypes) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
@@ -145,7 +145,7 @@ public class HardwareDriveMotors
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap, robotConfigSettings.robotConfigChoice baseConfig, LibraryMotorType.MotorTypes motorTypes) {
+    public void init(HardwareMap ahwMap, robotConfig.Bases baseConfig, robotConfig.MOTOR_KIND motorTypes) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
@@ -174,7 +174,7 @@ public class HardwareDriveMotors
 
     }
 
-    private void initMotorDefaults (robotConfigSettings.robotConfigChoice baseConfig, LibraryMotorType.MotorTypes motorTypes) {
+    private void initMotorDefaults (robotConfig.Bases baseConfig, robotConfig.MOTOR_KIND motorTypes) {
 
         // Define and Initialize Motors
         baseMotor1  = hwMap.dcMotor.get(robotConfig.motors.leftMotor1.toString());
@@ -203,71 +203,19 @@ public class HardwareDriveMotors
         if (baseMotor4 != null)
             baseMotor4.setZeroPowerBehavior(zeroPowerBehavior);
     }
-    public void setHardwareDriveDirections(robotConfigSettings.robotConfigChoice baseConfig, LibraryMotorType.MotorTypes motorTypes){
+    public void setHardwareDriveDirections(robotConfig.Bases baseConfig, robotConfig.MOTOR_KIND motorTypes){
         switch (baseConfig) {
-            case TileRunnerRegular:
+            case MECANUM_2020:
                 if (baseMotor1 != null)
                     baseMotor1.setDirection(DcMotor.Direction.REVERSE);
                 if (baseMotor2 != null)
-                    baseMotor2.setDirection(DcMotor.Direction.REVERSE);
+                    baseMotor2.setDirection(DcMotor.Direction.FORWARD);
                 if (baseMotor3 != null)
                     baseMotor3.setDirection(DcMotor.Direction.FORWARD);
                 if (baseMotor4 != null)
-                    baseMotor4.setDirection(DcMotor.Direction.FORWARD);
+                    baseMotor4.setDirection(DcMotor.Direction.REVERSE);
                 break;
-            case TileRunnerRegularOrbital:
-                if (baseMotor1 != null)
-                    baseMotor1.setDirection(DcMotor.Direction.REVERSE);
-                if (baseMotor2 != null)
-                    baseMotor2.setDirection(DcMotor.Direction.REVERSE);
-                if (baseMotor3 != null)
-                    baseMotor3.setDirection(DcMotor.Direction.FORWARD);
-                if (baseMotor4 != null)
-                    baseMotor4.setDirection(DcMotor.Direction.FORWARD);
-                break;
-            case TileRunnerMecanum:
-                //TOWR5291 Tilrunner has 2 motors running from belts to the wheel, 2 motors running on gears
-                if (baseMotor1 != null)
-                    baseMotor1.setDirection(DcMotor.Direction.FORWARD);
-                if (baseMotor2 != null)
-                    baseMotor2.setDirection(DcMotor.Direction.REVERSE);
-                if (baseMotor3 != null)
-                    baseMotor3.setDirection(DcMotor.Direction.REVERSE);
-                if (baseMotor4 != null)
-                    baseMotor4.setDirection(DcMotor.Direction.FORWARD);
-                break;
-            case TileRunnerMecanumOrbital:
-                //TOWR5291 Tilrunner has 2 motors running from belts to the wheel, 2 motors running on gears
-                if (motorTypes.isAndyMark()) {
-                    if (baseMotor1 != null)
-                        baseMotor1.setDirection(DcMotor.Direction.REVERSE);
-                    if (baseMotor2 != null)
-                        baseMotor2.setDirection(DcMotor.Direction.FORWARD);
-                    if (baseMotor3 != null)
-                        baseMotor3.setDirection(DcMotor.Direction.FORWARD);
-                    if (baseMotor4 != null)
-                        baseMotor4.setDirection(DcMotor.Direction.REVERSE);
-                } else {
-                    if (baseMotor1 != null)
-                        baseMotor1.setDirection(DcMotor.Direction.REVERSE);
-                    if (baseMotor2 != null)
-                        baseMotor2.setDirection(DcMotor.Direction.FORWARD);
-                    if (baseMotor3 != null)
-                        baseMotor3.setDirection(DcMotor.Direction.FORWARD);
-                    if (baseMotor4 != null)
-                        baseMotor4.setDirection(DcMotor.Direction.REVERSE);
-                }
-                break;
-            case TiltRunnerOmni:
-                if (baseMotor1 != null)
-                    baseMotor1.setDirection(DcMotor.Direction.REVERSE);
-                if (baseMotor2 != null)
-                    baseMotor2.setDirection(DcMotor.Direction.REVERSE);
-                if (baseMotor3 != null)
-                    baseMotor3.setDirection(DcMotor.Direction.FORWARD);
-                if (baseMotor4 != null)
-                    baseMotor4.setDirection(DcMotor.Direction.FORWARD);
-                break;
+
             default:
                 if (baseMotor1 != null)
                     baseMotor1.setDirection(DcMotor.Direction.FORWARD);

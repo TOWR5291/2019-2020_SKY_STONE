@@ -34,14 +34,9 @@ public class LibraryMotorType {
     private double dblGearRatioANDY3_7ORBITAL = 3.7;
 
     public enum MotorTypes {
-        REV40SPUR ("REV40SPUR"),
-        REV20SPUR ("REV20SPUR"),
-        REV20ORBIT ("REV20ORBIT"),
-        ANDY20SPUR ("ANDY20SPUR"),
-        ANDY40SPUR ("ANDY40SPUR"),
-        ANDY60SPUR ("ANDY60SPUR"),
-        ANDY20ORBIT ("ANDY20ORBIT"),
-        ANDY3_7ORBIT ("ANDY3_7ORBIT");
+        REV ("REV"),
+        ANDY ("ANDY"),
+        REV_CHANGEABLE ("REV_CHANGEABLE");
 
         public String name;
 
@@ -52,78 +47,29 @@ public class LibraryMotorType {
         public String toString() {
             return this.name;
         }
+    }
 
-        public boolean isAndyMark(){
-            return this.name.equals("ANDY20SPUR") || this.name.equals("ANDY40SPUR") || this.name.equals("ANDY60SPUR") || this.name.equals("ANDY20ORBIT") || this.name.equals("ANDY3_7ORBIT");
+    public enum REV_VARIABLE_RATIOS {
+        R1_5 (5, "1:5"),
+        R1_4 (4, "1:4"),
+        R1_3 (3, "1:3");
 
-        }
+        public double value;
+        public String name;
+
+        REV_VARIABLE_RATIOS(double value, String name){this.value = value; this.name = name;}
+
+        public double getValue(){return this.value;}
+        public String getName(){return this.name;}
+    }
+
+    public enum REV_RATIO {
+        R1_20,
+        R
     }
 
     public LibraryMotorType(){
         //Nothing In here yet :)
     }
 
-    public void loadData(MotorTypes motorTypes){
-        switch(motorTypes){
-            case REV40SPUR:
-                this.COUNTSPERROTATION = this.dblENCODER_CPR_REV40SPUR;
-                this.PULSEPERROTATION = this.dblENCODER_PPR_REV40SPUR;
-                this.GEARRATIO = this.dblGearRatioREV40SPUR;
-                break;
-
-            case REV20SPUR:
-                this.COUNTSPERROTATION = this.dblENCODER_CPR_REV20SPUR;
-                this.PULSEPERROTATION = this.dblENCODER_PPR_REV20SPUR;
-                this.GEARRATIO = this.dblGearRatioREV20SPUR;
-                break;
-
-            case REV20ORBIT:
-                this.COUNTSPERROTATION = this.dblENCODER_CPR_REV20ORBITAL;
-                this.PULSEPERROTATION = this.dblENCODER_PPR_REV20ORBITAL;
-                this.GEARRATIO = this.dblGearRatioREV20ORBITAL;
-                break;
-
-            case ANDY20SPUR:
-                this.COUNTSPERROTATION = this.dblENCODER_CPR_ANDY20SPUR;
-                this.PULSEPERROTATION = this.dblENCODER_PPR_ANDY20SPUR;
-                this.GEARRATIO = this.dblGearRatioANDY20SPUR;
-                break;
-
-            case ANDY40SPUR:
-                this.COUNTSPERROTATION = this.dblENCODER_CPR_ANDY40SPUR;
-                this.PULSEPERROTATION = this.dblENCODER_PPR_ANDY40SPUR;
-                this.GEARRATIO = this.dblGearRatioANDY40SPUR;
-                break;
-
-            case ANDY60SPUR:
-                this.COUNTSPERROTATION = this.dblENCODER_CPR_ANDY60SPUR;
-                this.PULSEPERROTATION = this.dblENCODER_PPR_ANDY60SPUR;
-                this.GEARRATIO = this.dblGearRatioANDY60SPUR;
-                break;
-
-            case ANDY20ORBIT:
-                this.COUNTSPERROTATION = this.dblENCODER_CPR_ANDY20ORBITAL;
-                this.PULSEPERROTATION = this.dblENCODER_PPR_ANDY20ORBITAL;
-                this.GEARRATIO = this.dblGearRatioANDY20ORBITAL;
-                break;
-
-            case ANDY3_7ORBIT:
-                this.COUNTSPERROTATION = this.dblENCODER_CPR_ANDY3_7ORBITAL;
-                this.PULSEPERROTATION = this.dblENCODER_PPR_ANDY3_7ORBITAL;
-                this.GEARRATIO = this.dblGearRatioANDY3_7ORBITAL;
-                break;
-        }
-    }
-
-    public double getGEARRATIO() {
-        return GEARRATIO;
-    }
-
-    public double getCOUNTSPERROTATION() {
-        return COUNTSPERROTATION;
-    }
-
-    public double getPULSEPERROTATION() {
-        return PULSEPERROTATION;
-    }
 }
