@@ -57,50 +57,45 @@ public class ReadStepFileXML {
 
             System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 
-            NodeList nStepList = doc.getDocumentElement().getElementsByTagName("Step");
-            Element element = doc.getDocumentElement().getAttribute("ID");
-//            NodeList nConfigList = doc.getElementsByTagName("Setup");
+            NodeList nStepList = doc.getElementsByTagName("Step");
+//            Element element = doc.getDocumentElement().getAttribute("ID");
+            NodeList nConfigList = doc.getElementsByTagName("Setup");
 
-//            for (int i = 0; i <= nConfigList.getLength(); i++){
-//                Node step = nConfigList.item(i);
-//                Log.e("Running Pass", step.getPrefix());
+            for (int i = 0; i <= nConfigList.getLength(); i++){
+                Node step = nConfigList.item(i);
 
-//                if (step.getNodeType() == Node.ELEMENT_NODE){
-//                    Element eElement = (Element) step;
-//                    Log.e("Finished eElement", eElement.getTagName());
+                if (step.getNodeType() == Node.ELEMENT_NODE){
+                    Element eElement = (Element) step;
+                    this.MOTOR_KIND = robotConfig.MOTOR_KIND.toObject(getValue("MotorType", eElement));
+                    this.BASE_TYPE = robotConfig.Bases.getBaseFromString(getValue("BaseType", eElement));
+                    this.dblMotorGearReduction = Integer.getInteger(getValue("MotorGearReduction", eElement));
+                    this.dblDriveGearReduction = Integer.getInteger(getValue("DriveGearReduction", eElement));
+                    this.dblWheelDiameterInches = Integer.getInteger(getValue("WheelDiameterInches", eElement));
+                    this.dblRobotWidthInches = Integer.getInteger(getValue("BaseWidth", eElement));
+                    this.usingAdafruitIMU = Boolean.parseBoolean(getValue("EnableIMU", eElement));
+                    this.usingOpenCV = Boolean.parseBoolean(getValue("EnableOpenCV", eElement));
+                    this.usingVuforia = Boolean.parseBoolean(getValue("EnableVuforia", eElement));
+                    this.usingVuforiaWebCam = Boolean.parseBoolean(getValue("EnableVuforiaWebCam", eElement));
+                    this.dblCOUNTS_PER_INCH_STRAFE_FRONT_OFFSET = Double.valueOf(getValue("COUNTS_PER_INCH_STRAFE_FRONT_OFFSET", eElement));
+                    this.dblCOUNTS_PER_INCH_STRAFE_REAR_OFFSET = Double.valueOf(getValue("COUNTS_PER_INCH_STRAFE_REAR_OFFSET", eElement));
+                    this.dblCOUNTS_PER_INCH_STRAFE_LEFT_OFFSET = Double.valueOf(getValue("COUNTS_PER_INCH_STRAFE_LEFT_OFFSET", eElement));
+                    this.dblCOUNTS_PER_INCH_STRAFE_RIGHT_OFFSET = Double.valueOf(getValue("COUNTS_PER_INCH_STRAFE_RIGHT_OFFSET", eElement));
+                    this.dblCOUNTS_PER_INCH_STRAFE = Double.valueOf(getValue("COUNTS_PER_INCH_STRAFE", eElement));
 
-                    this.MOTOR_KIND = robotConfig.MOTOR_KIND.toObject(element.getElementsByTagName("MotorKind").item(0).getTextContent());
-                    this.BASE_TYPE = robotConfig.Bases.getBaseFromString(element.getElementsByTagName("BaseType").item(0).getTextContent());
-                    Log.e("HELP ME", String.valueOf(BASE_TYPE));
-                    this.dblMotorGearReduction = Integer.getInteger(element.getElementsByTagName("MotorGearReduction").item(0).getTextContent());
-                    this.dblDriveGearReduction = Integer.getInteger(element.getElementsByTagName("DriveGearReduction").item(0).getTextContent());
-                    this.dblWheelDiameterInches = Integer.getInteger(element.getElementsByTagName("WheelDiameterInches").item(0).getTextContent());
-                    this.dblRobotWidthInches = Integer.getInteger(element.getElementsByTagName("BaseWidth").item(0).getTextContent());
-                    this.usingAdafruitIMU = Boolean.parseBoolean(element.getElementsByTagName("EnableIMU").item(0).getTextContent());
-                    this.usingOpenCV = Boolean.parseBoolean(element.getElementsByTagName("EnableOpenCV").item(0).getTextContent());
-                    this.usingVuforia = Boolean.parseBoolean(element.getElementsByTagName("EnableVuforia").item(0).getTextContent());
-                    this.usingVuforiaWebCam = Boolean.parseBoolean(element.getElementsByTagName("EnableVuforiaWebCam").item(0).getTextContent());
-                    this.dblCOUNTS_PER_INCH_STRAFE_FRONT_OFFSET = Double.valueOf(element.getElementsByTagName("COUNTS_PER_INCH_STRAFE_FRONT_OFFSET").item(0).getTextContent());
-                    this.dblCOUNTS_PER_INCH_STRAFE_REAR_OFFSET = Double.valueOf(element.getElementsByTagName("COUNTS_PER_INCH_STRAFE_REAR_OFFSET").item(0).getTextContent());
-                    this.dblCOUNTS_PER_INCH_STRAFE_LEFT_OFFSET = Double.valueOf(element.getElementsByTagName("COUNTS_PER_INCH_STRAFE_LEFT_OFFSET").item(0).getTextContent());
-                    this.dblCOUNTS_PER_INCH_STRAFE_RIGHT_OFFSET = Double.valueOf(element.getElementsByTagName("COUNTS_PER_INCH_STRAFE_RIGHT_OFFSET").item(0).getTextContent());
-                    this.dblCOUNTS_PER_INCH_STRAFE = Double.valueOf(element.getElementsByTagName("COUNTS_PER_INCH_STRAFE").item(0).getTextContent());
-
-                    if (element.hasAttribute("reverseLeftMotor1")){
-                        this.reverseLeftMotor1 = Boolean.valueOf(element.getElementsByTagName("ReverseLeftMotor1").item(0).getTextContent());
+                    if (eElement.getElementsByTagName("reverseLeftMotor1").getLength() != 0){
+                        this.reverseLeftMotor1 = Boolean.valueOf(getValue("ReverseLeftMotor1", eElement));
                     }
-                    if (element.hasAttribute("reverseLeftMotor2")){
-                        this.reverseLeftMotor2 = Boolean.valueOf(element.getElementsByTagName("ReverseLeftMotor2").item(0).getTextContent());
+                    if (eElement.getElementsByTagName("reverseLeftMotor2").getLength() != 0){
+                        this.reverseLeftMotor2 = Boolean.valueOf(getValue("ReverseLeftMotor2", eElement));
                     }
-                    if (element.hasAttribute("reverseRightMotor1")){
-                        this.reverseRightMotor1 = Boolean.valueOf(element.getElementsByTagName("ReverseRightMotor1").item(0).getTextContent());
+                    if (eElement.getElementsByTagName("reverseRightMotor1").getLength() != 0){
+                        this.reverseRightMotor1 = Boolean.valueOf(getValue("ReverseRightMotor1", eElement));
                     }
-                    if (element.hasAttribute("reverseRightMotor2")){
-                        this.reverseRightMotor2 = Boolean.valueOf(element.getElementsByTagName("ReverseRightMotor2").item(0).getTextContent());
+                    if (eElement.getElementsByTagName("reverseRightMotor2").getLength() != 0){
+                        this.reverseRightMotor2 = Boolean.valueOf(getValue("ReverseRightMotor2", eElement));
                     }
-//                }
-//            }
-
+                }
+            }
             for (int i = 0; i < nStepList.getLength(); i++){
                 Node step = nStepList.item(i);
 
@@ -129,6 +124,12 @@ public class ReadStepFileXML {
         }
 
         return this.autonomousStep;
+    }
+
+    private static String getValue(String tag, Element element) {
+        NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
+        Node node = nodes.item(0);
+        return node.getNodeValue();
     }
 
     public HashMap<String, LibraryStateSegAuto> ReadStepFile(SharedPreferences sharedPreferences) {
