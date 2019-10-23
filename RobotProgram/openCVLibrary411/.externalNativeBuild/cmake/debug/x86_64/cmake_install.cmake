@@ -1,4 +1,4 @@
-# Install script for directory: C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/libcxx_helper
+# Install script for directory: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/libcxx_helper
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/.externalNativeBuild/cmake/debug/x86_64/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/.externalNativeBuild/cmake/debug/x86_64/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

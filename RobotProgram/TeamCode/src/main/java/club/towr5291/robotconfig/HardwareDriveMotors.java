@@ -72,7 +72,7 @@ public class HardwareDriveMotors
 
     }
 
-    public void init(FileLogger fileloggerhandle, HardwareMap ahwMap, robotConfig.Bases baseConfig, String motor1, String motor2, String motor3, String motor4, robotConfig.MOTOR_KIND motorTypes) {
+    public void init(FileLogger fileloggerhandle, HardwareMap ahwMap, robotConfigSettings.robotConfigChoice baseConfig, String motor1, String motor2, String motor3, String motor4, LibraryMotorType.MotorTypes motorTypes) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
@@ -99,9 +99,10 @@ public class HardwareDriveMotors
 
         setHardwareDriveRunUsingEncoders();
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
 
-    public void init(FileLogger fileloggerhandle, robotConfig.Bases baseConfig, HardwareMap ahwMap, String motor1, String motor2, String motor3, String motor4, robotConfig.MOTOR_KIND motorTypes) {
+    public void init(FileLogger fileloggerhandle, robotConfigSettings.robotConfigChoice baseConfig, HardwareMap ahwMap, String motor1, String motor2, String motor3, String motor4, LibraryMotorType.MotorTypes motorTypes) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
@@ -131,7 +132,7 @@ public class HardwareDriveMotors
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(FileLogger fileloggerhandle, HardwareMap ahwMap, robotConfig.Bases baseConfig, robotConfig.MOTOR_KIND motorTypes) {
+    public void init(FileLogger fileloggerhandle, HardwareMap ahwMap, robotConfigSettings.robotConfigChoice baseConfig, LibraryMotorType.MotorTypes motorTypes) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
@@ -145,7 +146,7 @@ public class HardwareDriveMotors
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap ahwMap, robotConfig.Bases baseConfig, robotConfig.MOTOR_KIND motorTypes) {
+    public void init(HardwareMap ahwMap, robotConfigSettings.robotConfigChoice baseConfig, LibraryMotorType.MotorTypes motorTypes) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
@@ -174,7 +175,7 @@ public class HardwareDriveMotors
 
     }
 
-    private void initMotorDefaults (robotConfig.Bases baseConfig, robotConfig.MOTOR_KIND motorTypes) {
+    private void initMotorDefaults (robotConfigSettings.robotConfigChoice baseConfig, LibraryMotorType.MotorTypes motorTypes) {
 
         // Define and Initialize Motors
         baseMotor1  = hwMap.dcMotor.get(robotConfig.motors.leftMotor1.toString());
@@ -203,19 +204,71 @@ public class HardwareDriveMotors
         if (baseMotor4 != null)
             baseMotor4.setZeroPowerBehavior(zeroPowerBehavior);
     }
-    public void setHardwareDriveDirections(robotConfig.Bases baseConfig, robotConfig.MOTOR_KIND motorTypes){
+    public void setHardwareDriveDirections(robotConfigSettings.robotConfigChoice baseConfig, LibraryMotorType.MotorTypes motorTypes){
         switch (baseConfig) {
-            case MECANUM_2020:
+            case TileRunnerRegular:
                 if (baseMotor1 != null)
                     baseMotor1.setDirection(DcMotor.Direction.REVERSE);
                 if (baseMotor2 != null)
-                    baseMotor2.setDirection(DcMotor.Direction.FORWARD);
+                    baseMotor2.setDirection(DcMotor.Direction.REVERSE);
                 if (baseMotor3 != null)
                     baseMotor3.setDirection(DcMotor.Direction.FORWARD);
                 if (baseMotor4 != null)
-                    baseMotor4.setDirection(DcMotor.Direction.REVERSE);
+                    baseMotor4.setDirection(DcMotor.Direction.FORWARD);
                 break;
-
+            case TileRunnerRegularOrbital:
+                if (baseMotor1 != null)
+                    baseMotor1.setDirection(DcMotor.Direction.REVERSE);
+                if (baseMotor2 != null)
+                    baseMotor2.setDirection(DcMotor.Direction.REVERSE);
+                if (baseMotor3 != null)
+                    baseMotor3.setDirection(DcMotor.Direction.FORWARD);
+                if (baseMotor4 != null)
+                    baseMotor4.setDirection(DcMotor.Direction.FORWARD);
+                break;
+            case TileRunnerMecanum:
+                //TOWR5291 Tilrunner has 2 motors running from belts to the wheel, 2 motors running on gears
+                if (baseMotor1 != null)
+                    baseMotor1.setDirection(DcMotor.Direction.FORWARD);
+                if (baseMotor2 != null)
+                    baseMotor2.setDirection(DcMotor.Direction.REVERSE);
+                if (baseMotor3 != null)
+                    baseMotor3.setDirection(DcMotor.Direction.REVERSE);
+                if (baseMotor4 != null)
+                    baseMotor4.setDirection(DcMotor.Direction.FORWARD);
+                break;
+            case TileRunnerMecanumOrbital:
+                //TOWR5291 Tilrunner has 2 motors running from belts to the wheel, 2 motors running on gears
+                if (motorTypes.isAndyMark()) {
+                    if (baseMotor1 != null)
+                        baseMotor1.setDirection(DcMotor.Direction.REVERSE);
+                    if (baseMotor2 != null)
+                        baseMotor2.setDirection(DcMotor.Direction.FORWARD);
+                    if (baseMotor3 != null)
+                        baseMotor3.setDirection(DcMotor.Direction.FORWARD);
+                    if (baseMotor4 != null)
+                        baseMotor4.setDirection(DcMotor.Direction.REVERSE);
+                } else {
+                    if (baseMotor1 != null)
+                        baseMotor1.setDirection(DcMotor.Direction.REVERSE);
+                    if (baseMotor2 != null)
+                        baseMotor2.setDirection(DcMotor.Direction.FORWARD);
+                    if (baseMotor3 != null)
+                        baseMotor3.setDirection(DcMotor.Direction.FORWARD);
+                    if (baseMotor4 != null)
+                        baseMotor4.setDirection(DcMotor.Direction.REVERSE);
+                }
+                break;
+            case TiltRunnerOmni:
+                if (baseMotor1 != null)
+                    baseMotor1.setDirection(DcMotor.Direction.REVERSE);
+                if (baseMotor2 != null)
+                    baseMotor2.setDirection(DcMotor.Direction.REVERSE);
+                if (baseMotor3 != null)
+                    baseMotor3.setDirection(DcMotor.Direction.FORWARD);
+                if (baseMotor4 != null)
+                    baseMotor4.setDirection(DcMotor.Direction.FORWARD);
+                break;
             default:
                 if (baseMotor1 != null)
                     baseMotor1.setDirection(DcMotor.Direction.FORWARD);
@@ -287,7 +340,7 @@ public class HardwareDriveMotors
     }
 
     public boolean[] isBusy(){
-        boolean[] MotorsBusy = new boolean[4];
+        boolean MotorsBusy[] = new boolean[4];
         if (baseMotor1 != null) MotorsBusy[0] = baseMotor1.isBusy();
         if (baseMotor2 != null) MotorsBusy[1] = baseMotor2.isBusy();
         if (baseMotor3 != null) MotorsBusy[2] = baseMotor3.isBusy();
@@ -438,18 +491,18 @@ public class HardwareDriveMotors
 
     public void logEncoderCounts(FileLogger MasterFileLogger){
         this.fileLogger = MasterFileLogger;
-        fileLogger.writeEvent(3,"baseMotor1 Encoder Counts" + baseMotor1.getCurrentPosition());
-        fileLogger.writeEvent(3,"baseMotor2 Encoder Counts" + baseMotor2.getCurrentPosition());
-        fileLogger.writeEvent(3,"baseMotor3 Encoder Counts" + baseMotor3.getCurrentPosition());
-        fileLogger.writeEvent(3,"baseMotor4 Encoder Counts" + baseMotor4.getCurrentPosition());
+        fileLogger.writeEvent(3,"baseMotor1 Encoder Counts" + String.valueOf(baseMotor1.getCurrentPosition()));
+        fileLogger.writeEvent(3,"baseMotor2 Encoder Counts" + String.valueOf(baseMotor2.getCurrentPosition()));
+        fileLogger.writeEvent(3,"baseMotor3 Encoder Counts" + String.valueOf(baseMotor3.getCurrentPosition()));
+        fileLogger.writeEvent(3,"baseMotor4 Encoder Counts" + String.valueOf(baseMotor4.getCurrentPosition()));
     }
 
     public void logEncoderCounts(){
         if (this.fileLogger != null) {
-            fileLogger.writeEvent(3, "baseMotor1 Encoder Counts" + baseMotor1.getCurrentPosition());
-            fileLogger.writeEvent(3, "baseMotor2 Encoder Counts" + baseMotor2.getCurrentPosition());
-            fileLogger.writeEvent(3, "baseMotor3 Encoder Counts" + baseMotor3.getCurrentPosition());
-            fileLogger.writeEvent(3, "baseMotor4 Encoder Counts" + baseMotor4.getCurrentPosition());
+            fileLogger.writeEvent(3, "baseMotor1 Encoder Counts" + String.valueOf(baseMotor1.getCurrentPosition()));
+            fileLogger.writeEvent(3, "baseMotor2 Encoder Counts" + String.valueOf(baseMotor2.getCurrentPosition()));
+            fileLogger.writeEvent(3, "baseMotor3 Encoder Counts" + String.valueOf(baseMotor3.getCurrentPosition()));
+            fileLogger.writeEvent(3, "baseMotor4 Encoder Counts" + String.valueOf(baseMotor4.getCurrentPosition()));
         }
     }
 
@@ -648,23 +701,23 @@ public class HardwareDriveMotors
     }   //normalize
 
     /**
-    * FROM https://github.com/wpilibsuite/allwpilib/blob/master/wpilibj/src/main/java/edu/wpi/first/wpilibj/RobotDrive.java
-    * Drive method for Mecanum wheeled robots.
-    *
-    * <p>A method for driving with Mecanum wheeled robots. There are 4 wheels on the robot, arranged
-    * so that the front and back wheels are toed in 45 degrees. When looking at the wheels from the
-    * top, the roller axles should form an X across the robot.
-    *
-    * <p>This is designed to be directly driven by joystick axes.
-    *
-    * @param x         The speed that the robot should drive in the X direction. [-1.0..1.0]
-    * @param y         The speed that the robot should drive in the Y direction. This input is
-    *                  inverted to match the forward == -1.0 that joysticks produce. [-1.0..1.0]
-    * @param rotation  The rate of rotation for the robot that is completely independent of the
-    *                  translation. [-1.0..1.0]
-    * @param gyroAngle The current angle reading from the gyro. Use this to implement field-oriented
-    *                  controls.
-    */
+     * FROM https://github.com/wpilibsuite/allwpilib/blob/master/wpilibj/src/main/java/edu/wpi/first/wpilibj/RobotDrive.java
+     * Drive method for Mecanum wheeled robots.
+     *
+     * <p>A method for driving with Mecanum wheeled robots. There are 4 wheels on the robot, arranged
+     * so that the front and back wheels are toed in 45 degrees. When looking at the wheels from the
+     * top, the roller axles should form an X across the robot.
+     *
+     * <p>This is designed to be directly driven by joystick axes.
+     *
+     * @param x         The speed that the robot should drive in the X direction. [-1.0..1.0]
+     * @param y         The speed that the robot should drive in the Y direction. This input is
+     *                  inverted to match the forward == -1.0 that joysticks produce. [-1.0..1.0]
+     * @param rotation  The rate of rotation for the robot that is completely independent of the
+     *                  translation. [-1.0..1.0]
+     * @param gyroAngle The current angle reading from the gyro. Use this to implement field-oriented
+     *                  controls.
+     */
     public void mecanumDrive_Cartesian(double x, double y, double rotation, double gyroAngle) {
 
         double xIn = x;
@@ -726,11 +779,10 @@ public class HardwareDriveMotors
      * @param maxOutput Multiplied with the output percentage computed by the drive functions.
      */
     public void setMaxOutput(double maxOutput) {
-         this.mMotorMaxSpeed = maxOutput;
+        this.mMotorMaxSpeed = maxOutput;
     }
 
     public double getMaxOutput() {
         return this.mMotorMaxSpeed;
     }
 }
-

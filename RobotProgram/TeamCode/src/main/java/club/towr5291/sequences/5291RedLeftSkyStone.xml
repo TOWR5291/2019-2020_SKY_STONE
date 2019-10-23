@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <Step>
+        <Timeout>3</Timeout>
+        <Command>Delay</Command>
+        <Distance>13</Distance>
+        <Speed>1</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>0</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+    <Step>
+        <Timeout>3</Timeout>
+        <Command>Drive</Command>
+        <Distance>10</Distance>
+        <Speed>1</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>0</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+    <Step>
+        <Timeout>3</Timeout>
+        <Command>Drive</Command>
+        <Distance>10</Distance>
+        <Speed>1</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>0</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+</resources>

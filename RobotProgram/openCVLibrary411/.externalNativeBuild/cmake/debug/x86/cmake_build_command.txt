@@ -1,14 +1,14 @@
-Executable : C:\Users\Wyatt\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe
+Executable : C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe
 arguments : 
--HC:\FTC Code\2019-2020_SKY_STONE\RobotProgram\openCVLibrary411\libcxx_helper
--BC:\FTC Code\2019-2020_SKY_STONE\RobotProgram\openCVLibrary411\.externalNativeBuild\cmake\debug\x86
+-HC:\Users\lilah\Documents\FTCPrograms\2019-2020_SKY_STONE\RobotProgram\openCVLibrary411\libcxx_helper
+-BC:\Users\lilah\Documents\FTCPrograms\2019-2020_SKY_STONE\RobotProgram\openCVLibrary411\.externalNativeBuild\cmake\debug\x86
 -DANDROID_ABI=x86
 -DANDROID_PLATFORM=android-21
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\FTC Code\2019-2020_SKY_STONE\RobotProgram\openCVLibrary411\build\intermediates\cmake\debug\obj\x86
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\lilah\Documents\FTCPrograms\2019-2020_SKY_STONE\RobotProgram\openCVLibrary411\build\intermediates\cmake\debug\obj\x86
 -DCMAKE_BUILD_TYPE=Debug
--DANDROID_NDK=C:\Users\Wyatt\AppData\Local\Android\Sdk\ndk-bundle
--DCMAKE_TOOLCHAIN_FILE=C:\Users\Wyatt\AppData\Local\Android\Sdk\ndk-bundle\build\cmake\android.toolchain.cmake
--DCMAKE_MAKE_PROGRAM=C:\Users\Wyatt\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe
+-DANDROID_NDK=C:\Users\lilah\AppData\Local\Android\Sdk\ndk-bundle
+-DCMAKE_TOOLCHAIN_FILE=C:\Users\lilah\AppData\Local\Android\Sdk\ndk-bundle\build\cmake\android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe
 -GAndroid Gradle - Ninja
 -DANDROID_STL=c++_shared
 jvmArgs : 

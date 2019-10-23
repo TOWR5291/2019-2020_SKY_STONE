@@ -189,11 +189,14 @@ public abstract class Constants {
         }
     }
 
+
     public enum SharedPreferencesValues {
         ALLIANCE_COLOR ("club.towr5291.Autonomous.Color", "Red"),
         TEAM_NUMBER ("club.towr5291.Autonomous.TeamNumber", "0000"),
         ALLIANCE_START_POSITION ("club.towr5291.Autonomous.Position", "Left"),
         START_DELAY ("club.towr5291.Autonomous.Delay", "0"),
+        ROBOT_MOTOR_TYPE ("club.towr5291.Autonomous.RobotMotorChoice", LibraryMotorType.MotorTypes.REV20ORBIT.toString()),
+        ROBOT_BASE_CONFIG ("club.towr5291.Autonomous.RobotConfigBase", robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString()),
         DEBUG ("club.towr5291.Autonomous.Debug", "1");
 
         private final String SharedPrefString;

@@ -128,17 +128,29 @@ public class AutoSetupMenuTest extends OpModeMasterLinear implements FTCMenu.Men
         //
         boolean selected;
         for (robotConfigSettings.robotConfigTeam team : robotConfigSettings.robotConfigTeam.values()) {
-            selected = teamNumber.equals(team);
+            if (teamNumber.equals(team)) {
+                selected = true;
+            } else {
+                selected = false;
+            }
             teamMenu.addChoice(team.toString(), team, selected, allianceMenu);
         }
 
         for (robotConfigSettings.Alliance alliance : robotConfigSettings.Alliance.values()) {
-            selected = allianceColor.equals(alliance);
+            if (allianceColor.equals(alliance)) {
+                selected = true;
+            } else {
+                selected = false;
+            }
             allianceMenu.addChoice(alliance.toString(), alliance, selected, startPosMenu);
         }
 
         for (robotConfigSettings.robotConfigStartPos startPos : robotConfigSettings.robotConfigStartPos.values()) {
-            selected = allianceStartPosition.equals(startPos);
+            if (allianceStartPosition.equals(startPos)) {
+                selected = true;
+            } else {
+                selected = false;
+            }
             startPosMenu.addChoice(startPos.toString(), startPos, selected, delayMenu);
         }
 
@@ -146,23 +158,39 @@ public class AutoSetupMenuTest extends OpModeMasterLinear implements FTCMenu.Men
 
         for (robotConfigSettings.robotConfigChoice robotConfigChoice : robotConfigSettings.robotConfigChoice.values()) {
 
-            selected = robotConfig.equals(robotConfigChoice);
+            if (robotConfig.equals(robotConfigChoice)) {
+                selected = true;
+            } else {
+                selected = false;
+            }
             robotConfigMenu.addChoice(robotConfigChoice.toString(), robotConfigChoice, selected, AutonOpModeMenu);
         }
 
-        registeredOpModes = RegisteredOpModes.getInstance();
+        registeredOpModes = registeredOpModes.getInstance();
         for (OpModeMeta opModes : registeredOpModes.getOpModes()) {
-            selected = autonOpMode.equals(opModes);
+            if (autonOpMode.equals(opModes)) {
+                selected = true;
+            } else {
+                selected = false;
+            }
             AutonOpModeMenu.addChoice(opModes.name, opModes, selected, TeleOpModeMenu);
         }
 
         for (OpModeMeta opModes : registeredOpModes.getOpModes()) {
-            selected = teleOpMode.equals(opModes);
+            if (teleOpMode.equals(opModes)) {
+                selected = true;
+            } else {
+            selected = false;
+            }
             TeleOpModeMenu.addChoice(opModes.name, opModes, selected, debugConfigMenu);
         }
 
         for (int x = 1; x <= 10; x++) {
-            selected = debug == x;
+            if (debug == x) {
+                selected = true;
+            } else {
+                selected = false;
+            }
             debugConfigMenu.addChoice("" + x, x, selected);
         }
 
@@ -209,7 +237,7 @@ public class AutoSetupMenuTest extends OpModeMasterLinear implements FTCMenu.Men
         dashboard.displayPrintf(lnum++, "robotConfigTeam:     " + teamNumber);
         dashboard.displayPrintf(lnum++, "Alliance: " + allianceColor);
         dashboard.displayPrintf(lnum++, "Start:    " + allianceStartPosition);
-        dashboard.displayPrintf(lnum++, "Delay:    " + delay);
+        dashboard.displayPrintf(lnum++, "Delay:    " + String.valueOf(delay));
         dashboard.displayPrintf(lnum++, "Robot:    " + robotConfig);
         dashboard.displayPrintf(lnum++, "Auton:    " + autonOpMode);
         dashboard.displayPrintf(lnum++, "TeleOp:   " + teleOpMode);
@@ -218,7 +246,7 @@ public class AutoSetupMenuTest extends OpModeMasterLinear implements FTCMenu.Men
         fileLogger.writeEvent("AutonConfig", "robotConfigTeam     " + teamNumber);
         fileLogger.writeEvent("AutonConfig", "Alliance " + allianceColor);
         fileLogger.writeEvent("AutonConfig", "Start    " + allianceStartPosition);
-        fileLogger.writeEvent("AutonConfig", "Delay    " + delay);
+        fileLogger.writeEvent("AutonConfig", "Delay    " + String.valueOf(delay));
         fileLogger.writeEvent("AutonConfig", "Robot    " + robotConfig);
         fileLogger.writeEvent("AutonConfig", "Auton    " + autonOpMode);
         fileLogger.writeEvent("AutonConfig", "TeleOp   " + teleOpMode);
