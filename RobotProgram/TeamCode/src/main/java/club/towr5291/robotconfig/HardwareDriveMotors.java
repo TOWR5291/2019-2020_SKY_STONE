@@ -172,7 +172,6 @@ public class HardwareDriveMotors
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         setHardwareDriveResetEncoders();
         setHardwareDriveRunUsingEncoders();
-
     }
 
     private void initMotorDefaults (robotConfigSettings.robotConfigChoice baseConfig, LibraryMotorType.MotorTypes motorTypes) {

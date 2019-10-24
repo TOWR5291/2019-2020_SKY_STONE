@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.TextView;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -32,6 +33,7 @@ import static club.towr5291.functions.Constants.stepState.STATE_COMPLETE;
     made by Wyatt Ashley on 8/2/2018
 */
 @TeleOp(name = "Base Drive 2019", group = "5291")
+@Disabled
 public class BaseDrive_2019 extends OpModeMasterLinear {
     private Constants.stepState stepState = Constants.stepState.STATE_COMPLETE;
 
