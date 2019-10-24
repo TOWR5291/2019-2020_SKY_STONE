@@ -3,3 +3,5 @@
 219	866	0	libopencv_jni_shared.a	4bd5ca1e983f53ac
 0	185	0	CMakeFiles/opencv_jni_shared.dir/dummy.cpp.o	8a48053ad6426600
 185	465	0	libopencv_jni_shared.a	4bd5ca1e983f53ac
+2	570	0	CMakeFiles/opencv_jni_shared.dir/dummy.cpp.o	8a48053ad6426600
+570	1077	0	libopencv_jni_shared.a	4bd5ca1e983f53ac
