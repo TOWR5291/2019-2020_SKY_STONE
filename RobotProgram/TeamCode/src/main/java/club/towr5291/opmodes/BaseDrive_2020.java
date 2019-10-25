@@ -22,6 +22,7 @@ import club.towr5291.libraries.TOWRDashBoard;
 import club.towr5291.libraries.robotConfig;
 import club.towr5291.libraries.robotConfigSettings;
 import club.towr5291.robotconfig.HardwareArmMotorsRoverRuckus;
+import club.towr5291.robotconfig.HardwareArmMotorsSkyStone;
 import club.towr5291.robotconfig.HardwareDriveMotors;
 import club.towr5291.robotconfig.HardwareSensorsRoverRuckus;
 
@@ -36,6 +37,7 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
 
     /* Hardware Set Up */
     private HardwareDriveMotors Robot               = new HardwareDriveMotors();
+    private HardwareArmMotorsSkyStone Arms          = new HardwareArmMotorsSkyStone();
 
     //Settings from the sharepreferences
     private SharedPreferences sharedPreferences;
@@ -44,12 +46,6 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
     final String TAG = "TeleOp";
     private ElapsedTime runtime                     = new ElapsedTime();
     private robotConfig ourRobotConfig;
-
-    /* TOWR TICK FUNCTION */
-    private TOWR5291Tick robotPowerMultiplier       = new TOWR5291Tick();
-    private TOWR5291Tick controllerAMode            = new TOWR5291Tick();
-    private TOWR5291Tick controllerBMode            = new TOWR5291Tick();
-    private TOWR5291Toggle leftBumperToggle         = new TOWR5291Toggle();//For Moving Lift
 
     private double maxDrivePower                    = 1;
     private double minDrivePower                    = 0.33;
@@ -106,17 +102,7 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
 
         Robot.allMotorsStop();
 
-        fileLogger.writeEvent(2,"LED Init");
-        dashboard.displayPrintf(0, "LEDs Loaded");
-
-        //init all the values for the counters etc
-        fileLogger.writeEvent(2, "INIT Function Started -- " + String.valueOf(this.runtime));
-        initFunction();
-        fileLogger.writeEvent(2,"Init Function Done -- " + String.valueOf(this.runtime));
-
-        TOWR5291Toggle toggleGamePad1X = new TOWR5291Toggle(gamepad1.x);
-        toggleGamePad1X.setDebounce(500);
-
+        Arms.init(hardwareMap, dashboard);
         fileLogger.writeEvent(1,"","Wait For Start ");
 
         dashboard.displayPrintf(1, "Waiting for Start");
@@ -137,78 +123,16 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
         while (opModeIsActive()) {
             fileLogger.writeEvent(1,"In Main Loop");
 
-            //adjust the robot power using the dpad on the game controller
-            robotPowerMultiplier.incrementTick(gamepad1.dpad_up);
-            robotPowerMultiplier.decrementTick(gamepad1.dpad_down);
+            dashboard.displayPrintf(5, "Controller Mode -- ", "Mecanum Drive Relic Recovery (BAD)");
+            fileLogger.writeEvent(debug,"Controller Mode", "Mecanum Drive Relic Recovery");
 
-            //controllerAMode.incrementTick(gamepad1.start);
-            //controllerBMode.incrementTick(gamepad2.start);
+            Robot.baseMotor1.setPower(Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x, -1, 1));
+            Robot.baseMotor2.setPower(Range.clip(gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x, -1, 1));
+            Robot.baseMotor3.setPower(Range.clip(gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x, -1, 1));
+            Robot.baseMotor4.setPower(Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x, -1, 1));
 
-            dashboard.displayPrintf(6, "Power Multiplier:  " + robotPowerMultiplier.getTickCurrValue());
-            dashboard.displayPrintf(7, "Controller A Mode: " + (int)controllerAMode.getTickCurrValue());
-            dashboard.displayPrintf(10, "Controller B Mode: " + (int)controllerBMode.getTickCurrValue());
-
-            //drivers controller, operation based on the mode selection
-            switch ((int)controllerAMode.getTickCurrValue()) {
-
-                //last years driving mode, prefered not to use
-                case 1:
-                    dashboard.displayPrintf(5, "Controller Mode -- ", "Mecanum Drive Relic Recovery (BAD)");
-                    fileLogger.writeEvent(debug,"Controller Mode", "Mecanum Drive Relic Recovery");
-                    /*
-                     * This was made just for Rover Ruckus becaues the drivers wanted something new!
-                     * THis also allows for strafing
-                     */
-                    Robot.baseMotor1.setPower(Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x, -1, 1));
-                    Robot.baseMotor2.setPower(Range.clip(gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x, -1, 1));
-                    Robot.baseMotor3.setPower(Range.clip(gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x, -1, 1));
-                    Robot.baseMotor4.setPower(Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x, -1, 1));
-                    break;
-
-                case 2:
-                    fileLogger.writeEvent(debug,"Controller Mode -- ", "POV");
-                    dashboard.displayPrintf(5, "Controller POV:");
-                    /*
-                     * Case 1 is the controller type POV
-                     * POV uses both joy sticks to drive
-                     * The left joy stick is for forward and back
-                     * The right joystick is for turning left and right
-                     */
-                    fileLogger.writeEvent(debug,"Controller Mode", "Robot Multiplier: -" + robotPowerMultiplier.getTickCurrValue());
-                    Robot.setHardwareDriveLeftMotorPower(Range.clip(-gamepad1.left_stick_y + gamepad1.right_stick_x, -1.0, 1.0) * robotPowerMultiplier.getTickCurrValue());
-                    Robot.setHardwareDriveRightMotorPower(Range.clip(-gamepad1.left_stick_y - gamepad1.right_stick_x, -1.0, 1.0) * robotPowerMultiplier.getTickCurrValue());
-                    fileLogger.writeEvent(debug,"SetPowers Done");
-                    break;
-
-                case 3:
-                    dashboard.displayPrintf(5, "Controller Mode -- ", "Tank");
-                    fileLogger.writeEvent("Controller Mode -- ", "Tank");
-                    /*
-                     * Case 2 is the controller type Tank drive
-                     * Tank uses both joy sticks to drive
-                     * The left joy stick is for the left wheel speed
-                     * The right joy stick is for the right wheel speed
-                     */
-                    Robot.setHardwareDriveLeftMotorPower(-gamepad1.left_stick_y * robotPowerMultiplier.getTickCurrValue());
-                    Robot.setHardwareDriveRightMotorPower(-gamepad1.right_stick_y * robotPowerMultiplier.getTickCurrValue());
-                    break;
-
-                case 4:
-                    dashboard.displayPrintf(5, "Controller Mode -- ", "Mecanum Drive 18-19");
-                    fileLogger.writeEvent(debug,"Controller Mode -- ", "Mecanum Drive New 2018-19");
-                    /*
-                     * This is a controller type that is going to be deprecated soon.
-                     *
-                     */
-                    Robot.baseMotor1.setPower(gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x);
-                    Robot.baseMotor2.setPower(-gamepad1.left_stick_x + -gamepad1.left_stick_y + gamepad1.right_stick_x);
-                    Robot.baseMotor3.setPower(-gamepad1.left_stick_x + -gamepad1.left_stick_y + -gamepad1.right_stick_x);
-                    Robot.baseMotor4.setPower(-gamepad1.left_stick_x + -gamepad1.left_stick_y + -gamepad1.right_stick_x);
-
-                    break;
-
-            } //Switch ControllerA
-
+            Arms.liftMotor1.setPower(-gamepad2.left_stick_y);
+            Arms.intakeMotor1.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
         }
 
         //stop the logging
@@ -219,40 +143,4 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
             fileLogger = null;
         }
     } //RunOpMode
-
-    private void initFunction() {
-        fileLogger.writeEvent(debug, "initFunctions" ,  "Started");
-
-        fileLogger.writeEvent(debug, "initFunctions" ,  "Robot Power Multiplier Start");
-
-        robotPowerMultiplier.setRollOver(true);
-        robotPowerMultiplier.setTickMax(maxDrivePower);
-        robotPowerMultiplier.setTickMin(minDrivePower);
-        robotPowerMultiplier.setTickIncrement(incrementDrivePower);
-        robotPowerMultiplier.setTickValue(startDrivePower);
-        fileLogger.writeEvent(debug, "initFunctions" ,  "Robot Power Multiplier End");
-
-        fileLogger.writeEvent(debug, "initFunctions" ,  "ControllerAMode Start");
-        controllerAMode.setRollOver(true);
-        controllerAMode.setTickMin(1);
-        controllerAMode.setTickIncrement(1);
-        controllerAMode.setTickMax(controllerAModes);
-        controllerAMode.setTickValue(1);
-        fileLogger.writeEvent(debug, "initFunctions" ,  "ControllerAMode End");
-
-        fileLogger.writeEvent(debug, "initFunctions" ,  "ControllerBMode Start");
-        controllerBMode.setRollOver(true);
-        controllerBMode.setTickValue(1);
-        controllerBMode.setTickMin(1);
-        controllerBMode.setTickMax(1);
-        controllerBMode.setTickIncrement(1);
-        fileLogger.writeEvent(debug, "initFunctions" ,  "ControllerBMode End");
-
-        fileLogger.writeEvent(debug, "initFunctions" ,  "Toggle for left bumper Start");
-        leftBumperToggle.setDebounce(500);
-        leftBumperToggle.toggleState(false);
-        fileLogger.writeEvent(debug, "initFunctions" ,  "Toggle for left bumper End");
-
-    }
-
 }
