@@ -35,6 +35,7 @@ import static club.towr5291.functions.Constants.stepState.STATE_COMPLETE;
 @TeleOp(name = "Base Drive 2020", group = "5291")
 public class BaseDrive_2020 extends OpModeMasterLinear {
     private Constants.stepState stepState = Constants.stepState.STATE_COMPLETE;
+    boolean hold = false;
 
     /* Hardware Set Up */
     private HardwareDriveMotors Robot               = new HardwareDriveMotors();
@@ -48,12 +49,7 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
     private ElapsedTime runtime                     = new ElapsedTime();
     private robotConfig ourRobotConfig;
 
-    private double maxDrivePower                    = 1;
-    private double minDrivePower                    = 0.33;
-    private double incrementDrivePower              = 0.33;
-    private double startDrivePower                  = 1;
-    //Controller A has 4 modes of operation
-    private double controllerAModes                 = 5;
+    public double HOLDINGTILTMOTORPOWER = .2;
     private int debug;
 
     private static TOWRDashBoard dashboard = null;
@@ -115,6 +111,8 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
 
         //dashboard.clearDisplay();
 
+        Arms.liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         dashboard.displayPrintf(3, "Controller A Options");
         dashboard.displayPrintf(4, "--------------------");
         dashboard.displayPrintf(8, "Controller B Options");
@@ -122,20 +120,45 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
 
         //the main loop.  this is where the action happens
         while (opModeIsActive()) {
-            fileLogger.writeEvent(1,"In Main Loop");
+            fileLogger.writeEvent(1, "In Main Loop");
 
             dashboard.displayPrintf(5, "Controller Mode -- ", "Mecanum Drive Relic Recovery (BAD)");
-            fileLogger.writeEvent(debug,"Controller Mode", "Mecanum Drive Relic Recovery");
+            fileLogger.writeEvent(debug, "Controller Mode", "Mecanum Drive Relic Recovery");
 
             Robot.baseMotor1.setPower(Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x, -1, 1));
             Robot.baseMotor2.setPower(Range.clip(gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x, -1, 1));
             Robot.baseMotor3.setPower(Range.clip(gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x, -1, 1));
             Robot.baseMotor4.setPower(Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x, -1, 1));
 
-            Arms.liftMotor1.setPower(-gamepad2.left_stick_y);
+            liftMotorPower();
             Arms.intakeMotor1.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
-        }
+            // grab the block
+            if (gamepad2.a)
+                Arms.grabServo.setPosition(0);
+            else if (gamepad2.y)
+                Arms.grabServo.setPosition(.5);
 
+            //rotate the arm out so we can stack the block or bring it back in
+            if (gamepad2.b)
+                Arms.wristServo.setPosition(0);
+            else if (gamepad2.x)
+                Arms.wristServo.setPosition(1);
+
+            //send the tape measure out
+            if (gamepad2.dpad_up)
+                Arms.tapeServo.setPosition(.9);
+            else if (gamepad2.dpad_down)
+                Arms.tapeServo.setPosition(.1);
+            else
+                Arms.tapeServo.setPosition(0);
+            //Foundation Arm
+
+            if (gamepad2.left_bumper)
+                Arms.foundationServo.setPosition(0);
+            else if (gamepad2.right_bumper)
+                Arms.foundationServo.setPosition(1);
+
+        }
         //stop the logging
         if (fileLogger != null) {
             fileLogger.writeEvent(1, "TeleOP FINISHED - FINISHED");
@@ -144,4 +167,27 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
             fileLogger = null;
         }
     } //RunOpMode
+
+    public void liftMotorPower(){
+
+        if ((gamepad2.left_stick_y == 0)) {
+            if ((hold == false)) {
+                fileLogger.writeEvent(8, "Hold is Now true");
+                fileLogger.writeEvent(8,"Run using encoders now in hold function in the movement of the arm");
+                Arms.liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                fileLogger.writeEvent(8, "Setting the target position so that the arm does not move!");
+                Arms.liftMotor1.setTargetPosition(Arms.liftMotor1.getCurrentPosition());
+                hold = true;
+            }
+            Arms.liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            Arms.liftMotor1.setPower(HOLDINGTILTMOTORPOWER);
+
+            fileLogger.writeEvent(8, "Setting the power to the tilt motor at " + Arms.liftMotor1.getPower());
+        } else {
+            Arms.liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            hold = false;
+            Arms.liftMotor1.setPower(-gamepad2.left_stick_y);
+        }
+    }
 }

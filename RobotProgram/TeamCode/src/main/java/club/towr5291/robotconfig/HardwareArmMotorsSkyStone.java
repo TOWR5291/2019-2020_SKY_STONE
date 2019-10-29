@@ -57,8 +57,8 @@ public class HardwareArmMotorsSkyStone
 
         liftMotor1.setPower(0);
         this.intakeMotor1.setPower(0);
-        this.grabServo.setPosition(1);
-        this.liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //this.grabServo.setPosition(1);
+        this.liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.intakeMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 

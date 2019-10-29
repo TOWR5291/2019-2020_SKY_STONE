@@ -33,25 +33,21 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package club.towr5291.opmodes;
 
 //Android Imports
+
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.TextView;
 
-//Qualcomm Imports
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-//FTC Imports
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -64,35 +60,36 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
-
-//OpenCV Imports
 import org.firstinspires.ftc.teamcode.R;
 import org.opencv.core.Mat;
 
-//Java Imports
 import java.util.HashMap;
-
-//Local Imports
 
 import club.towr5291.functions.Constants;
 import club.towr5291.functions.FileLogger;
 import club.towr5291.functions.ReadStepFileRoverRuckus;
+import club.towr5291.functions.ReadStepFileXML;
 import club.towr5291.functions.RoverRuckusOCV;
 import club.towr5291.functions.TOWR5291PID;
 import club.towr5291.functions.TOWR5291TextToSpeech;
+import club.towr5291.functions.TOWR5291Utils;
 import club.towr5291.libraries.ImageCaptureOCV;
 import club.towr5291.libraries.LibraryMotorType;
 import club.towr5291.libraries.LibraryStateSegAutoRoverRuckus;
 import club.towr5291.libraries.LibraryTensorFlowRoverRuckus;
 import club.towr5291.libraries.LibraryVuforiaRoverRuckus;
 import club.towr5291.libraries.TOWRDashBoard;
-import club.towr5291.libraries.TOWR5291LEDControl;
 import club.towr5291.libraries.robotConfig;
 import club.towr5291.libraries.robotConfigSettings;
-import club.towr5291.functions.TOWR5291Utils;
 import club.towr5291.robotconfig.HardwareArmMotorsRoverRuckus;
 import club.towr5291.robotconfig.HardwareDriveMotors;
 import club.towr5291.robotconfig.HardwareSensorsRoverRuckus;
+
+//Qualcomm Imports
+//FTC Imports
+//OpenCV Imports
+//Java Imports
+//Local Imports
 
 
 /*
@@ -121,9 +118,9 @@ Written by Ian Haden/Wyatt Ashley October 2018
 
 */
 
-@Autonomous(name="5291 Autonomous Drive Rover Ruckus", group="5291")
-@Disabled
-public class AutoDriveTeam5291RoverRuckus extends OpModeMasterLinear {
+@Autonomous(name="5291 Autonomous Drive Sky Stone", group="5291")
+//@Disabled
+public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
 
     private OpMode onStop = this;
     private OpModeManagerImpl opModeManager;
@@ -282,7 +279,7 @@ public class AutoDriveTeam5291RoverRuckus extends OpModeMasterLinear {
     //hashmap for the steps to be stored in.  A Hashmap is like a fancy array
     //private HashMap<String, LibraryStateSegAutoRoverRuckus> autonomousSteps = new HashMap<String, LibraryStateSegAutoRoverRuckus>();
     private HashMap<String, String> powerTable = new HashMap<String, String>();
-    private ReadStepFileRoverRuckus autonomousStepsFile = new ReadStepFileRoverRuckus();
+    private ReadStepFileXML autonomousStepsFile = new ReadStepFileXML();
 
     private RoverRuckusOCV elementColour = new RoverRuckusOCV();
 
@@ -302,10 +299,6 @@ public class AutoDriveTeam5291RoverRuckus extends OpModeMasterLinear {
     private TOWR5291PID PIDRIGHT2 = new TOWR5291PID();
     private int intdirection;
     private double dblStartVoltage = 0;
-
-    //LED Strips
-    private TOWR5291LEDControl LEDs;
-    private Constants.LEDState mint5291LEDStatus = Constants.LEDState.STATE_NULL;
 
     private static TOWRDashBoard dashboard = null;
 
@@ -398,16 +391,7 @@ public class AutoDriveTeam5291RoverRuckus extends OpModeMasterLinear {
         dashboard.displayPrintf(8, "Robot Motor Type  " + ourRobotConfig.getRobotMotorType());
         dashboard.displayPrintf(9, "Debug Level       " + debug);
 
-        // Set up the LEDS
-        LEDs = new TOWR5291LEDControl(hardwareMap, "green1", "red1", "blue1", "green2", "red2", "blue2");
-        LEDs.setLEDControlDemoMode(false);
-        LEDs.setLEDColour(Constants.LEDColours.LED_MAGENTA);
-        LEDs.setLEDControlAlliance(ourRobotConfig.getAllianceColor());
-        dashboard.displayPrintf(10, "initRobot LED Initiated!");
-
-        dashboard.displayPrintf(10, "initRobot Limit Switch Initiated!");
         //load the sequence based on alliance colour and team
-
         autonomousStepsFile.ReadStepFile(ourRobotConfig);
 
         //need to load initial step of a delay based on user input
@@ -470,7 +454,6 @@ public class AutoDriveTeam5291RoverRuckus extends OpModeMasterLinear {
 
         initDefaultStates();
 
-        mint5291LEDStatus = Constants.LEDState.STATE_TEAM;
         mblnNextStepLastPos = false;
 
         fileLogger.writeEvent(3, "Resetting State Engine - Finish");
@@ -523,8 +506,6 @@ public class AutoDriveTeam5291RoverRuckus extends OpModeMasterLinear {
 
         //the main loop.  this is where the action happens
         while (opModeIsActive()) {
-            //adjust the LED state
-            mint5291LEDStatus = LEDs.LEDControlUpdate(mint5291LEDStatus);
 
             switch (mintCurrentStateStep) {
                 case STATE_INIT:
@@ -596,11 +577,9 @@ public class AutoDriveTeam5291RoverRuckus extends OpModeMasterLinear {
                     mintCurrentStateStep = Constants.stepState.STATE_FINISHED;
                     break;
                 case STATE_ERROR:
-                    mint5291LEDStatus = Constants.LEDState.STATE_ERROR;
                     dashboard.displayPrintf(1, LABEL_WIDTH,"STATE", "ERROR WAITING TO FINISH " + mintCurrentStep);
                     break;
                 case STATE_FINISHED:
-                    mint5291LEDStatus = Constants.LEDState.STATE_FINISHED;
                     robotDrive.setHardwareDrivePower(0);
                     robotArms.setHardwareLiftPower(0);
                     robotArms.setTiltLiftPower(0);
