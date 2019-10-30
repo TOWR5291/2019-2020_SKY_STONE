@@ -10,6 +10,8 @@ import static club.towr5291.functions.Constants.SharedPreferencesValues.ALLIANCE
 import static club.towr5291.functions.Constants.SharedPreferencesValues.ALLIANCE_START_POSITION;
 import static club.towr5291.functions.Constants.SharedPreferencesValues.DEBUG;
 import static club.towr5291.functions.Constants.SharedPreferencesValues.ROBOT_BASE_CONFIG;
+import static club.towr5291.functions.Constants.SharedPreferencesValues.ROBOT_MOTOR_DIRECTION;
+import static club.towr5291.functions.Constants.SharedPreferencesValues.ROBOT_MOTOR_RATIO;
 import static club.towr5291.functions.Constants.SharedPreferencesValues.ROBOT_MOTOR_TYPE;
 import static club.towr5291.functions.Constants.SharedPreferencesValues.START_DELAY;
 import static club.towr5291.functions.Constants.SharedPreferencesValues.TEAM_NUMBER;
@@ -52,6 +54,10 @@ public class robotConfig {
     private int debug;
     private String robotConfigBase;
     private String robotMotorType;
+    private String robotMotorChoice;
+    private int robotMotorRatio;
+    private String robotMotorDirection;
+
 
     private LibraryMotorType libraryMotorType = new LibraryMotorType();
 
@@ -194,6 +200,9 @@ public class robotConfig {
         this.debug = 1;
         this.robotConfigBase = "";
         this.robotMotorType = "";
+        this.robotMotorChoice = "";
+        this.robotMotorRatio = 0;
+        this.robotMotorDirection = "";
     }
 
     public robotConfig (SharedPreferences sharedPreferences){
@@ -204,17 +213,28 @@ public class robotConfig {
         this.robotMotorType = sharedPreferences.getString(ROBOT_MOTOR_TYPE.getSharedPrefString(), ROBOT_MOTOR_TYPE.getSharedPrefDefault());
         this.robotConfigBase = sharedPreferences.getString(ROBOT_BASE_CONFIG.getSharedPrefString(), ROBOT_BASE_CONFIG.getSharedPrefDefault());
         this.debug = Integer.parseInt(sharedPreferences.getString(DEBUG.getSharedPrefString(), DEBUG.getSharedPrefDefault()));
-
+        this.robotMotorRatio = Integer.parseInt(sharedPreferences.getString(ROBOT_MOTOR_RATIO.getSharedPrefString(), ROBOT_MOTOR_RATIO.getSharedPrefDefault()));
+        this.robotMotorDirection = sharedPreferences.getString(ROBOT_MOTOR_DIRECTION.getSharedPrefString(), ROBOT_MOTOR_DIRECTION.getSharedPrefDefault());
         initConfig();
     }
 
     public void initConfig() {
         libraryMotorType.loadData(LibraryMotorType.MotorTypes.valueOf(robotMotorType));
+        COUNTS_PER_MOTOR_REV = libraryMotorType.getCOUNTSPERROTATION(this.robotMotorRatio, LibraryMotorType.MotorTypes.valueOf(robotMotorType));              // eg: TETRIX = 1440 pulses, NeveRest 20 = 560 pulses, NeveRest 40 =  1120, NeveRest 60 = 1680 pulses
 
         switch (robotConfigBase) {
+            case "CustomMecanum":
+                REVERSE_DIRECTION = 1;                                                       // Reverse the direction without significant code changes, (using motor FORWARD REVERSE will affect the driver station as we use same robotconfig file
+                DRIVE_GEAR_REDUCTION = 1.09;                                                 // This is < 1.0 if geared UP
+                WHEEL_DIAMETER_INCHES = 4.0;                                                 // For figuring circumference
+                WHEEL_ACTUAL_FUDGE = 1;                                                      // Fine tuning amount
+                COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415)) * WHEEL_ACTUAL_FUDGE * REVERSE_DIRECTION;
+                ROBOT_TRACK = 17;                                                     //  distance between centerline of rear wheels robot will pivot on rear wheel of omni on front, 16.5 track is 103.67 inches full circle
+                WHEEL_TURN_FUDGE = 1.0;                                                        // Fine tuning amount
+                COUNTS_PER_DEGREE = (((2 * 3.1415 * ROBOT_TRACK) * COUNTS_PER_INCH) / 360) * WHEEL_TURN_FUDGE;
+                break;
             case "TileRunnerRegular":
                 REVERSE_DIRECTION = 1;                                                       // Reverse the direction without significant code changes, (using motor FORWARD REVERSE will affect the driver station as we use same robotconfig file
-                COUNTS_PER_MOTOR_REV = libraryMotorType.getCOUNTSPERROTATION();              // eg: TETRIX = 1440 pulses, NeveRest 20 = 560 pulses, NeveRest 40 =  1120, NeveRest 60 = 1680 pulses
                 DRIVE_GEAR_REDUCTION = 0.7;                                                  // This is < 1.0 if geared UP, Tilerunner is geared up
                 WHEEL_DIAMETER_INCHES = 4.0;                                                 // For figuring circumference
                 WHEEL_ACTUAL_FUDGE = 1;                                                      // Fine tuning amount
@@ -225,7 +245,6 @@ public class robotConfig {
                 break;
             case "TileRunnerRegularOrbital":
                 REVERSE_DIRECTION = 1;                                                        // Reverse the direction without significant code changes, (using motor FORWARD REVERSE will affect the driver station as we use same robotconfig file
-                COUNTS_PER_MOTOR_REV = libraryMotorType.getCOUNTSPERROTATION();               // eg: TETRIX = 1440 pulses, NeveRest 20 = 560 pulses, NeveRest 40 =  1120, NeveRest 60 = 1680 pulses
                 DRIVE_GEAR_REDUCTION = 1.0;                                                   // This is < 1.0 if geared UP, Tilerunner is geared up
                 WHEEL_DIAMETER_INCHES = 4.0;                                                  // For figuring circumference
                 WHEEL_ACTUAL_FUDGE = 1.02;                                                    // Fine tuning amount
@@ -245,7 +264,6 @@ public class robotConfig {
                 break;
             case "TileRunnerMecanum":
                 REVERSE_DIRECTION = 1;                                                        // Reverse the direction without significant code changes, (using motor FORWARD REVERSE will affect the driver station as we use same robotconfig file
-                COUNTS_PER_MOTOR_REV = libraryMotorType.getCOUNTSPERROTATION();               //eg: TETRIX = 1440 pulses, NeveRest 20 = 560 pulses, NeveRest 40 =  1120, NeveRest 60 = 1680 pulses
                 DRIVE_GEAR_REDUCTION = 1.0;                                                   // This is < 1.0 if geared UP, Tilerunner is geared up
                 WHEEL_DIAMETER_INCHES = 4.0;                                                  // For figuring circumference
                 WHEEL_ACTUAL_FUDGE = 1.02;                                                    // Fine tuning amount
@@ -263,7 +281,6 @@ public class robotConfig {
                 break;
             case "TileRunnerMecanumOrbital":
                 REVERSE_DIRECTION = 1;                                                        // Reverse the direction without significant code changes, (using motor FORWARD REVERSE will affect the driver station as we use same robotconfig file
-                COUNTS_PER_MOTOR_REV = libraryMotorType.getCOUNTSPERROTATION();               // eg: TETRIX = 1440 pulses, NeveRest 20 = 560 pulses, NeveRest 40 =  1120, NeveRest 60 = 1680 pulses
                 DRIVE_GEAR_REDUCTION = 1.0;                                                   // This is < 1.0 if geared UP, Tilerunner is geared up
                 WHEEL_DIAMETER_INCHES = 4.0;                                                  // For figuring circumference
                 WHEEL_ACTUAL_FUDGE = 1.02;                                                    // Fine tuning amount
@@ -282,7 +299,6 @@ public class robotConfig {
                 break;
             case "TileRunnerOmni":
                 REVERSE_DIRECTION = 1;                                                       // Reverse the direction without significant code changes, (using motor FORWARD REVERSE will affect the driver station as we use same robotconfig file
-                COUNTS_PER_MOTOR_REV = libraryMotorType.getCOUNTSPERROTATION();              // eg: TETRIX = 1440 pulses, NeveRest 20 = 560 pulses, NeveRest 40 =  1120, NeveRest 60 = 1680 pulses
                 DRIVE_GEAR_REDUCTION = 0.7;                                                  // This is < 1.0 if geared UP, Tilerunner is geared up
                 WHEEL_DIAMETER_INCHES = 4.0;                                                 // For figuring circumference
                 WHEEL_ACTUAL_FUDGE = 1;                                                      // Fine tuning amount
@@ -293,7 +309,6 @@ public class robotConfig {
                 break;
             case "5291 Tank Tread-2x40 Custom":   //for tank tread base
                 REVERSE_DIRECTION = 1;
-                COUNTS_PER_MOTOR_REV = libraryMotorType.getCOUNTSPERROTATION();                 // eg: TETRIX = 1440 pulses, NeveRest 20 = 560 pulses, NeveRest 40 =  1120, NeveRest 60 = 1680 pulses
                 DRIVE_GEAR_REDUCTION = 1.0;                                                     // Tank Tread is 1:1 ration
                 WHEEL_DIAMETER_INCHES = 3.75;                                                   // For figuring circumference
                 WHEEL_ACTUAL_FUDGE = 1;                                                         // Fine tuning amount
@@ -304,7 +319,6 @@ public class robotConfig {
                 MECANUM_TURN_OFFSET = 0;
                 break;
             case "11231 2016 Custom": //2016 - 11231 Drivetrain
-                COUNTS_PER_MOTOR_REV = libraryMotorType.getCOUNTSPERROTATION();                // eg: TETRIX = 1440 pulses, NeveRest 20 = 560 pulses, NeveRest 40 =  1120, NeveRest 60 = 1680 pulses
                 DRIVE_GEAR_REDUCTION = .667;                                                   // (.665) UP INCREASES THE DISTANCE This is < 1.0 if geared UP, Tilerunner is geared up
                 WHEEL_DIAMETER_INCHES = 4.0;                                                   // For figuring circumference
                 WHEEL_ACTUAL_FUDGE = 1;                                                        // Fine tuning amount
@@ -316,7 +330,6 @@ public class robotConfig {
                 break;
             default:  //default for competition TileRunner-2x40
                 REVERSE_DIRECTION = 1;
-                COUNTS_PER_MOTOR_REV = libraryMotorType.getCOUNTSPERROTATION();               // eg: TETRIX = 1440 pulses, NeveRest 20 = 560 pulses, NeveRest 40 =  1120, NeveRest 60 = 1680 pulses
                 DRIVE_GEAR_REDUCTION = 1.28;                                                  // This is < 1.0 if geared UP, Tilerunner is geared up
                 WHEEL_DIAMETER_INCHES = 4.0;                                                  // For figuring circumference
                 WHEEL_ACTUAL_FUDGE = 1;                                                       // Fine tuning amount
@@ -378,7 +391,22 @@ public class robotConfig {
         return this.robotMotorType;
     }
 
+    public void setRobotMotorRatio(int ratio){
+        this.robotMotorRatio = ratio;
+    }
+    public int getRobotMotorRatio() {
+        return this.robotMotorRatio;
+    }
+    public void setRobotMotorDirection(String direction){
+        this.robotMotorDirection = direction;
+    }
+    public String getRobotMotorDirection() {
+        return this.robotMotorDirection;
+    }
+
     public double getMecanumTurnOffset() { return this.MECANUM_TURN_OFFSET;}
 
     public double getCOUNTS_PER_DEGREE_TILT() {return this.COUNTS_PER_DEGREE_TILT_MOTOR;}
+
+    public double getCounts_Per_Rev() {return this.COUNTS_PER_MOTOR_REV;}
 }

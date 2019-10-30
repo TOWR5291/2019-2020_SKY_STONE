@@ -236,6 +236,16 @@ public class HardwareDriveMotors
                 if (baseMotor4 != null)
                     baseMotor4.setDirection(DcMotor.Direction.FORWARD);
                 break;
+            case Custom_Mecanum:
+                if (baseMotor1 != null)
+                    baseMotor1.setDirection(DcMotor.Direction.REVERSE);
+                if (baseMotor2 != null)
+                    baseMotor2.setDirection(DcMotor.Direction.REVERSE);
+                if (baseMotor3 != null)
+                    baseMotor3.setDirection(DcMotor.Direction.FORWARD);
+                if (baseMotor4 != null)
+                    baseMotor4.setDirection(DcMotor.Direction.FORWARD);
+                break;
             case TileRunnerMecanumOrbital:
                 //TOWR5291 Tilrunner has 2 motors running from belts to the wheel, 2 motors running on gears
                 if (motorTypes.isAndyMark()) {

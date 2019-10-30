@@ -126,6 +126,11 @@ public class ConceptRobotBasicMotorTest extends LinearOpMode {
             dblRightMotor2 = Range.clip(gamepad1.right_stick_x , -1.0, 1.0);
 
             robotDrive.setHardwareDrivePower(dblLeftMotor1, dblLeftMotor2, dblRightMotor1, dblRightMotor2);
+            telemetry.clearAll();
+            telemetry.addLine("Motor1" + robotDrive.baseMotor1.getCurrentPosition());
+            telemetry.addLine("Motor2" + robotDrive.baseMotor2.getCurrentPosition());
+            telemetry.addLine("Motor3" + robotDrive.baseMotor3.getCurrentPosition());
+            telemetry.addLine("Motor4" + robotDrive.baseMotor4.getCurrentPosition());
 
             telemetry.update();
         }

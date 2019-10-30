@@ -81,7 +81,7 @@ import club.towr5291.libraries.LibraryVuforiaRoverRuckus;
 import club.towr5291.libraries.TOWRDashBoard;
 import club.towr5291.libraries.robotConfig;
 import club.towr5291.libraries.robotConfigSettings;
-import club.towr5291.robotconfig.HardwareArmMotorsRoverRuckus;
+import club.towr5291.robotconfig.HardwareArmMotorsSkyStone;
 import club.towr5291.robotconfig.HardwareDriveMotors;
 import club.towr5291.robotconfig.HardwareSensorsRoverRuckus;
 
@@ -182,9 +182,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
     private Constants.stepState mintCurrentStepDelay;                           // Current State of Delay (robot doing nothing)
     private Constants.stepState mintCurrentStateMoveLift;                       // Current State of the Move lift
     private Constants.stepState mintCurrentStateInTake;                       // Current State of the Move lift
-    private Constants.stepState mintCurrentStateTiltMotor;                      // Current State of the Tilt Motor
     private Constants.stepState mintCurrentStateFindGold;                       // Current State of Finding Gold
-    private Constants.stepState mintCurrentStateTeamMarker;                     // Current State of releaseing the team marker
     private Constants.stepState mintCurrentStateWyattsGyroDrive;                     //Wyatt Gyro Function
 
     private int mintFindGoldLoop = 0;                                           //there can only be 3 positions so count how many times we try
@@ -198,8 +196,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
 
     //motors
     private HardwareDriveMotors robotDrive          = new HardwareDriveMotors();   // Use 5291's hardware
-    private HardwareArmMotorsRoverRuckus robotArms  = new HardwareArmMotorsRoverRuckus();   // Use 5291's hardware
-    private HardwareSensorsRoverRuckus sensor       = new HardwareSensorsRoverRuckus();
+    private HardwareArmMotorsSkyStone robotArms     = new HardwareArmMotorsSkyStone();   // Use 5291's hardware
+    //private HardwareSensorsRoverRuckus sensor       = new HardwareSensorsRoverRuckus();
 
     private boolean vuforiaWebcam = false;
 
@@ -372,24 +370,30 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         //adjust debug level based on saved settings
         fileLogger.setDebugLevel(debug);
 
-        fileLogger.writeEvent(1, "robotConfigTeam #  " + ourRobotConfig.getTeamNumber());
-        fileLogger.writeEvent(1, "Alliance Colour    " + ourRobotConfig.getAllianceColor());
-        fileLogger.writeEvent(1, "Alliance Start Pos " + ourRobotConfig.getAllianceStartPosition());
-        fileLogger.writeEvent(1, "Alliance Delay     " + ourRobotConfig.getDelay());
-        fileLogger.writeEvent(1, "Robot Config Base  " + ourRobotConfig.getRobotConfigBase());
-        fileLogger.writeEvent(1, "Robot Motor Type  " + ourRobotConfig.getRobotMotorType());
+        fileLogger.writeEvent(1, "robotConfigTeam #       " + ourRobotConfig.getTeamNumber());
+        fileLogger.writeEvent(1, "Alliance Colour         " + ourRobotConfig.getAllianceColor());
+        fileLogger.writeEvent(1, "Alliance Start Pos      " + ourRobotConfig.getAllianceStartPosition());
+        fileLogger.writeEvent(1, "Alliance Delay          " + ourRobotConfig.getDelay());
+        fileLogger.writeEvent(1, "Robot Config Base       " + ourRobotConfig.getRobotConfigBase());
+        fileLogger.writeEvent(1, "Robot Motor Type        " + ourRobotConfig.getRobotMotorType());
+        fileLogger.writeEvent(1, "Robot Motor Ratio       " + ourRobotConfig.getRobotMotorRatio());
+        fileLogger.writeEvent(1, "Robot Motor Direction   " + ourRobotConfig.getRobotMotorDirection());
+        fileLogger.writeEvent(1, "Robot Motor Counts PR   " + ourRobotConfig.getCounts_Per_Rev());
         fileLogger.writeEvent(3, "Configuring Robot Parameters - Finished");
         fileLogger.writeEvent(3, "Loading Autonomous Steps - Start");
 
         dashboard.displayPrintf(1, "initRobot Loading Steps " + ourRobotConfig.getAllianceColor() + " Team " + ourRobotConfig.getTeamNumber());
         dashboard.displayPrintf(2, "initRobot SharePreferences!");
-        dashboard.displayPrintf(3, "robotConfigTeam # " + ourRobotConfig.getTeamNumber());
-        dashboard.displayPrintf(4, "Alliance          " + ourRobotConfig.getAllianceColor());
-        dashboard.displayPrintf(5, "Start Pos         " + ourRobotConfig.getAllianceStartPosition());
-        dashboard.displayPrintf(6, "Start Del         " + ourRobotConfig.getDelay());
-        dashboard.displayPrintf(7, "Robot Base        " + ourRobotConfig.getRobotConfigBase());
-        dashboard.displayPrintf(8, "Robot Motor Type  " + ourRobotConfig.getRobotMotorType());
-        dashboard.displayPrintf(9, "Debug Level       " + debug);
+        dashboard.displayPrintf(3, "robotConfigTeam #     " + ourRobotConfig.getTeamNumber());
+        dashboard.displayPrintf(4, "Alliance              " + ourRobotConfig.getAllianceColor());
+        dashboard.displayPrintf(5, "Start Pos             " + ourRobotConfig.getAllianceStartPosition());
+        dashboard.displayPrintf(6, "Start Del             " + ourRobotConfig.getDelay());
+        dashboard.displayPrintf(7, "Robot Base            " + ourRobotConfig.getRobotConfigBase());
+        dashboard.displayPrintf(8, "Robot Motor Type      " + ourRobotConfig.getRobotMotorType());
+        dashboard.displayPrintf(9, "Robot Motor Ratio      " + ourRobotConfig.getRobotMotorRatio());
+        dashboard.displayPrintf(10, "Robot Motor Direction " + ourRobotConfig.getRobotMotorDirection());
+        dashboard.displayPrintf(11, "Robot Motor Counts PR   " + ourRobotConfig.getCounts_Per_Rev());
+        dashboard.displayPrintf(12, "Debug Level       " + debug);
 
         //load the sequence based on alliance colour and team
         autonomousStepsFile.ReadStepFile(ourRobotConfig);
@@ -433,6 +437,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         robotDrive.init(fileLogger, hardwareMap, robotConfigSettings.robotConfigChoice.valueOf(ourRobotConfig.getRobotConfigBase()), LibraryMotorType.MotorTypes.valueOf(ourRobotConfig.getRobotMotorType()));
         robotDrive.setHardwareDriveResetEncoders();
         robotDrive.setHardwareDriveRunUsingEncoders();
+        robotDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         dashboard.displayPrintf(10, "initRobot BaseDrive Loaded");
         fileLogger.writeEvent(3, "Configuring Motors Base - Finish");
@@ -444,12 +449,10 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         robotArms.setHardwareLiftMotorResetEncoders();
         robotArms.setHardwareLiftMotorRunUsingEncoders();
         robotArms.setHardwareArmDirections();
-        robotArms.teamMarkerServo.setPosition(mdblTeamMarkerHome);
-
         fileLogger.writeEvent(3, "Configuring Arm Motors - Finish");
         dashboard.displayPrintf(10, "Configuring Arm Motors - Finish");
 
-        sensor.init(hardwareMap);
+        //sensor.init(hardwareMap);
         fileLogger.writeEvent(3, "Resetting State Engine - Start");
 
         initDefaultStates();
@@ -472,7 +475,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         VuforiaTrackables RoverRuckusTrackables;
 
         if (vuforiaWebcam) {
-            robotWebcam = hardwareMap.get(WebcamName.class, "Webcam 1");
+            robotWebcam = hardwareMap.get(WebcamName.class, "Webcam1");
             RoverRuckusTrackables = RoverRuckusVuforia.LibraryVuforiaRoverRuckus(hardwareMap, ourRobotConfig, robotWebcam, false);
         } else{
             RoverRuckusTrackables = RoverRuckusVuforia.LibraryVuforiaRoverRuckus(hardwareMap, ourRobotConfig, false);
@@ -571,8 +574,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     break;
                 case STATE_TIMEOUT:
                     robotDrive.setHardwareDrivePower(0);
-                    robotArms.setHardwareLiftPower(0);
-                    robotArms.setTiltLiftPower(0);
                     //  Transition to a new state.
                     mintCurrentStateStep = Constants.stepState.STATE_FINISHED;
                     break;
@@ -581,8 +582,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     break;
                 case STATE_FINISHED:
                     robotDrive.setHardwareDrivePower(0);
-                    robotArms.setHardwareLiftPower(0);
-                    robotArms.setTiltLiftPower(0);
                     imu.close();
                     //stop the logging
                     if (fileLogger != null) {
@@ -631,7 +630,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         mdblRobotParm4      = mStateSegAuto.getmRobotParm4();
         mdblRobotParm5      = mStateSegAuto.getmRobotParm5();
         mdblRobotParm6      = mStateSegAuto.getmRobotParm6();
-
     }
 
     private void loadParallelSteps() {
@@ -658,7 +656,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
     private void processSteps(String stepName) {
         fileLogger.setEventTag("processSteps()");
         fileLogger.writeEvent(2,"Processing Parallel Step " + stepName);
-        switch (stepName) {
+        switch (stepName.toUpperCase()) {
             case "DELAY":
                 DelayStep();
                 break;
@@ -692,19 +690,13 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 VuforiaTurn();
                 break;
             case "LIFT":    // Moves the lift up and down for the 2018-19 game
-                moveLiftUpDown();
+
                 break;
             case "INTAKE":
                 SetIntake();
                 break;
-            case "TILT":
-                tiltMotor();
-                break;
             case "FINDGOLD":
                 findGold();
-                break;
-            case "TEAMMARKER":
-                releaseTeamMarker();
                 break;
             case "WYATTGYRO":
                 WyattsGyroDrive();
@@ -728,7 +720,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         // Reset the state time, and then change to next state.
         mStateTime.reset();
 
-        switch (mstrRobotCommand) {
+        switch (mstrRobotCommand.toUpperCase()) {
             case "DELAY":
                 mintCurrentStepDelay                = Constants.stepState.STATE_INIT;
                 towr5291TextToSpeech.Speak("Running Delay", debug);
@@ -793,10 +785,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 mintCurrentStateInTake              = Constants.stepState.STATE_INIT;
                 towr5291TextToSpeech.Speak("Running Set Intake", debug);
                 break;
-            case "TILT":
-                mintCurrentStateTiltMotor           = Constants.stepState.STATE_INIT;
-                towr5291TextToSpeech.Speak("Running Tilt Motor", debug);
-                break;
             case "FINDGOLD":
                 mintCurrentStateFindGold            = Constants.stepState.STATE_INIT;
                 towr5291TextToSpeech.Speak("Running Find Gold", debug);
@@ -808,11 +796,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             case "FNC":  //  Run a special Function with Parms
 
                 break;
-            case "TEAMMARKER":
-                mintCurrentStateTeamMarker          = Constants.stepState.STATE_INIT;
-                towr5291TextToSpeech.Speak("Running Set Team Marker Servo Position", debug);
-                break;
-        }
+            }
 
         fileLogger.writeEvent(2,"Current Step          :- " + mintCurrentStep);
         fileLogger.writeEvent(2, "initStep()", "Current Step          :- " + mintCurrentStep);
@@ -876,10 +860,10 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 }
                 mblnNextStepLastPos = false;
 
-                mintStepLeftTarget1 = mintStartPositionLeft1 + (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH());
-                mintStepLeftTarget2 = mintStartPositionLeft2 + (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH());
-                mintStepRightTarget1 = mintStartPositionRight1 + (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH());
-                mintStepRightTarget2 = mintStartPositionRight2 + (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH());
+                mintStepLeftTarget1 = mintStartPositionLeft1 - (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH());
+                mintStepLeftTarget2 = mintStartPositionLeft2 - (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH());
+                mintStepRightTarget1 = mintStartPositionRight1 - (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH());
+                mintStepRightTarget2 = mintStartPositionRight2 - (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH());
 
                 //store the encoder positions so next step can calculate destination
                 mintLastEncoderDestinationLeft1 = mintStepLeftTarget1;
@@ -899,7 +883,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 // set motor controller to mode, Turn On RUN_TO_POSITION
                 robotDrive.setHardwareDriveRunToPosition();
 
-                mintCurrentStateDriveHeading = Constants.stepState.STATE_START;
+                mintCurrentStateDriveHeading = Constants.stepState.STATE_RUNNING;
                 robotDrive.setHardwareDrivePower(Math.abs(mdblStepSpeed));
 
                 dblStepSpeedTempRight = mdblStepSpeed;
@@ -2171,102 +2155,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         }
     }
 
-    private void moveLiftUpDown(){
-
-        fileLogger.setEventTag("moveLiftUpDown()");
-
-        switch (mintCurrentStateMoveLift){
-            case STATE_INIT:
-                fileLogger.writeEvent(2, "Initialised");
-                robotArms.setHardwareLiftMotorRunUsingEncoders();
-                fileLogger.writeEvent(5, "Using Encoders");
-                robotArms.setHardwareLiftMotorResetEncoders();
-                fileLogger.writeEvent(5, "Resetting Encoders");
-
-                //check timeout value
-                if (mStateTime.milliseconds() > mdblRobotParm1) {
-                    if (mdblRobotParm2 == 0){
-                        mdblTargetPositionTop1 = robotArms.getLiftMotor1Encoder() + (mdblStepDistance * ourRobotConfig.getLIFTMAIN_COUNTS_PER_INCH());
-                        mdblTargetPositionTop2 = robotArms.getLiftMotor2Encoder() + (mdblStepDistance * ourRobotConfig.getLIFTMAIN_COUNTS_PER_INCH());
-                    } else if (mdblRobotParm2 == 1){
-                        double distaceInCounts = (mdblStepDistance * ourRobotConfig.getLIFTMAIN_COUNTS_PER_INCH());
-                        mdblTargetPositionTop1 = (robotArms.getLiftMotor1Encoder() - mintLiftStartCountMotor1) + distaceInCounts;
-                        mdblTargetPositionTop2 = (robotArms.getLiftMotor2Encoder() - mintLiftStartCountMotor2) + distaceInCounts;
-                    } else {
-                        mdblTargetPositionTop1 = 0;
-                        mdblTargetPositionTop2 = 0;
-                        fileLogger.writeEvent("ERROR ERROR ERROR ERROR ERROR ERROR ERROR");
-                        fileLogger.writeEvent("ERROR ERROR ERROR ERROR ERROR ERROR ERROR");
-                        fileLogger.writeEvent("ERROR MOVING LIFT PARM 1 IS THE MODE CAN BE 0 OR 1");
-                        fileLogger.writeEvent("Mode 1 is to move a certain distance so like move out 1 more inch");
-                        fileLogger.writeEvent("Mode 2 is to move to a spot so move to 5 inches on the lift");
-                    }
-                    robotArms.liftMotor1.setTargetPosition((int)mdblTargetPositionTop1);
-                    robotArms.liftMotor2.setTargetPosition((int)mdblTargetPositionTop2);
-
-                    robotArms.setHardwareLiftPower(mdblStepSpeed);
-
-                    robotArms.setHardwareLiftMotorRunToPosition();
-
-                    mintCurrentStateMoveLift = Constants.stepState.STATE_RUNNING;
-                }
-                break;
-            case STATE_RUNNING:
-                fileLogger.writeEvent(2, "Running");
-
-                robotArms.setHardwareLiftPower(mdblStepSpeed);
-                fileLogger.writeEvent(2, "Motor Speed Set: Busy 1 " + robotArms.liftMotor1.isBusy() + " Busy 2 " + robotArms.liftMotor2.isBusy());
-
-                //determine how close to target we are
-                double dblDistanceToEndLift1 = (mdblTargetPositionTop1 - robotArms.getLiftMotor1Encoder()) / ourRobotConfig.getLIFTMAIN_COUNTS_PER_INCH();
-                double dblDistanceToEndLift2 = (mdblTargetPositionTop2 - robotArms.getLiftMotor2Encoder()) / ourRobotConfig.getLIFTMAIN_COUNTS_PER_INCH();
-
-                //if getting close ramp down speed
-                double dblDistanceToEnd = Math.max(Math.abs(dblDistanceToEndLift1),Math.abs(dblDistanceToEndLift2));
-
-                fileLogger.writeEvent(3,"Distance to END " + Math.abs(dblDistanceToEnd));
-                fileLogger.writeEvent(5,"Lift Motor 1 Current Encoder Count: " + String.valueOf(robotArms.liftMotor1.getCurrentPosition()));
-                fileLogger.writeEvent(5,"Lift Motor 2 Current Encoder Count: " + String.valueOf(robotArms.liftMotor2.getCurrentPosition()));
-
-                if (Math.abs(dblDistanceToEnd) <= mdblRobotParm6) {
-                    fileLogger.writeEvent(3,"mblnRobotLastPos Complete Near END " + Math.abs(dblDistanceToEnd));
-                    mintCurrentStateMoveLift = Constants.stepState.STATE_COMPLETE;
-                    robotArms.setHardwareLiftPower(0);
-                    deleteParallelStep();
-                    break;
-                }
-
-                //we are close enough.. don't waste time
-                if (Math.abs(dblDistanceToEnd) <= .25) {
-                    fileLogger.writeEvent(3,"mblnRobotLastPos Complete Close enough " + Math.abs(dblDistanceToEnd));
-                    mintCurrentStateMoveLift = Constants.stepState.STATE_COMPLETE;
-                    robotArms.setHardwareLiftPower(0);
-                    deleteParallelStep();
-                    break;
-                }
-
-                if ((!(robotArms.liftMotor1.isBusy())) || (!(robotArms.liftMotor2.isBusy()))){
-                    //robotArms.setHardwareLiftPower(0);
-                    //fileLogger.writeEvent(5, "LIFT MOTOR POWER IS 0");
-                    fileLogger.writeEvent(2,"Finished");
-                    mintCurrentStateMoveLift = Constants.stepState.STATE_COMPLETE;
-                    robotArms.setHardwareLiftPower(0);
-                    deleteParallelStep();
-                    break;
-                }
-                //check timeout value
-                if (mStateTime.seconds() > mdblStepTimeout) {
-                    robotArms.setHardwareLiftPower(0);
-                    fileLogger.writeEvent(1,"Timeout:- " + mStateTime.seconds());
-                    //  Transition to a new state.
-                    mintCurrentStateMoveLift = Constants.stepState.STATE_COMPLETE;
-                    deleteParallelStep();
-                    break;
-                }
-                break;
-        }
-    }
-
     private void SetIntake(){
         fileLogger.setEventTag("SetIntake()");
 
@@ -2274,8 +2162,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             case STATE_INIT:
                 fileLogger.writeEvent(2,"Initialised");
                 fileLogger.writeEvent(2,"Power: " + String.valueOf(mdblStepSpeed));
-                robotArms.intakeServo1.setPosition(mdblStepSpeed);
-                robotArms.intakeServo2.setPosition(mdblStepSpeed);
+                robotArms.intakeMotor1.setPower(mdblStepSpeed);
                 mintCurrentStateInTake = Constants.stepState.STATE_RUNNING;
                 break;
             case STATE_RUNNING:
@@ -2298,126 +2185,11 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 }//check timeout value
 
                 if (mStateTime.seconds() > mdblStepTimeout) {
-                    robotArms.intakeServo1.setPosition(0);
-                    robotArms.intakeServo2.setPosition(0);
+                    robotArms.intakeMotor1.setPower(0);
                     fileLogger.writeEvent(1,"Timeout:- " + mStateTime.seconds());
                     //  Transition to a new state.
                     mintCurrentStateInTake = Constants.stepState.STATE_COMPLETE;
                     deleteParallelStep();
-                }
-                break;
-        }
-    }
-
-    private void tiltMotor(){
-
-        fileLogger.setEventTag("tiltMotor()");
-
-        switch (mintCurrentStateTiltMotor){
-            case STATE_INIT:
-                fileLogger.writeEvent(2, "Initialised");
-                robotArms.tiltMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                robotArms.tiltMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                mdblDistanceToMoveTilt1 = robotArms.tiltMotor1.getCurrentPosition() + (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_DEGREE_TILT());
-                mdblDistanceToMoveTilt2 = robotArms.tiltMotor2.getCurrentPosition() + (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_DEGREE_TILT());
-
-                fileLogger.writeEvent(2, "Distance to move = " + mdblStepDistance + ", dblDistanceToMoveTilt1 " + mdblDistanceToMoveTilt1);
-                fileLogger.writeEvent(2, "Distance to move = " + mdblStepDistance + ", dblDistanceToMoveTilt2 " + mdblDistanceToMoveTilt2);
-
-                robotArms.tiltMotor1.setTargetPosition((int)mdblDistanceToMoveTilt1);
-                robotArms.tiltMotor2.setTargetPosition((int)mdblDistanceToMoveTilt2);
-
-                robotArms.tiltMotor1.setPower(mdblStepSpeed);
-                robotArms.tiltMotor2.setPower(mdblStepSpeed);
-
-                robotArms.tiltMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                robotArms.tiltMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                mintCurrentStateTiltMotor = Constants.stepState.STATE_RUNNING;
-                break;
-            case STATE_RUNNING:
-                fileLogger.writeEvent(2, "Running");
-
-                robotArms.tiltMotor1.setPower(mdblStepSpeed);
-                robotArms.tiltMotor2.setPower(mdblStepSpeed);
-
-                fileLogger.writeEvent(3,"Current Encoder 1 = " + robotArms.tiltMotor1.getCurrentPosition() + " Expected Encoder " + robotArms.tiltMotor1.getTargetPosition());
-                fileLogger.writeEvent(3,"Current Encoder 2 = " + robotArms.tiltMotor2.getCurrentPosition() + " Expected Encoder " + robotArms.tiltMotor2.getTargetPosition());
-
-                //determine how close to target we are
-                double dblDistanceToMoveTilt1 = (mdblDistanceToMoveTilt1 - robotArms.tiltMotor1.getCurrentPosition()) / ourRobotConfig.getCOUNTS_PER_DEGREE_TILT();
-                double dblDistanceToMoveTilt2 = (mdblDistanceToMoveTilt2 - robotArms.tiltMotor2.getCurrentPosition()) / ourRobotConfig.getCOUNTS_PER_DEGREE_TILT();
-
-                //if getting close ramp down speed
-                double dblDistanceToEnd = Math.max(Math.abs(dblDistanceToMoveTilt1),Math.abs(dblDistanceToMoveTilt2));
-
-                fileLogger.writeEvent(3,"Distance to end " + Math.abs(dblDistanceToEnd));
-
-                if (Math.abs(dblDistanceToEnd) <= mdblRobotParm6) {
-                    fileLogger.writeEvent(3,"mblnRobotLastPos Complete Near END " + Math.abs(dblDistanceToEnd));
-                    robotArms.tiltMotor1.setPower(10);
-                    robotArms.tiltMotor2.setPower(10);
-                    mintCurrentStateTiltMotor = Constants.stepState.STATE_COMPLETE;
-                    deleteParallelStep();
-                    break;
-                }
-
-                //we are close enough.. don't waste time 2 degrees
-                if (Math.abs(dblDistanceToEnd) <= 2) {
-                    fileLogger.writeEvent(3,"mblnRobotLastPos Complete Close enough " + Math.abs(dblDistanceToEnd));
-                    robotArms.tiltMotor1.setPower(20);
-                    robotArms.tiltMotor2.setPower(20);
-                    if (mdblRobotParm2 > 0) {
-                        robotArms.tiltMotor1.setPower(0);
-                        robotArms.tiltMotor2.setPower(0);
-                    }
-                    mintCurrentStateTiltMotor = Constants.stepState.STATE_COMPLETE;
-                    deleteParallelStep();
-                    break;
-                }
-
-                if (mdblRobotParm1 > 0){
-                    if ((robotArms.tiltMotor1.getCurrentPosition() < (robotArms.tiltMotor1.getTargetPosition() + mdblRobotParm1))
-                        && (robotArms.tiltMotor1.getCurrentPosition() > (robotArms.tiltMotor1.getTargetPosition() - mdblRobotParm1))
-                        && (robotArms.tiltMotor2.getCurrentPosition() < (robotArms.tiltMotor2.getTargetPosition() + mdblRobotParm1))
-                        && (robotArms.tiltMotor2.getCurrentPosition() > (robotArms.tiltMotor2.getTargetPosition() - mdblRobotParm1))) {
-
-                        fileLogger.writeEvent(2, "Motor 1 is near the target Stopping Motor");
-                        fileLogger.writeEvent(2, "Motor 2 is near the target Stopping Motor");
-
-                        fileLogger.writeEvent(2, "Finished");
-                        mintCurrentStateTiltMotor = Constants.stepState.STATE_COMPLETE;
-                        if (mdblRobotParm2 > 0) {
-                            robotArms.tiltMotor1.setPower(0);
-                            robotArms.tiltMotor2.setPower(0);
-                        }
-                        deleteParallelStep();
-                        break;
-                    }
-                } else {
-                    if (!(robotArms.tiltMotor1.isBusy()) && !(robotArms.tiltMotor2.isBusy())) {
-                        //robotArms.tiltMotor1.setPower(0);
-                        //robotArms.tiltMotor2.setPower(0);
-                        fileLogger.writeEvent(2, "Finished");
-                        if (mdblRobotParm2 > 0) {
-                            robotArms.tiltMotor1.setPower(0);
-                            robotArms.tiltMotor2.setPower(0);
-                        }
-                        mintCurrentStateTiltMotor = Constants.stepState.STATE_COMPLETE;
-                        deleteParallelStep();
-                        break;
-                    }
-                }
-                //check timeout value
-                if (mStateTime.seconds() > mdblStepTimeout) {
-                    robotArms.tiltMotor1.setPower(0);
-                    robotArms.tiltMotor2.setPower(0);
-                    fileLogger.writeEvent(1,"Timeout:- " + mStateTime.seconds());
-                    //  Transition to a new state.
-                    mintCurrentStateTiltMotor = Constants.stepState.STATE_COMPLETE;
-                    deleteParallelStep();
-                    break;
                 }
                 break;
         }
@@ -2696,54 +2468,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     fileLogger.writeEvent(1,"Timeout:- " + mStateTime.seconds());
                     //  Transition to a new state.
                     mintCurrentStateFindGold = Constants.stepState.STATE_COMPLETE;
-                    deleteParallelStep();
-                }
-                break;
-        }
-    }
-
-    private void releaseTeamMarker(){
-
-        fileLogger.setEventTag("releaseTeamMarker()");
-
-        switch (mintCurrentStateTeamMarker) {
-            case STATE_INIT:
-                fileLogger.writeEvent(2, "Initialised");
-                robotArms.teamMarkerServo.setPosition(mdblTeamMarkerDrop);
-
-                if (mdblRobotParm1 == 1) {
-                    robotArms.teamMarkerServo.setPosition(mdblTeamMarkerDrop);
-                } else if (mdblRobotParm1 == 0) {
-                    robotArms.teamMarkerServo.setPosition(mdblTeamMarkerHome);
-                    mintCurrentStateTeamMarker = Constants.stepState.STATE_COMPLETE;
-                    break;
-                }
-                mintCurrentStateTeamMarker = Constants.stepState.STATE_RUNNING;
-                break;
-            case STATE_RUNNING:
-                fileLogger.writeEvent(2, "Running");
-                //  Transition to a new state.
-                //check timeout value
-                if (mdblRobotParm2 != 0) {
-                    if (mStateTime.milliseconds() > mdblRobotParm2) {
-                        robotArms.teamMarkerServo.setPosition(mdblTeamMarkerHome);
-                        fileLogger.writeEvent(2, "Open for " + mdblRobotParm1 + "ms, now closing");
-                        //  Transition to a new state.
-                        mintCurrentStateTeamMarker = Constants.stepState.STATE_COMPLETE;
-                        deleteParallelStep();
-                        break;
-                    }
-                } else {
-                    mintCurrentStateTeamMarker = Constants.stepState.STATE_COMPLETE;
-                    deleteParallelStep();
-                }
-
-                //check timeout value
-                if (mStateTime.seconds() > mdblStepTimeout) {
-                    robotArms.teamMarkerServo.setPosition(mdblTeamMarkerHome);
-                    fileLogger.writeEvent(1,"Timeout:- " + mStateTime.seconds());
-                    //  Transition to a new state.
-                    mintCurrentStateTeamMarker = Constants.stepState.STATE_COMPLETE;
                     deleteParallelStep();
                 }
                 break;
@@ -3126,9 +2850,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             (mintCurrentStateMecanumStrafe          == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateMoveLift               == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateInTake                 == Constants.stepState.STATE_COMPLETE) &&
-            (mintCurrentStateTiltMotor              == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateFindGold               == Constants.stepState.STATE_COMPLETE) &&
-            (mintCurrentStateTeamMarker             == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateRadiusTurn             == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateWyattsGyroDrive        == Constants.stepState.STATE_COMPLETE)) {
             return true;
@@ -3151,11 +2873,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         mintCurrentStateMecanumStrafe       = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateMoveLift            = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateInTake              = Constants.stepState.STATE_COMPLETE;
-        mintCurrentStateTiltMotor           = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateFindGold            = Constants.stepState.STATE_COMPLETE;
-        mintCurrentStateTeamMarker          = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateRadiusTurn          = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateWyattsGyroDrive     = Constants.stepState.STATE_COMPLETE;
     }
-
 }

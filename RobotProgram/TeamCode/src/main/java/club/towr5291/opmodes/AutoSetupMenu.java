@@ -53,9 +53,10 @@ public class AutoSetupMenu extends OpModeMasterLinear implements FTCMenu.MenuBut
     private String allianceStartPosition;
     private String allianceParkPosition;
     private int delay;
-    private String numBeacons;
     private String robotConfigBase;
-    private String robotMotorChoice;
+    private String robotMotorType;
+    private int robotMotorRatio;
+    private String robotMotorDirection;
 
     private static AutoSetupMenu instance = null;
 
@@ -100,20 +101,25 @@ public class AutoSetupMenu extends OpModeMasterLinear implements FTCMenu.MenuBut
         allianceColor = sharedPreferences.getString("club.towr5291.Autonomous.Color", "Red");
         allianceStartPosition = sharedPreferences.getString("club.towr5291.Autonomous.Position", "Left");
         delay = Integer.parseInt(sharedPreferences.getString("club.towr5291.Autonomous.Delay", "0"));
-        robotConfigBase = sharedPreferences.getString("club.towr5291.Autonomous.RobotConfigBase", "TileRunner-Mecanum-2x40");
-        robotMotorChoice = sharedPreferences.getString("club.towr5291.Autonomous.RobotMotorChoice", "ANDY40SPUR");
+        robotConfigBase = sharedPreferences.getString("club.towr5291.Autonomous.RobotConfigBase", "Custom_Mecanum");
+        robotMotorType = sharedPreferences.getString("club.towr5291.Autonomous.RobotMotorType", "Rev");
+        robotMotorRatio = Integer.parseInt(sharedPreferences.getString("club.towr5291.Autonomous.RobotMotorRatio", "15"));
+        robotMotorDirection = sharedPreferences.getString("club.towr5291.Autonomous.RobotMotorDirection", "Forward");
         debug = Integer.parseInt(sharedPreferences.getString("club.towr5291.Autonomous.Debug", "1"));
 
         //
         // Create the menus.
         //
-        FTCChoiceMenu teamMenu           = new FTCChoiceMenu("robotConfigTeam:", null, this);
-        FTCChoiceMenu allianceMenu       = new FTCChoiceMenu("Alliance:", teamMenu, this);
-        FTCChoiceMenu startPosMenu       = new FTCChoiceMenu("Start:", allianceMenu, this);
-        FTCValueMenu delayMenu           = new FTCValueMenu("Delay:", startPosMenu, this, 0.0, 20.0, 1.0, delay, "%1f");
-        FTCChoiceMenu robotMotorMenu    = new FTCChoiceMenu("Robot Base:", delayMenu, this);
-        FTCChoiceMenu robotConfigMenu    = new FTCChoiceMenu("Robot Motor:", robotMotorMenu, this);
-        FTCChoiceMenu debugConfigMenu    = new FTCChoiceMenu("Debug:", robotConfigMenu, this);
+        FTCChoiceMenu teamMenu                  = new FTCChoiceMenu("robotConfigTeam:", null, this);
+        FTCChoiceMenu allianceMenu              = new FTCChoiceMenu("Alliance:", teamMenu, this);
+        FTCChoiceMenu startPosMenu              = new FTCChoiceMenu("Start:", allianceMenu, this);
+        FTCValueMenu delayMenu                  = new FTCValueMenu("Delay:", startPosMenu, this, 0.0, 20.0, 1.0, delay, "%1f");
+        FTCChoiceMenu robotConfigMenu           = new FTCChoiceMenu("Robot Base:", delayMenu, this);
+        FTCChoiceMenu robotMotorMenu            = new FTCChoiceMenu("Robot Motor:", robotConfigMenu, this);
+        FTCValueMenu robotMotorRatioMenu        = new FTCValueMenu("Robot Ratio:", robotMotorMenu, this, 0.0, 100.0, 1.0, robotMotorRatio, "%1f");
+        FTCChoiceMenu robotMotorDirectionMenu   = new FTCChoiceMenu("Robot Ratio:", robotMotorRatioMenu, this);
+        //FTCChoiceMenu debugConfigMenu           = new FTCChoiceMenu("Debug:", robotMotorDirectionMenu, this);
+        FTCValueMenu debugConfigMenu            = new FTCValueMenu("Debug:", robotMotorDirectionMenu, this, 0.0, 20.0, 1.0, debug, "%1f");
 
         //
         // remember last saved settings and reorder the menu with last run settings as the defaults
@@ -154,165 +160,169 @@ public class AutoSetupMenu extends OpModeMasterLinear implements FTCMenu.MenuBut
             startPosMenu.addChoice(robotConfigSettings.robotConfigStartPos.START_RIGHT.toString(), robotConfigSettings.robotConfigStartPos.START_RIGHT, false, delayMenu);
         }
 
-        delayMenu.setChildMenu(robotMotorMenu);
+        delayMenu.setChildMenu(robotConfigMenu);
 
-        if (robotMotorChoice.equals(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString())){
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, true, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotConfigMenu);
-
-        } else if (robotMotorChoice.equals(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString())){
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, true, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotConfigMenu);
-
-        } else if (robotMotorChoice.equals(LibraryMotorType.MotorTypes.REV20ORBIT.toString())){
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, true, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotConfigMenu);
-
-        } else if (robotMotorChoice.equals(LibraryMotorType.MotorTypes.ANDY20SPUR.toString())){
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, true, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotConfigMenu);
-
-        } else if (robotMotorChoice.equals(LibraryMotorType.MotorTypes.ANDY40SPUR.toString())){
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, true, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotConfigMenu);
-
-        } else if (robotMotorChoice.equals(LibraryMotorType.MotorTypes.ANDY60SPUR.toString())){
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, true, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotConfigMenu);
-
-        } else if (robotMotorChoice.equals(LibraryMotorType.MotorTypes.REV20SPUR.toString())){
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, true, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotConfigMenu);
-
-        } else if (robotMotorChoice.equals(LibraryMotorType.MotorTypes.REV40SPUR.toString())){
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, true, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotConfigMenu);
-
-        } else {
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, true, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotConfigMenu);
-            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotConfigMenu);
-
-        }
-
-        if (robotConfigBase.equals(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString())) {
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, true, debugConfigMenu);
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, debugConfigMenu);
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital,false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_11231_2016.toString(), robotConfigSettings.robotConfigChoice.Custom_11231_2016, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, debugConfigMenu);
-
+        if (robotConfigBase.equals(robotConfigSettings.robotConfigChoice.Custom_Mecanum.toString())) {
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_Mecanum.toString(), robotConfigSettings.robotConfigChoice.Custom_Mecanum, true, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital,false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, robotMotorMenu);
+        } else if (robotConfigBase.equals(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString())) {
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, true, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_Mecanum.toString(), robotConfigSettings.robotConfigChoice.Custom_Mecanum, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital,false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, robotMotorMenu);
         } else if (robotConfigBase.equals(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString())) {
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, true, debugConfigMenu);
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, false, debugConfigMenu);
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_11231_2016.toString(), robotConfigSettings.robotConfigChoice.Custom_11231_2016, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, debugConfigMenu);
-
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, true, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_Mecanum.toString(), robotConfigSettings.robotConfigChoice.Custom_Mecanum, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, robotMotorMenu);
         } else if (robotConfigBase.equals(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString())) {
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())){
-                robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, true, debugConfigMenu);
-                robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, false, debugConfigMenu);
-            } else {
-                robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, true, debugConfigMenu);
-            }
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_11231_2016.toString(), robotConfigSettings.robotConfigChoice.Custom_11231_2016, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, debugConfigMenu);
-
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, true, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_Mecanum.toString(), robotConfigSettings.robotConfigChoice.Custom_Mecanum, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, robotMotorMenu);
         } else if (robotConfigBase.equals(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString())) {
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())){
-                robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital, true, debugConfigMenu);
-                robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, debugConfigMenu);
-            } else {
-                robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, true, debugConfigMenu);
-            }
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_11231_2016.toString(), robotConfigSettings.robotConfigChoice.Custom_11231_2016, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, debugConfigMenu);
-
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital, true, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_Mecanum.toString(), robotConfigSettings.robotConfigChoice.Custom_Mecanum, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, robotMotorMenu);
         } else if (robotConfigBase.equals(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString())) {
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, true, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, false, debugConfigMenu);
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, debugConfigMenu);
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_11231_2016.toString(), robotConfigSettings.robotConfigChoice.Custom_11231_2016, false, debugConfigMenu);
-
-        } else if (robotConfigBase.equals(robotConfigSettings.robotConfigChoice.Custom_11231_2016.toString())) {
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_11231_2016.toString(), robotConfigSettings.robotConfigChoice.Custom_11231_2016, true, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, false, debugConfigMenu);
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, debugConfigMenu);
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, debugConfigMenu);
-
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, true, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_Mecanum.toString(), robotConfigSettings.robotConfigChoice.Custom_Mecanum, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital, false, robotMotorMenu);
         } else {
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, true, debugConfigMenu);
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, debugConfigMenu);
-            if (isMotorOrbital(robotMotorMenu.getCurrentChoiceObject())) robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_11231_2016.toString(), robotConfigSettings.robotConfigChoice.Custom_11231_2016, false, debugConfigMenu);
-            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, debugConfigMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegular.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegular, true, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.Custom_Mecanum.toString(), robotConfigSettings.robotConfigChoice.Custom_Mecanum, true, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerRegularOrbital, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanum.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanum, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital.toString(), robotConfigSettings.robotConfigChoice.TileRunnerMecanumOrbital, false, robotMotorMenu);
+            robotConfigMenu.addChoice(robotConfigSettings.robotConfigChoice.TankTread2x40Custom.toString(), robotConfigSettings.robotConfigChoice.TankTread2x40Custom, false, robotMotorMenu);
         }
-        
+
+        if (robotMotorType.equals(LibraryMotorType.MotorTypes.REV01ORBIT.toString())){
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV01ORBIT.toString(), LibraryMotorType.MotorTypes.REV01ORBIT, true, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotMotorRatioMenu);
+        } else if (robotMotorType.equals(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString())){
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, true, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV01ORBIT.toString(), LibraryMotorType.MotorTypes.REV01ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotMotorRatioMenu);
+        } else if (robotMotorType.equals(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString())){
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, true, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV01ORBIT.toString(), LibraryMotorType.MotorTypes.REV01ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotMotorRatioMenu);
+        } else if (robotMotorType.equals(LibraryMotorType.MotorTypes.REV20ORBIT.toString())){
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, true, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV01ORBIT.toString(), LibraryMotorType.MotorTypes.REV01ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotMotorRatioMenu);
+        } else if (robotMotorType.equals(LibraryMotorType.MotorTypes.ANDY20SPUR.toString())){
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, true, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV01ORBIT.toString(), LibraryMotorType.MotorTypes.REV01ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotMotorRatioMenu);
+        } else if (robotMotorType.equals(LibraryMotorType.MotorTypes.ANDY40SPUR.toString())){
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, true, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotMotorRatioMenu);
+        } else if (robotMotorType.equals(LibraryMotorType.MotorTypes.ANDY60SPUR.toString())){
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, true, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV01ORBIT.toString(), LibraryMotorType.MotorTypes.REV01ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotMotorRatioMenu);
+        } else if (robotMotorType.equals(LibraryMotorType.MotorTypes.REV20SPUR.toString())){
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, true, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotMotorRatioMenu);
+        } else if (robotMotorType.equals(LibraryMotorType.MotorTypes.REV40SPUR.toString())){
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, true, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotMotorRatioMenu);
+        } else {
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20SPUR.toString(), LibraryMotorType.MotorTypes.ANDY20SPUR, true, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY40SPUR.toString(), LibraryMotorType.MotorTypes.ANDY40SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY60SPUR.toString(), LibraryMotorType.MotorTypes.ANDY60SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY3_7ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY3_7ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.ANDY20ORBIT.toString(), LibraryMotorType.MotorTypes.ANDY20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV01ORBIT.toString(), LibraryMotorType.MotorTypes.REV01ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20ORBIT.toString(), LibraryMotorType.MotorTypes.REV20ORBIT, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV20SPUR.toString(), LibraryMotorType.MotorTypes.REV20SPUR, false, robotMotorRatioMenu);
+            robotMotorMenu.addChoice(LibraryMotorType.MotorTypes.REV40SPUR.toString(), LibraryMotorType.MotorTypes.REV40SPUR, false, robotMotorRatioMenu);
+        }
+
+        robotMotorRatioMenu.setChildMenu(robotMotorDirectionMenu);
+
+        if (robotMotorDirection.equals("Forward")) {
+            robotMotorDirectionMenu.addChoice("Forward", "Forward" , true, debugConfigMenu);
+            robotMotorDirectionMenu.addChoice("Reverse", "Reverse", false, debugConfigMenu);
+        } else  {
+            robotMotorDirectionMenu.addChoice("Reverse", "Reverse", true, debugConfigMenu);
+            robotMotorDirectionMenu.addChoice("Forward",  "Forward", false, debugConfigMenu);
+        }
+
+/*
         switch (debug) {
             case 1:
                 debugConfigMenu.addChoice("1", 1, true);
@@ -447,6 +457,7 @@ public class AutoSetupMenu extends OpModeMasterLinear implements FTCMenu.MenuBut
                 debugConfigMenu.addChoice("10", 10, false);
                 break;
         }
+*/
 
         //
         // Walk the menu tree starting with the strategy menu as the root
@@ -456,14 +467,18 @@ public class AutoSetupMenu extends OpModeMasterLinear implements FTCMenu.MenuBut
 
         //
         // Set choices variables.
+        //load variables
         //
-        allianceStartPosition = startPosMenu.getCurrentChoiceText();
-        allianceColor = allianceMenu.getCurrentChoiceText();
         teamNumber = teamMenu.getCurrentChoiceText();
-        robotConfigBase = robotConfigMenu.getCurrentChoiceText();
-        robotMotorChoice = robotMotorMenu.getCurrentChoiceText();
+        allianceColor = allianceMenu.getCurrentChoiceText();
+        allianceStartPosition = startPosMenu.getCurrentChoiceText();
         delay = (int)delayMenu.getCurrentValue();
-        debug = Integer.parseInt(debugConfigMenu.getCurrentChoiceText());
+        robotConfigBase = robotConfigMenu.getCurrentChoiceText();
+        robotMotorType = robotMotorMenu.getCurrentChoiceText();
+        robotMotorRatio = (int)robotMotorRatioMenu.getCurrentValue();
+        robotMotorDirection = robotMotorDirectionMenu.getCurrentChoiceText();
+        //debug = Integer.parseInt(debugConfigMenu.getCurrentChoiceText());
+        debug = (int)(debugConfigMenu.getCurrentValue());
 
         //write the options to sharedpreferences
         editor.putString("club.towr5291.Autonomous.TeamNumber", teamNumber);
@@ -471,44 +486,44 @@ public class AutoSetupMenu extends OpModeMasterLinear implements FTCMenu.MenuBut
         editor.putString("club.towr5291.Autonomous.Position", allianceStartPosition);
         editor.putString("club.towr5291.Autonomous.Delay", String.valueOf(delay));
         editor.putString("club.towr5291.Autonomous.RobotConfigBase", robotConfigBase);
-        editor.putString("club.towr5291.Autonomous.RobotMotorChoice", robotMotorChoice);
+        editor.putString("club.towr5291.Autonomous.RobotMotorType", robotMotorType);
+        editor.putString("club.towr5291.Autonomous.RobotMotorRatio", String.valueOf(robotMotorRatio));
+        editor.putString("club.towr5291.Autonomous.RobotMotorDirection", robotMotorDirection);
         editor.putString("club.towr5291.Autonomous.Debug", String.valueOf(debug));
         editor.commit();
 
         //read them back to ensure they were written
-        teamNumber = sharedPreferences.getString("club.towr5291.Autonomous.TeamNumber", null);
-        allianceColor = sharedPreferences.getString("club.towr5291.Autonomous.Color", null);
-        allianceStartPosition = sharedPreferences.getString("club.towr5291.Autonomous.Position", null);
-        delay = Integer.parseInt(sharedPreferences.getString("club.towr5291.Autonomous.Delay", null));
-        robotConfigBase = sharedPreferences.getString("club.towr5291.Autonomous.RobotConfigBase", null);
-        robotMotorChoice = sharedPreferences.getString("club.towr5291.Autonomous.RobotMotorChoice", null);
-        debug = Integer.parseInt(sharedPreferences.getString("club.towr5291.Autonomous.Debug", null));
+        //load variables
+        teamNumber = sharedPreferences.getString("club.towr5291.Autonomous.TeamNumber", "0000");
+        allianceColor = sharedPreferences.getString("club.towr5291.Autonomous.Color", "Red");
+        allianceStartPosition = sharedPreferences.getString("club.towr5291.Autonomous.Position", "Left");
+        delay = Integer.parseInt(sharedPreferences.getString("club.towr5291.Autonomous.Delay", "0"));
+        robotConfigBase = sharedPreferences.getString("club.towr5291.Autonomous.RobotConfigBase", "Custom_Mecanum");
+        robotMotorType = sharedPreferences.getString("club.towr5291.Autonomous.RobotMotorType", "Rev");
+        robotMotorRatio = Integer.parseInt(sharedPreferences.getString("club.towr5291.Autonomous.RobotMotorRatio", "15"));
+        robotMotorDirection = sharedPreferences.getString("club.towr5291.Autonomous.RobotMotorDirection", "Forward");
+        debug = Integer.parseInt(sharedPreferences.getString("club.towr5291.Autonomous.Debug", "1"));
 
         int lnum = 1;
-        dashboard.displayPrintf(lnum++, "Team#:     " + teamNumber);
-        dashboard.displayPrintf(lnum++, "Alliance:  " + allianceColor);
-        dashboard.displayPrintf(lnum++, "Start:     " + allianceStartPosition);
-        dashboard.displayPrintf(lnum++, "Delay:     " + String.valueOf(delay));
-        dashboard.displayPrintf(lnum++, "RobotBase: " + robotConfigBase);
-        dashboard.displayPrintf(lnum++, "RobotMotor: " + robotMotorChoice);
-        dashboard.displayPrintf(lnum++, "Debug:     " + debug);
+        dashboard.displayPrintf(lnum++, "Team#:            " + teamNumber);
+        dashboard.displayPrintf(lnum++, "Alliance:         " + allianceColor);
+        dashboard.displayPrintf(lnum++, "Start:            " + allianceStartPosition);
+        dashboard.displayPrintf(lnum++, "Delay:            " + String.valueOf(delay));
+        dashboard.displayPrintf(lnum++, "RobotBase:        " + robotConfigBase);
+        dashboard.displayPrintf(lnum++, "RobotMotor:       " + robotMotorType);
+        dashboard.displayPrintf(lnum++, "RobotMotorRatio:  " + robotMotorRatio);
+        dashboard.displayPrintf(lnum++, "RobotMotorDirec:  " + robotMotorDirection);
+        dashboard.displayPrintf(lnum++, "Debug:            " + debug);
 
-        fileLogger.writeEvent("AutonConfig", "Team#     " + teamNumber);
-        fileLogger.writeEvent("AutonConfig", "Alliance  " + allianceColor);
-        fileLogger.writeEvent("AutonConfig", "Start     " + allianceStartPosition);
-        fileLogger.writeEvent("AutonConfig", "Delay     " + String.valueOf(delay));
-        fileLogger.writeEvent("AutonConfig", "RobotBase " + robotConfigBase);
-        fileLogger.writeEvent("AutonConfig", "RobotMotor " + robotMotorChoice);
-        fileLogger.writeEvent("AutonConfig", "Debug:    " + debug);
-
-    }
-
-    public boolean isMotorOrbital(Object types){
-        if (types == LibraryMotorType.MotorTypes.REV20ORBIT || types == LibraryMotorType.MotorTypes.ANDY20ORBIT || types == LibraryMotorType.MotorTypes.ANDY3_7ORBIT){
-            return true;
-        } else {
-            return false;
-        }
+        fileLogger.writeEvent("AutonConfig", "Team#           " + teamNumber);
+        fileLogger.writeEvent("AutonConfig", "Alliance        " + allianceColor);
+        fileLogger.writeEvent("AutonConfig", "Start           " + allianceStartPosition);
+        fileLogger.writeEvent("AutonConfig", "Delay           " + String.valueOf(delay));
+        fileLogger.writeEvent("AutonConfig", "RobotBase       " + robotConfigBase);
+        fileLogger.writeEvent("AutonConfig", "RobotMotor      " + robotMotorType);
+        fileLogger.writeEvent("AutonConfig", "RobotMotorRatio " + robotMotorRatio);
+        fileLogger.writeEvent("AutonConfig", "RobotMotorDirec " + robotMotorDirection);
+        fileLogger.writeEvent("AutonConfig", "Debug:          " + debug);
     }
 
     public void initRobot()
@@ -553,7 +568,6 @@ public class AutoSetupMenu extends OpModeMasterLinear implements FTCMenu.MenuBut
             fileLogger = null;
         }
     }   //stopMode
-
 }
 
 

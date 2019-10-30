@@ -92,9 +92,9 @@ public class robotConfigSettings {
         TileRunnerMecanum ("TileRunnerMecanum"),
         TileRunnerMecanumOrbital ("TileRunnerMecanumOrbital"),
         TiltRunnerOmni ("TileRunnerOmni"),
-
-        TankTread2x40Custom ("5291 Tank Tread-2x40 Custom"),
-        Custom_11231_2016 ("11231 2016 Custom");
+        TankTread2x40Custom ("TankTread2x40Custom"),
+        Custom_11231_2016 ("11231_2016_Custom"),
+        Custom_Mecanum ("Custom_Mecanum");
 
         private final String value;
 

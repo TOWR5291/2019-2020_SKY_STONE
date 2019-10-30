@@ -2,10 +2,11 @@ package club.towr5291.libraries;
 
 public class LibraryMotorType {
 
-    public double GEARRATIO;
+    public double GEARRATIO = 1;
     public double COUNTSPERROTATION;
     public double PULSEPERROTATION;
 
+    private double dblENCODER_CPR_REV = 28;
     private double dblENCODER_CPR_REV40SPUR = 1120;
     private double dblENCODER_CPR_REV20SPUR = 560;
     private double dblENCODER_CPR_REV20ORBITAL = 560;
@@ -16,10 +17,13 @@ public class LibraryMotorType {
     private double dblENCODER_CPR_ANDY60SPUR = 1680;
     private double dblENCODER_CPR_ANDY3_7ORBITAL = 0;
 
-    private double dblENCODER_PPR_REV40SPUR = 112;
-    private double dblENCODER_PPR_REV20SPUR = 56;
-    private double dblENCODER_PPR_REV15ORBITAL = 42;
-    private double dblENCODER_PPR_REV20ORBITAL = 56;
+    private double dblENCODER_PPR_REV = 2.8;
+    private double dblENCODER_PPR_REV40SPUR = dblENCODER_PPR_REV * 40;
+    private double dblENCODER_PPR_REV20SPUR = dblENCODER_PPR_REV * 20;
+    private double dblENCODER_PPR_REV03ORBITAL = dblENCODER_PPR_REV * 3;
+    private double dblENCODER_PPR_REV04ORBITAL = dblENCODER_PPR_REV * 4;
+    private double dblENCODER_PPR_REV05ORBITAL = dblENCODER_PPR_REV * 5;
+    private double dblENCODER_PPR_REV20ORBITAL = dblENCODER_PPR_REV * 20;
     private double dblENCODER_PPR_ANDY20ORBITAL = 134.4;
     private double dblENCODER_PPR_ANDY20SPUR = 28;
     private double dblENCODER_PPR_ANDY40SPUR = 28;
@@ -28,7 +32,9 @@ public class LibraryMotorType {
 
     private double dblGearRatioREV40SPUR = 40;
     private double dblGearRatioREV20SPUR = 20;
-    private double dblGearRatioREV15ORBITAL = 15;
+    private double dblGearRatioREV03ORBITAL = 3;
+    private double dblGearRatioREV04ORBITAL = 4;
+    private double dblGearRatioREV05ORBITAL = 5;
     private double dblGearRatioREV20ORBITAL = 20;
     private double dblGearRatioANDY20ORBITAL = 19.2;
     private double dblGearRatioANDY20SPUR = 20;
@@ -39,7 +45,10 @@ public class LibraryMotorType {
     public enum MotorTypes {
         REV40SPUR ("REV40SPUR"),
         REV20SPUR ("REV20SPUR"),
-        REV15ORBIT ("REV15ORBIT"),
+        REV01ORBIT ("REV01ORBIT"),
+        REV03ORBIT ("REV03ORBIT"),
+        REV04ORBIT ("REV04ORBIT"),
+        REV05ORBIT ("REV05ORBIT"),
         REV20ORBIT ("REV20ORBIT"),
         ANDY20SPUR ("ANDY20SPUR"),
         ANDY40SPUR ("ANDY40SPUR"),
@@ -63,27 +72,7 @@ public class LibraryMotorType {
             } else {
                 return false;
             }
-
         }
-    }
-
-    public enum REV_VARIABLE_RATIOS {
-        R1_5 (5, "1:5"),
-        R1_4 (4, "1:4"),
-        R1_3 (3, "1:3");
-
-        public double value;
-        public String name;
-
-        REV_VARIABLE_RATIOS(double value, String name){this.value = value; this.name = name;}
-
-        public double getValue(){return this.value;}
-        public String getName(){return this.name;}
-    }
-
-    public enum REV_RATIO {
-        R1_20,
-        R
     }
 
     public void loadData(MotorTypes motorTypes){
@@ -91,55 +80,73 @@ public class LibraryMotorType {
             case REV40SPUR:
                 this.COUNTSPERROTATION = this.dblENCODER_CPR_REV40SPUR;
                 this.PULSEPERROTATION = this.dblENCODER_PPR_REV40SPUR;
-                this.GEARRATIO = this.dblGearRatioREV40SPUR;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioREV40SPUR;
                 break;
 
             case REV20SPUR:
                 this.COUNTSPERROTATION = this.dblENCODER_CPR_REV20SPUR;
                 this.PULSEPERROTATION = this.dblENCODER_PPR_REV20SPUR;
-                this.GEARRATIO = this.dblGearRatioREV20SPUR;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioREV20SPUR;
                 break;
 
             case REV20ORBIT:
-                this.COUNTSPERROTATION = this.dblENCODER_CPR_REV20ORBITAL;
                 this.PULSEPERROTATION = this.dblENCODER_PPR_REV20ORBITAL;
-                this.GEARRATIO = this.dblGearRatioREV20ORBITAL;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioREV20ORBITAL;
+                this.COUNTSPERROTATION = this.dblENCODER_CPR_REV20ORBITAL;
                 break;
 
-            case REV15ORBIT:
-                this.COUNTSPERROTATION = this.dblENCODER_CPR_REV15ORBITAL;
-                this.PULSEPERROTATION = this.dblENCODER_PPR_REV15ORBITAL;
-                this.GEARRATIO = this.dblGearRatioREV15ORBITAL;
+            case REV01ORBIT:
+                this.PULSEPERROTATION = this.PULSEPERROTATION*this.dblENCODER_PPR_REV03ORBITAL;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioREV03ORBITAL;
+                this.COUNTSPERROTATION = this.dblENCODER_CPR_REV*this.GEARRATIO;
+                break;
+
+            case REV03ORBIT:
+                this.PULSEPERROTATION = this.PULSEPERROTATION*this.dblENCODER_PPR_REV03ORBITAL;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioREV03ORBITAL;
+                this.COUNTSPERROTATION = this.dblENCODER_CPR_REV*this.GEARRATIO;
+                break;
+
+            case REV04ORBIT:
+                this.PULSEPERROTATION = this.PULSEPERROTATION*this.dblENCODER_PPR_REV04ORBITAL;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioREV04ORBITAL;
+                this.COUNTSPERROTATION = this.dblENCODER_CPR_REV*this.GEARRATIO;
+                break;
+
+            case REV05ORBIT:
+                this.PULSEPERROTATION = this.PULSEPERROTATION*this.dblENCODER_PPR_REV05ORBITAL;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioREV05ORBITAL;
+                this.COUNTSPERROTATION = this.dblENCODER_CPR_REV*this.GEARRATIO;
                 break;
 
             case ANDY20SPUR:
                 this.COUNTSPERROTATION = this.dblENCODER_CPR_ANDY20SPUR;
                 this.PULSEPERROTATION = this.dblENCODER_PPR_ANDY20SPUR;
-                this.GEARRATIO = this.dblGearRatioANDY20SPUR;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioANDY20SPUR;
                 break;
 
             case ANDY40SPUR:
                 this.COUNTSPERROTATION = this.dblENCODER_CPR_ANDY40SPUR;
                 this.PULSEPERROTATION = this.dblENCODER_PPR_ANDY40SPUR;
-                this.GEARRATIO = this.dblGearRatioANDY40SPUR;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioANDY40SPUR;
                 break;
 
             case ANDY60SPUR:
                 this.COUNTSPERROTATION = this.dblENCODER_CPR_ANDY60SPUR;
                 this.PULSEPERROTATION = this.dblENCODER_PPR_ANDY60SPUR;
-                this.GEARRATIO = this.dblGearRatioANDY60SPUR;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioANDY60SPUR;
                 break;
 
             case ANDY20ORBIT:
                 this.COUNTSPERROTATION = this.dblENCODER_CPR_ANDY20ORBITAL;
                 this.PULSEPERROTATION = this.dblENCODER_PPR_ANDY20ORBITAL;
-                this.GEARRATIO = this.dblGearRatioANDY20ORBITAL;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioANDY20ORBITAL;
                 break;
 
             case ANDY3_7ORBIT:
                 this.COUNTSPERROTATION = this.dblENCODER_CPR_ANDY3_7ORBITAL;
                 this.PULSEPERROTATION = this.dblENCODER_PPR_ANDY3_7ORBITAL;
-                this.GEARRATIO = this.dblGearRatioANDY3_7ORBITAL;
+                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioANDY3_7ORBITAL;
                 break;
         }
     }
@@ -152,7 +159,64 @@ public class LibraryMotorType {
         return GEARRATIO;
     }
 
-    public double getCOUNTSPERROTATION() {
+    public double getCOUNTSPERROTATION(int ratio, MotorTypes motorType) {
+        if (motorType == MotorTypes.REV01ORBIT) {
+            switch (ratio) {
+                case 3:
+                    loadData(MotorTypes.REV03ORBIT);
+                    break;
+                case 4:
+                    loadData(MotorTypes.REV04ORBIT);
+                    break;
+                case 5:
+                    loadData(MotorTypes.REV05ORBIT);
+                    break;
+                case 9:
+                    loadData(MotorTypes.REV03ORBIT);
+                    loadData(MotorTypes.REV03ORBIT);
+                    break;
+                case 12:
+                    loadData(MotorTypes.REV03ORBIT);
+                    loadData(MotorTypes.REV04ORBIT);
+                    break;
+                case 15:
+                    loadData(MotorTypes.REV03ORBIT);
+                    loadData(MotorTypes.REV05ORBIT);
+                    break;
+                case 16:
+                    loadData(MotorTypes.REV04ORBIT);
+                    loadData(MotorTypes.REV04ORBIT);
+                    break;
+                case 20:
+                    loadData(MotorTypes.REV04ORBIT);
+                    loadData(MotorTypes.REV05ORBIT);
+                    break;
+                case 25:
+                    loadData(MotorTypes.REV05ORBIT);
+                    loadData(MotorTypes.REV05ORBIT);
+                    break;
+                case 27:
+                    loadData(MotorTypes.REV03ORBIT);
+                    loadData(MotorTypes.REV03ORBIT);
+                    loadData(MotorTypes.REV03ORBIT);
+                    break;
+                case 60:
+                    loadData(MotorTypes.REV03ORBIT);
+                    loadData(MotorTypes.REV04ORBIT);
+                    loadData(MotorTypes.REV05ORBIT);
+                    break;
+                case 64:
+                    loadData(MotorTypes.REV04ORBIT);
+                    loadData(MotorTypes.REV04ORBIT);
+                    loadData(MotorTypes.REV04ORBIT);
+                    break;
+                case 125:
+                    loadData(MotorTypes.REV04ORBIT);
+                    loadData(MotorTypes.REV04ORBIT);
+                    loadData(MotorTypes.REV04ORBIT);
+                    break;
+            }
+        }
         return COUNTSPERROTATION;
     }
 
