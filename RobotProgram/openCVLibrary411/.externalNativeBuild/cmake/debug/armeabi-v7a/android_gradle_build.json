@@ -2,11 +2,11 @@
 {
 	"buildFiles" : 
 	[
-		"C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/libcxx_helper/CMakeLists.txt"
+		"C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/libcxx_helper/CMakeLists.txt"
 	],
 	"cleanCommands" : 
 	[
-		"C:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\lilah\\Documents\\FTCPrograms\\2019-2020_SKY_STONE\\RobotProgram\\openCVLibrary411\\.externalNativeBuild\\cmake\\debug\\armeabi-v7a --target clean"
+		"C:\\Users\\Wyatt\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build \"C:\\FTC Code\\2019-2020_SKY_STONE\\RobotProgram\\openCVLibrary411\\.externalNativeBuild\\cmake\\debug\\armeabi-v7a\" --target clean"
 	],
 	"cppFileExtensions" : [ "cpp" ],
 	"libraries" : 
@@ -15,27 +15,27 @@
 		{
 			"abi" : "armeabi-v7a",
 			"artifactName" : "opencv_jni_shared",
-			"buildCommand" : "C:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\lilah\\Documents\\FTCPrograms\\2019-2020_SKY_STONE\\RobotProgram\\openCVLibrary411\\.externalNativeBuild\\cmake\\debug\\armeabi-v7a --target opencv_jni_shared",
+			"buildCommand" : "C:\\Users\\Wyatt\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build \"C:\\FTC Code\\2019-2020_SKY_STONE\\RobotProgram\\openCVLibrary411\\.externalNativeBuild\\cmake\\debug\\armeabi-v7a\" --target opencv_jni_shared",
 			"buildType" : "debug",
 			"files" : 
 			[
 				
 				{
-					"flags" : "  --target=armv7-none-linux-androideabi21 --gcc-toolchain=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot    -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -march=armv7-a -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC    -c ",
-					"src" : "C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/libcxx_helper/dummy.cpp",
-					"workingDirectory" : "C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/.externalNativeBuild/cmake/debug/armeabi-v7a"
+					"flags" : "  --target=armv7-none-linux-androideabi21 --gcc-toolchain=C:/Users/Wyatt/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/Wyatt/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot    -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -march=armv7-a -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC    -c ",
+					"src" : "C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/libcxx_helper/dummy.cpp",
+					"workingDirectory" : "C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/.externalNativeBuild/cmake/debug/armeabi-v7a"
 				}
 			],
-			"output" : "C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/.externalNativeBuild/cmake/debug/armeabi-v7a/libopencv_jni_shared.a",
-			"toolchain" : "217952065"
+			"output" : "C:/FTC Code/2019-2020_SKY_STONE/RobotProgram/openCVLibrary411/.externalNativeBuild/cmake/debug/armeabi-v7a/libopencv_jni_shared.a",
+			"toolchain" : "3319108769"
 		}
 	},
 	"toolchains" : 
 	{
-		"217952065" : 
+		"3319108769" : 
 		{
-			"cCompilerExecutable" : "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe",
-			"cppCompilerExecutable" : "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe"
+			"cCompilerExecutable" : "C:/Users/Wyatt/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe",
+			"cppCompilerExecutable" : "C:/Users/Wyatt/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe"
 		}
 	}
 }

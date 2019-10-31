@@ -96,9 +96,9 @@ public class LibraryMotorType {
                 break;
 
             case REV01ORBIT:
-                this.PULSEPERROTATION = this.PULSEPERROTATION*this.dblENCODER_PPR_REV03ORBITAL;
-                this.GEARRATIO = this.GEARRATIO*this.dblGearRatioREV03ORBITAL;
-                this.COUNTSPERROTATION = this.dblENCODER_CPR_REV*this.GEARRATIO;
+                //this.PULSEPERROTATION = this.PULSEPERROTATION*this.dblENCODER_PPR_REV03ORBITAL;
+                //this.GEARRATIO = this.GEARRATIO*this.dblGearRatioREV03ORBITAL;
+                //this.COUNTSPERROTATION = this.dblENCODER_CPR_REV*this.GEARRATIO;
                 break;
 
             case REV03ORBIT:

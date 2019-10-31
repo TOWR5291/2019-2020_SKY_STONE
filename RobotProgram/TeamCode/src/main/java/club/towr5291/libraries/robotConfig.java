@@ -223,11 +223,11 @@ public class robotConfig {
         COUNTS_PER_MOTOR_REV = libraryMotorType.getCOUNTSPERROTATION(this.robotMotorRatio, LibraryMotorType.MotorTypes.valueOf(robotMotorType));              // eg: TETRIX = 1440 pulses, NeveRest 20 = 560 pulses, NeveRest 40 =  1120, NeveRest 60 = 1680 pulses
 
         switch (robotConfigBase) {
-            case "CustomMecanum":
+            case "Custom_Mecanum":
                 REVERSE_DIRECTION = 1;                                                       // Reverse the direction without significant code changes, (using motor FORWARD REVERSE will affect the driver station as we use same robotconfig file
                 DRIVE_GEAR_REDUCTION = 1.09;                                                 // This is < 1.0 if geared UP
                 WHEEL_DIAMETER_INCHES = 4.0;                                                 // For figuring circumference
-                WHEEL_ACTUAL_FUDGE = 1;                                                      // Fine tuning amount
+                WHEEL_ACTUAL_FUDGE = 0.95;                                                      // Fine tuning amount
                 COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415)) * WHEEL_ACTUAL_FUDGE * REVERSE_DIRECTION;
                 ROBOT_TRACK = 17;                                                     //  distance between centerline of rear wheels robot will pivot on rear wheel of omni on front, 16.5 track is 103.67 inches full circle
                 WHEEL_TURN_FUDGE = 1.0;                                                        // Fine tuning amount
