@@ -38,8 +38,8 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
     boolean hold = false;
 
     /* Hardware Set Up */
-    private HardwareDriveMotors Robot               = new HardwareDriveMotors();
-    private HardwareArmMotorsSkyStone Arms          = new HardwareArmMotorsSkyStone();
+    private HardwareDriveMotors robotDrive               = new HardwareDriveMotors();
+    private HardwareArmMotorsSkyStone robotArms          = new HardwareArmMotorsSkyStone();
 
     //Settings from the sharepreferences
     private SharedPreferences sharedPreferences;
@@ -94,12 +94,13 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
         fileLogger.writeEvent(1, "Robot Motor Type", ourRobotConfig.getRobotMotorType());
         fileLogger.writeEvent(1,"Team Number", ourRobotConfig.getTeamNumber());
 
-        Robot.init(fileLogger, hardwareMap, robotConfigSettings.robotConfigChoice.valueOf(ourRobotConfig.getRobotConfigBase()), LibraryMotorType.MotorTypes.valueOf(ourRobotConfig.getRobotMotorType()));// Starting robot Hardware map
+        robotDrive.init(fileLogger, hardwareMap, robotConfigSettings.robotConfigChoice.valueOf(ourRobotConfig.getRobotConfigBase()), LibraryMotorType.MotorTypes.valueOf(ourRobotConfig.getRobotMotorType()));// Starting robot Hardware map
         dashboard.displayPrintf(0, "Robot Base Loaded");
 
-        Robot.allMotorsStop();
+        robotDrive.allMotorsStop();
+        robotDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        Arms.init(hardwareMap, dashboard);
+        robotArms.init(hardwareMap, dashboard);
         fileLogger.writeEvent(1,"","Wait For Start ");
 
         dashboard.displayPrintf(1, "Waiting for Start");
@@ -111,7 +112,7 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
 
         //dashboard.clearDisplay();
 
-        Arms.liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robotArms.liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         dashboard.displayPrintf(3, "Controller A Options");
         dashboard.displayPrintf(4, "--------------------");
@@ -125,38 +126,38 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
             dashboard.displayPrintf(5, "Controller Mode -- ", "Mecanum Drive Relic Recovery (BAD)");
             fileLogger.writeEvent(debug, "Controller Mode", "Mecanum Drive Relic Recovery");
 
-            Robot.baseMotor1.setPower(Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x, -1, 1));
-            Robot.baseMotor2.setPower(Range.clip(gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x, -1, 1));
-            Robot.baseMotor3.setPower(Range.clip(gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x, -1, 1));
-            Robot.baseMotor4.setPower(Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x, -1, 1));
+            robotDrive.baseMotor1.setPower(Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x, -1, 1));
+            robotDrive.baseMotor2.setPower(Range.clip(gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x, -1, 1));
+            robotDrive.baseMotor3.setPower(Range.clip(gamepad1.left_stick_y + gamepad1.left_stick_x - gamepad1.right_stick_x, -1, 1));
+            robotDrive.baseMotor4.setPower(Range.clip(gamepad1.left_stick_y - gamepad1.left_stick_x - gamepad1.right_stick_x, -1, 1));
 
             liftMotorPower();
-            Arms.intakeMotor1.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
+            robotArms.intakeMotor1.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
             // grab the block
             if (gamepad2.a)
-                Arms.grabServo.setPosition(0);
+                robotArms.grabServo.setPosition(0);
             else if (gamepad2.y)
-                Arms.grabServo.setPosition(.5);
+                robotArms.grabServo.setPosition(.5);
 
             //rotate the arm out so we can stack the block or bring it back in
             if (gamepad2.b)
-                Arms.wristServo.setPosition(0);
+                robotArms.wristServo.setPosition(0);
             else if (gamepad2.x)
-                Arms.wristServo.setPosition(1);
+                robotArms.wristServo.setPosition(1);
 
             //send the tape measure out
             if (gamepad2.dpad_up)
-                Arms.tapeServo.setPosition(.9);
+                robotArms.tapeServo.setPosition(.9);
             else if (gamepad2.dpad_down)
-                Arms.tapeServo.setPosition(.1);
+                robotArms.tapeServo.setPosition(.1);
             else
-                Arms.tapeServo.setPosition(0);
+                robotArms.tapeServo.setPosition(0);
             //Foundation Arm
 
             if (gamepad2.left_bumper)
-                Arms.foundationServo.setPosition(0);
+                robotArms.foundationServo.setPosition(0);
             else if (gamepad2.right_bumper)
-                Arms.foundationServo.setPosition(1);
+                robotArms.foundationServo.setPosition(1);
 
         }
         //stop the logging
@@ -174,20 +175,20 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
             if ((hold == false)) {
                 fileLogger.writeEvent(8, "Hold is Now true");
                 fileLogger.writeEvent(8,"Run using encoders now in hold function in the movement of the arm");
-                Arms.liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                robotArms.liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 fileLogger.writeEvent(8, "Setting the target position so that the arm does not move!");
-                Arms.liftMotor1.setTargetPosition(Arms.liftMotor1.getCurrentPosition());
+                robotArms.liftMotor1.setTargetPosition(robotArms.liftMotor1.getCurrentPosition());
                 hold = true;
             }
-            Arms.liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robotArms.liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            Arms.liftMotor1.setPower(HOLDINGTILTMOTORPOWER);
+            robotArms.liftMotor1.setPower(HOLDINGTILTMOTORPOWER);
 
-            fileLogger.writeEvent(8, "Setting the power to the tilt motor at " + Arms.liftMotor1.getPower());
+            fileLogger.writeEvent(8, "Setting the power to the tilt motor at " + robotArms.liftMotor1.getPower());
         } else {
-            Arms.liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            robotArms.liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             hold = false;
-            Arms.liftMotor1.setPower(-gamepad2.left_stick_y);
+            robotArms.liftMotor1.setPower(-gamepad2.left_stick_y);
         }
     }
 }

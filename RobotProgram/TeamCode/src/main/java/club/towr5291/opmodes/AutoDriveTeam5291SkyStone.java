@@ -44,6 +44,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -141,8 +142,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
     //adafruit IMU
     // The IMU sensor object
     private BNO055IMU imu;
-    // State used for updating telemetry
-    private boolean useAdafruitIMU = false;
 
     private double mdblTurnAbsoluteGyro;
     private double mdblGyrozAccumulated;
@@ -181,9 +180,11 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
     private Constants.stepState mintCurrentStateMecanumStrafe;                  // Current State of mecanum strafe
     private Constants.stepState mintCurrentStepDelay;                           // Current State of Delay (robot doing nothing)
     private Constants.stepState mintCurrentStateMoveLift;                       // Current State of the Move lift
-    private Constants.stepState mintCurrentStateInTake;                       // Current State of the Move lift
+    private Constants.stepState mintCurrentStateInTake;                         // Current State of the Move lift
     private Constants.stepState mintCurrentStateFindGold;                       // Current State of Finding Gold
-    private Constants.stepState mintCurrentStateWyattsGyroDrive;                     //Wyatt Gyro Function
+    private Constants.stepState mintCurrentStateWyattsGyroDrive;                //Wyatt Gyro Function
+    private Constants.stepState mintCurrentStateTapeMeasure;                    // Control Tape Measure
+    private Constants.stepState mintCurrentStateGrabFoundation;                 // Control Servo to move foundation
 
     private int mintFindGoldLoop = 0;                                           //there can only be 3 positions so count how many times we try
     private boolean mboolFoundGold = false;
@@ -197,6 +198,14 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
     //motors
     private HardwareDriveMotors robotDrive          = new HardwareDriveMotors();   // Use 5291's hardware
     private HardwareArmMotorsSkyStone robotArms     = new HardwareArmMotorsSkyStone();   // Use 5291's hardware
+    PIDFCoefficients getMotorPIDFMotor1;
+    PIDFCoefficients getMotorPIDFMotor2;
+    PIDFCoefficients getMotorPIDFMotor3;
+    PIDFCoefficients getMotorPIDFMotor4;
+    PIDFCoefficients newMotorPIDFMotor1;
+    PIDFCoefficients newMotorPIDFMotor2;
+    PIDFCoefficients newMotorPIDFMotor3;
+    PIDFCoefficients newMotorPIDFMotor4;
     //private HardwareSensorsRoverRuckus sensor       = new HardwareSensorsRoverRuckus();
 
     private boolean vuforiaWebcam = false;
@@ -438,6 +447,54 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         robotDrive.setHardwareDriveResetEncoders();
         robotDrive.setHardwareDriveRunUsingEncoders();
         robotDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        getMotorPIDFMotor1 = robotDrive.getMotorPIDF(1);
+        getMotorPIDFMotor2 = robotDrive.getMotorPIDF(2);
+        getMotorPIDFMotor3 = robotDrive.getMotorPIDF(3);
+        getMotorPIDFMotor4 = robotDrive.getMotorPIDF(4);
+        newMotorPIDFMotor1 = getMotorPIDFMotor1;
+        newMotorPIDFMotor2 = getMotorPIDFMotor2;
+        newMotorPIDFMotor3 = getMotorPIDFMotor3;
+        newMotorPIDFMotor4 = getMotorPIDFMotor4;
+        fileLogger.writeEvent("(orig Motor 1) P " + getMotorPIDFMotor1.p + ", I " + getMotorPIDFMotor1.i + ", D " + getMotorPIDFMotor1.d + ", F " + getMotorPIDFMotor1.f);
+        fileLogger.writeEvent("(orig Motor 2) P " + getMotorPIDFMotor2.p + ", I " + getMotorPIDFMotor2.i + ", D " + getMotorPIDFMotor2.d + ", F " + getMotorPIDFMotor2.f);
+        fileLogger.writeEvent("(orig Motor 3) P " + getMotorPIDFMotor3.p + ", I " + getMotorPIDFMotor3.i + ", D " + getMotorPIDFMotor3.d + ", F " + getMotorPIDFMotor3.f);
+        fileLogger.writeEvent("(orig Motor 4) P " + getMotorPIDFMotor4.p + ", I " + getMotorPIDFMotor4.i + ", D " + getMotorPIDFMotor4.d + ", F " + getMotorPIDFMotor4.f);
+        newMotorPIDFMotor1.p = getMotorPIDFMotor1.p + 21;
+        newMotorPIDFMotor2.p = getMotorPIDFMotor2.p + 21;
+        newMotorPIDFMotor3.p = getMotorPIDFMotor3.p + 21;
+        newMotorPIDFMotor4.p = getMotorPIDFMotor4.p + 21;
+        newMotorPIDFMotor1.i = getMotorPIDFMotor1.i + 0.037;
+        newMotorPIDFMotor2.i = getMotorPIDFMotor2.i + 0.037;
+        newMotorPIDFMotor3.i = getMotorPIDFMotor3.i + 0.037;
+        newMotorPIDFMotor4.i = getMotorPIDFMotor4.i + 0.037;
+        newMotorPIDFMotor1.d = getMotorPIDFMotor1.d;
+        newMotorPIDFMotor2.d = getMotorPIDFMotor2.d;
+        newMotorPIDFMotor3.d = getMotorPIDFMotor3.d;
+        newMotorPIDFMotor4.d = getMotorPIDFMotor4.d;
+        newMotorPIDFMotor1.f = 0;//getMotorPIDFMotor1.f + 2;
+        newMotorPIDFMotor2.f = 0;//getMotorPIDFMotor2.f + 2;
+        newMotorPIDFMotor3.f = 0;//getMotorPIDFMotor3.f + 2;
+        newMotorPIDFMotor4.f = 0;//getMotorPIDFMotor4.f + 2;
+
+        //set new PIDF Values
+        robotDrive.setMotorPIDF(newMotorPIDFMotor1,1);
+        robotDrive.setMotorPIDF(newMotorPIDFMotor2,2);
+        robotDrive.setMotorPIDF(newMotorPIDFMotor3,3);
+        robotDrive.setMotorPIDF(newMotorPIDFMotor4,4);
+
+        getMotorPIDFMotor1 = robotDrive.getMotorPIDF(1);
+        getMotorPIDFMotor2 = robotDrive.getMotorPIDF(2);
+        getMotorPIDFMotor3 = robotDrive.getMotorPIDF(3);
+        getMotorPIDFMotor4 = robotDrive.getMotorPIDF(4);
+        fileLogger.writeEvent("(new Motor 1) P " + getMotorPIDFMotor1.p + ", I " + getMotorPIDFMotor1.i + ", D " + getMotorPIDFMotor1.d + ", F " + getMotorPIDFMotor1.f);
+        fileLogger.writeEvent("(new Motor 2) P " + getMotorPIDFMotor2.p + ", I " + getMotorPIDFMotor2.i + ", D " + getMotorPIDFMotor2.d + ", F " + getMotorPIDFMotor2.f);
+        fileLogger.writeEvent("(new Motor 3) P " + getMotorPIDFMotor3.p + ", I " + getMotorPIDFMotor3.i + ", D " + getMotorPIDFMotor3.d + ", F " + getMotorPIDFMotor3.f);
+        fileLogger.writeEvent("(new Motor 4) P " + getMotorPIDFMotor4.p + ", I " + getMotorPIDFMotor4.i + ", D " + getMotorPIDFMotor4.d + ", F " + getMotorPIDFMotor4.f);
+
+
+        fileLogger.writeEvent(1, "robotConfigTeam #       " + ourRobotConfig.getTeamNumber());
+        fileLogger.writeEvent(1, "Alliance Colour         " + ourRobotConfig.getAllianceColor());
+        fileLogger.writeEvent(1, "Alliance Start Pos      " + ourRobotConfig.getAllianceStartPosition());
 
         dashboard.displayPrintf(10, "initRobot BaseDrive Loaded");
         fileLogger.writeEvent(3, "Configuring Motors Base - Finish");
@@ -674,8 +731,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 PivotTurnStep();
                 break;
             case "STRAFE":
-                //MecanumStrafe();
-                MecanumStrafeTime();
+                MecanumStrafe();
+                //MecanumStrafeTime();
                 break;
             case "RADIUSTURN":
                 RadiusTurnStep();
@@ -700,6 +757,12 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 break;
             case "WYATTGYRO":
                 WyattsGyroDrive();
+                break;
+            case "GRAB":
+                GrabFoundation();
+                break;
+            case "TAPE":
+                TapeMeasure();
                 break;
         }
     }
@@ -795,6 +858,15 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 break;
             case "FNC":  //  Run a special Function with Parms
 
+                break;
+
+            case "GRAB":
+                mintCurrentStateGrabFoundation       = Constants.stepState.STATE_INIT;
+                towr5291TextToSpeech.Speak("Grabbing Foundation", debug);
+                break;
+            case "TAPE":
+                mintCurrentStateTapeMeasure          = Constants.stepState.STATE_INIT;
+                towr5291TextToSpeech.Speak("Tape Measure", debug);
                 break;
             }
 
@@ -930,13 +1002,14 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 dblDistanceFromStart = (dblDistanceFromStartLeft1 + dblDistanceFromStartRight1 + dblDistanceFromStartLeft2 + dblDistanceFromStartRight2) / 4;
 
                 //determine how close to target we are
-                dblDistanceToEndLeft1 = (mintStepLeftTarget1 - intLeft1MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
-                dblDistanceToEndLeft2 = (mintStepLeftTarget2 - intLeft2MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
-                dblDistanceToEndRight1 = (mintStepRightTarget1 - intRight1MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
-                dblDistanceToEndRight2 = (mintStepRightTarget2 - intRight2MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
+                //dblDistanceToEndLeft1 = (mintStepLeftTarget1 - intLeft1MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
+                //dblDistanceToEndLeft2 = (mintStepLeftTarget2 - intLeft2MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
+                //dblDistanceToEndRight1 = (mintStepRightTarget1 - intRight1MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
+                //dblDistanceToEndRight2 = (mintStepRightTarget2 - intRight2MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
 
                 //if getting close ramp down speed
-                dblDistanceToEnd = Math.max(Math.max(Math.max(Math.abs(dblDistanceToEndLeft1),Math.abs(dblDistanceToEndRight1)),Math.abs(dblDistanceToEndLeft2)),Math.abs(dblDistanceToEndRight2));
+                //dblDistanceToEnd = Math.max(Math.max(Math.max(Math.abs(dblDistanceToEndLeft1),Math.abs(dblDistanceToEndRight1)),Math.abs(dblDistanceToEndLeft2)),Math.abs(dblDistanceToEndRight2));
+                dblDistanceToEnd = Math.abs(Math.abs(mdblStepDistance) - Math.abs(dblDistanceFromStart));
 
                 //parameter 1 or 4 is use gyro for direction,  setting either of these to 1 will get gyro correction
                 // if parameter 1 is true
@@ -983,9 +1056,9 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     break;
                 }
 
-                //stop driving when within .25 inch, sometimes takes a long time to get that last bit and times out.
+                //stop driving when within .5 inch, sometimes takes a long time to get that last bit and times out.
                 //stop when drive motors stop
-                if (Math.abs(dblDistanceToEnd) <= 0.25) {
+                if (Math.abs(dblDistanceToEnd) <= 0.5) {
                     fileLogger.writeEvent(3,"mblnRobotLastPos Complete Near END " + Math.abs(dblDistanceToEnd));
                     mintCurrentStateDriveHeading = Constants.stepState.STATE_COMPLETE;
                     deleteParallelStep();
@@ -1572,7 +1645,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 adafruitIMUHeading = getAdafruitHeading();
                 currentHeading = adafruitIMUHeading;
                 //mdblRobotTurnAngle = Double.parseDouble(mdblStepDistance);
-                //fileLogger.writeEvent(3, "MecanumStrafe", "USING HEADING FROM IMU=" + useAdafruitIMU);
                 //fileLogger.writeEvent(3, "MecanumStrafe()", "mdblRobotTurnAngle " + mdblRobotTurnAngle + " currentHeading " + currentHeading);
                 //mdblTurnAbsoluteGyro = Double.parseDouble(newAngleDirection((int) currentHeading, (int) mdblRobotTurnAngle).substring(3));
 
@@ -1635,7 +1707,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 mdblGyrozAccumulated = teamAngleAdjust(mdblGyrozAccumulated);//Set variables to MRgyro readings
                 //mdblTurnAbsoluteGyro = Double.parseDouble(newAngleDirectionGyro((int) mdblGyrozAccumulated, (int) mdblRobotTurnAngle).substring(3));
                 String mstrDirection = (newAngleDirectionGyro((int) mdblGyrozAccumulated, (int) mdblRobotTurnAngle).substring(0, 3));
-                fileLogger.writeEvent(3, "USING HEADING FROM IMU=" + useAdafruitIMU);
                 fileLogger.writeEvent(3, "Running, mdblGyrozAccumulated = " + mdblGyrozAccumulated);
                 fileLogger.writeEvent(3, "Running, mdblTurnAbsoluteGyro = " + mdblTurnAbsoluteGyro);
                 fileLogger.writeEvent(3, "Running, mstrDirection        = " + mstrDirection);
@@ -1661,7 +1732,22 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 dashboard.displayPrintf(7, LABEL_WIDTH, "Right Target: ", "Running to %7d :%7d", mintStepRightTarget1, mintStepRightTarget2);
                 dashboard.displayPrintf(8, LABEL_WIDTH, "Right Actual: ", "Running at %7d :%7d", intRight1MotorEncoderPosition, intRight2MotorEncoderPosition);
 
-                double dblDistanceToEnd = Math.max(Math.max(Math.max(Math.abs(dblDistanceToEndLeft1),Math.abs(dblDistanceToEndRight1)),Math.abs(dblDistanceToEndLeft2)),Math.abs(dblDistanceToEndRight2));
+                //if moving ramp up
+                // ramp up speed - need to write function to ramp up speed
+                double dblDistanceFromStartLeft1;
+                double dblDistanceFromStartLeft2;
+                double dblDistanceFromStartRight1;
+                double dblDistanceFromStartRight2;
+                double dblDistanceFromStart;
+                dblDistanceFromStartLeft1 = Math.abs(mintStartPositionLeft1 - intLeft1MotorEncoderPosition) / (ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_LEFT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_FRONT_OFFSET());
+                dblDistanceFromStartLeft2 = Math.abs(mintStartPositionLeft2 - intLeft2MotorEncoderPosition) / (ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_LEFT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_REAR_OFFSET());
+                dblDistanceFromStartRight1 = Math.abs(mintStartPositionRight1 - intRight1MotorEncoderPosition) / (ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_RIGHT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_FRONT_OFFSET());
+                dblDistanceFromStartRight2 = Math.abs(mintStartPositionRight2 - intRight2MotorEncoderPosition) / (ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_RIGHT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_REAR_OFFSET());
+
+                dblDistanceFromStart = (dblDistanceFromStartLeft1 + dblDistanceFromStartRight1 + dblDistanceFromStartLeft2 + dblDistanceFromStartRight2) / 4;
+
+                //double dblDistanceToEnd = Math.max(Math.max(Math.max(Math.abs(dblDistanceToEndLeft1),Math.abs(dblDistanceToEndRight1)),Math.abs(dblDistanceToEndLeft2)),Math.abs(dblDistanceToEndRight2));
+                double dblDistanceToEnd = Math.abs(Math.abs(mdblStepDistance) - Math.abs(dblDistanceFromStart));
 
                 if (mblnRobotLastPos) {
                     if (Math.abs(dblDistanceToEnd) <= mdblRobotParm6) {
@@ -1709,9 +1795,9 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     blnStallTimerStarted = false;
 */
 
-                //stop driving when within .25 inch, sometimes takes a long time to get that last bit and times out.
+                //stop driving when within .5 inch, sometimes takes a long time to get that last bit and times out.
                 //stop when drive motors stop
-                if (Math.abs(dblDistanceToEnd) <= 0.25) {
+                if (Math.abs(dblDistanceToEnd) <= 0.5) {
                     fileLogger.writeEvent(3,"mblnRobotLastPos Complete Near END " + Math.abs(dblDistanceToEnd));
                     mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
                     deleteParallelStep();
@@ -1993,13 +2079,13 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         fileLogger.setEventTag("TankTurnGyroHeading()");
         switch (mintCurrentStateTankTurnGyroHeading) {
             case STATE_INIT: {
-                double gain = 0.13;
+                double gain = 0.032;
                 if (dblStartVoltage > 13.1){
-                    gain = 0.13;
+                    gain = gain;
                 } else if (dblStartVoltage > 12.8) {
-                    gain =0.131;
+                    gain = gain + 0.001;
                 } else {
-                    gain = 0.132;
+                    gain = gain + 0.002;
                 }
                 PID1 = new TOWR5291PID(runtime,0,0,gain,0,0);
                 double adafruitIMUHeading;
@@ -2015,12 +2101,14 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     blnCrossZeroPositive = true;
                     while (mdblTankTurnGyroRequiredHeading > 360)
                         mdblTankTurnGyroRequiredHeading = mdblTankTurnGyroRequiredHeading - 360;
-                }
-                else if (mdblTankTurnGyroRequiredHeading < 0) {
+                } else if (mdblTankTurnGyroRequiredHeading < 0) {
                     blnCrossZeroNegative = true;
                     while (mdblTankTurnGyroRequiredHeading < 0)
                         mdblTankTurnGyroRequiredHeading = 360 + mdblTankTurnGyroRequiredHeading;
+                } else if ((mdblTankTurnGyroRequiredHeading - adafruitIMUHeading) > 180 ) {
+                    blnCrossZeroNegative = true;
                 }
+
                 if (mdblRobotParm1 > 0) {
                     if ((adafruitIMUHeading - mdblRobotTurnAngle) > 180)
                         blnCrossZeroNegative = true;
@@ -2032,7 +2120,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     blnReverseDir = true;
                 }
 
-                fileLogger.writeEvent(3,"USING HEADING FROM IMU=" + useAdafruitIMU);
                 fileLogger.writeEvent(3,"mdblRobotTurnAngle " + mdblRobotTurnAngle + " adafruitIMUHeading " + adafruitIMUHeading);
                 fileLogger.writeEvent(3,"mdblTankTurnGyroRequiredHeading " + mdblTankTurnGyroRequiredHeading);
                 mdblTurnAbsoluteGyro = TOWR5291Utils.getNewHeading((int) adafruitIMUHeading, (int) mdblRobotTurnAngle);
@@ -2043,23 +2130,26 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             case STATE_RUNNING: {
                 double adafruitIMUHeading = getAdafruitHeading();
                 fileLogger.writeEvent(3,"Running, before adafruitIMUHeading   = " + adafruitIMUHeading);
-                if (adafruitIMUHeading > 360)
-                    while (adafruitIMUHeading > 360)
-                        adafruitIMUHeading = adafruitIMUHeading - 360;
-                else if (adafruitIMUHeading < 0)
-                    while (adafruitIMUHeading < 0)
-                        adafruitIMUHeading =  360 + adafruitIMUHeading;
 
                 //no longer near the 0 crossing point
                 if ((adafruitIMUHeading > 90 ) && (adafruitIMUHeading < 270 )) {
                     blnCrossZeroPositive = false;
                     blnCrossZeroNegative = false;
+                } else {
+                    if (mdblRobotParm1 > 0) {
+                        if (Math.abs(adafruitIMUHeading - mdblRobotTurnAngle) > 180)
+                            blnCrossZeroNegative = true;
+                        else
+                            blnCrossZeroNegative = false;
+                    }
                 }
+                fileLogger.writeEvent(3,"Running, Zero Neg Crossing Setting = " + blnCrossZeroNegative);
+                fileLogger.writeEvent(3,"Running, Zero Pos Crossing Setting = " + blnCrossZeroPositive);
 
                 if (blnCrossZeroPositive && (adafruitIMUHeading >= 270) )
                     adafruitIMUHeading = adafruitIMUHeading - 360;
-                else if (blnCrossZeroNegative && (adafruitIMUHeading >= 270))
-                    adafruitIMUHeading = adafruitIMUHeading - 360;
+                //else if (blnCrossZeroNegative && (adafruitIMUHeading >= 270))
+                //    adafruitIMUHeading = adafruitIMUHeading - 360;
 
                 fileLogger.writeEvent(3,"Running, after adafruitIMUHeading   = " + adafruitIMUHeading);
                 double dblError = mdblRobotParm6;
@@ -2075,7 +2165,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     double correction = PID1.PIDCorrection(runtime,adafruitIMUHeading, mdblTankTurnGyroRequiredHeading);
 
                     fileLogger.writeEvent(3,"Correction....." + correction);
-                    if (Math.abs(adafruitIMUHeading - mdblRobotTurnAngle) > 180){
+                    //if (Math.abs(adafruitIMUHeading - mdblRobotTurnAngle) > 180){
+                    if ((Math.abs(mdblTankTurnGyroRequiredHeading - Math.abs(mdblRobotTurnAngle)) > 180) || (blnCrossZeroNegative)){
                         blnReverseDir = true;
                     } else {
                         blnReverseDir = false;
@@ -2166,10 +2257,10 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 mintCurrentStateInTake = Constants.stepState.STATE_RUNNING;
                 break;
             case STATE_RUNNING:
+                robotArms.intakeMotor1.setPower(mdblStepSpeed);
                 fileLogger.writeEvent(2,"Running");
                 fileLogger.writeEvent(2,"Power: " + String.valueOf(mdblStepSpeed));
-                //robotArms.intakeMotor.setPower(mdblStepSpeed);
-                if (mdblStepSpeed == 0) {
+                if (mdblRobotParm1 == 0) {
                     fileLogger.writeEvent(1,"Complete.......");
                     mintCurrentStateInTake = Constants.stepState.STATE_COMPLETE;
                     deleteParallelStep();
@@ -2178,6 +2269,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
 
                 if (mStateTime.milliseconds() >= mdblRobotParm1)
                 {
+                    robotArms.intakeMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    robotArms.intakeMotor1.setPower(0);
                     fileLogger.writeEvent(1,"Timer Complete.......");
                     mintCurrentStateInTake = Constants.stepState.STATE_COMPLETE;
                     deleteParallelStep();
@@ -2189,6 +2282,69 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     fileLogger.writeEvent(1,"Timeout:- " + mStateTime.seconds());
                     //  Transition to a new state.
                     mintCurrentStateInTake = Constants.stepState.STATE_COMPLETE;
+                    deleteParallelStep();
+                }
+                break;
+        }
+    }
+
+
+    private void GrabFoundation(){
+        fileLogger.setEventTag("GrabFoundation()");
+
+        switch (mintCurrentStateGrabFoundation){
+            case STATE_INIT:
+                fileLogger.writeEvent(2,"Initialised");
+                fileLogger.writeEvent(2,"Power: " + String.valueOf(mdblStepSpeed));
+                robotArms.foundationServo.setPosition(mdblStepSpeed);
+                mintCurrentStateGrabFoundation = Constants.stepState.STATE_RUNNING;
+                break;
+            case STATE_RUNNING:
+                robotArms.foundationServo.setPosition(mdblStepSpeed);
+                fileLogger.writeEvent(2,"Running");
+                fileLogger.writeEvent(2,"Power: " + String.valueOf(mdblStepSpeed));
+                fileLogger.writeEvent(1,"Complete.......");
+                mintCurrentStateGrabFoundation = Constants.stepState.STATE_COMPLETE;
+                deleteParallelStep();
+                break;
+            }
+    }
+
+    private void TapeMeasure(){
+        fileLogger.setEventTag("TapeMeasure()");
+
+        switch (mintCurrentStateTapeMeasure){
+            case STATE_INIT:
+                fileLogger.writeEvent(2,"Initialised");
+                fileLogger.writeEvent(2,"Power: " + String.valueOf(mdblStepSpeed));
+                robotArms.tapeServo.setPosition(mdblStepSpeed);
+                mintCurrentStateTapeMeasure = Constants.stepState.STATE_RUNNING;
+                break;
+            case STATE_RUNNING:
+                robotArms.tapeServo.setPosition(mdblStepSpeed);
+                fileLogger.writeEvent(2,"Running");
+                fileLogger.writeEvent(2,"Power: " + String.valueOf(mdblStepSpeed));
+                if (mdblRobotParm1 == 0) {
+                    fileLogger.writeEvent(1,"Complete.......");
+                    mintCurrentStateTapeMeasure = Constants.stepState.STATE_COMPLETE;
+                    deleteParallelStep();
+                    break;
+                }
+
+                if (mStateTime.milliseconds() >= mdblRobotParm1)
+                {
+                    robotArms.tapeServo.setPosition(0);
+                    fileLogger.writeEvent(1,"Timer Complete.......");
+                    mintCurrentStateTapeMeasure = Constants.stepState.STATE_COMPLETE;
+                    deleteParallelStep();
+                    break;
+                }//check timeout value
+
+                if (mStateTime.seconds() > mdblStepTimeout) {
+                    robotArms.tapeServo.setPosition(0);
+                    fileLogger.writeEvent(1,"Timeout:- " + mStateTime.seconds());
+                    //  Transition to a new state.
+                    mintCurrentStateTapeMeasure = Constants.stepState.STATE_COMPLETE;
                     deleteParallelStep();
                 }
                 break;
@@ -2768,7 +2924,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         // calculate error in -179 to +180 range  (
         robotErrorIMU = targetAngle - teamAngleAdjust(adafruitIMUHeading);
         robotError = robotErrorIMU;
-        fileLogger.writeEvent(2,"USING HEADING FROM IMU=" + useAdafruitIMU);
         fileLogger.writeEvent(2,"robotErrorIMU " + robotError + ", getAdafruitHeading() " + adafruitIMUHeading + " teamAngleAdjust(adafruitIMUHeading) "  + teamAngleAdjust(adafruitIMUHeading));
 
         if (robotError > 180)
@@ -2852,7 +3007,9 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             (mintCurrentStateInTake                 == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateFindGold               == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateRadiusTurn             == Constants.stepState.STATE_COMPLETE) &&
-            (mintCurrentStateWyattsGyroDrive        == Constants.stepState.STATE_COMPLETE)) {
+            (mintCurrentStateWyattsGyroDrive        == Constants.stepState.STATE_COMPLETE) &&
+            (mintCurrentStateGrabFoundation         == Constants.stepState.STATE_COMPLETE) &&
+            (mintCurrentStateTapeMeasure            == Constants.stepState.STATE_COMPLETE)) {
             return true;
         }
         return false;
@@ -2876,5 +3033,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         mintCurrentStateFindGold            = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateRadiusTurn          = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateWyattsGyroDrive     = Constants.stepState.STATE_COMPLETE;
+        mintCurrentStateGrabFoundation      = Constants.stepState.STATE_COMPLETE;
+        mintCurrentStateTapeMeasure         = Constants.stepState.STATE_COMPLETE;
     }
 }

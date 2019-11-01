@@ -2,7 +2,10 @@ package club.towr5291.robotconfig;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -56,6 +59,11 @@ public class HardwareDriveMotors
     public DcMotor  baseMotor3  = null;
     public DcMotor  baseMotor4  = null;
 
+    private DcMotorControllerEx motorControllerExMotor1;
+    private DcMotorControllerEx motorControllerExMotor2;
+    private DcMotorControllerEx motorControllerExMotor3;
+    private DcMotorControllerEx motorControllerExMotor4;
+
     /* local OpMode members. */
     HardwareMap hwMap            = null;
     private ElapsedTime period   = new ElapsedTime();
@@ -76,18 +84,29 @@ public class HardwareDriveMotors
         // Save reference to Hardware map
         hwMap = ahwMap;
 
+        // get a reference to the motor controller and cast it as an extended functionality controller.
+        // we assume it's a REV Robotics Expansion Hub (which supports the extended controller functions).
+
+
         this.fileLogger = fileloggerhandle;
 
         // Define and Initialize Motors
-        if (motor1 != null)
-            baseMotor1  = hwMap.dcMotor.get(motor1);
-        if (motor2 != null)
-            baseMotor2  = hwMap.dcMotor.get(motor2);
-        if (motor3 != null)
-            baseMotor3  = hwMap.dcMotor.get(motor3);
-        if (motor4 != null)
-            baseMotor4  = hwMap.dcMotor.get(motor4);
-
+        if (motor1 != null) {
+            baseMotor1 = hwMap.get(DcMotor.class, motor1);
+            motorControllerExMotor1 = (DcMotorControllerEx)baseMotor1.getController();
+        }
+        if (motor2 != null) {
+            baseMotor2 = hwMap.get(DcMotor.class, motor2);
+            motorControllerExMotor2 = (DcMotorControllerEx)baseMotor2.getController();
+        }
+        if (motor3 != null) {
+            baseMotor3 = hwMap.get(DcMotor.class, motor3);
+            motorControllerExMotor3 = (DcMotorControllerEx)baseMotor3.getController();
+        }
+        if (motor4 != null) {
+            baseMotor4 = hwMap.get(DcMotor.class, motor4);
+            motorControllerExMotor4 = (DcMotorControllerEx)baseMotor4.getController();
+        }
         setHardwareDriveDirections(baseConfig, motorTypes);
 
         // Set all motors to zero power
@@ -98,7 +117,7 @@ public class HardwareDriveMotors
         setHardwareDriveResetEncoders();
 
         setHardwareDriveRunUsingEncoders();
-        setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
 
@@ -109,15 +128,23 @@ public class HardwareDriveMotors
         this.fileLogger = fileloggerhandle;
 
         // Define and Initialize Motors
-        if (motor1 != null)
-            baseMotor1  = hwMap.dcMotor.get(motor1);
-        if (motor2 != null)
-            baseMotor2  = hwMap.dcMotor.get(motor2);
-        if (motor3 != null)
-            baseMotor3  = hwMap.dcMotor.get(motor3);
-        if (motor4 != null)
-            baseMotor4  = hwMap.dcMotor.get(motor4);
-
+        // Define and Initialize Motors
+        if (motor1 != null) {
+            baseMotor1 = hwMap.get(DcMotor.class, motor1);
+            motorControllerExMotor1 = (DcMotorControllerEx)baseMotor1.getController();
+        }
+        if (motor2 != null) {
+            baseMotor2 = hwMap.get(DcMotor.class, motor2);
+            motorControllerExMotor2 = (DcMotorControllerEx)baseMotor2.getController();
+        }
+        if (motor3 != null) {
+            baseMotor3 = hwMap.get(DcMotor.class, motor3);
+            motorControllerExMotor3 = (DcMotorControllerEx)baseMotor3.getController();
+        }
+        if (motor4 != null) {
+            baseMotor4 = hwMap.get(DcMotor.class, motor4);
+            motorControllerExMotor4 = (DcMotorControllerEx)baseMotor4.getController();
+        }
         setHardwareDriveDirections(baseConfig, motorTypes);
         // Set all motors to zero power
         setHardwareDrivePower(0);
@@ -165,6 +192,11 @@ public class HardwareDriveMotors
         baseMotor3  = hwMap.dcMotor.get(robotConfig.motors.rightMotor1.toString());
         baseMotor4  = hwMap.dcMotor.get(robotConfig.motors.rightMotor2.toString());
 
+        motorControllerExMotor1 = (DcMotorControllerEx)baseMotor1.getController();
+        motorControllerExMotor2 = (DcMotorControllerEx)baseMotor2.getController();
+        motorControllerExMotor3 = (DcMotorControllerEx)baseMotor3.getController();
+        motorControllerExMotor4 = (DcMotorControllerEx)baseMotor4.getController();
+
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Set all motors to zero power
         setHardwareDrivePower(0);
@@ -181,6 +213,11 @@ public class HardwareDriveMotors
         baseMotor2  = hwMap.dcMotor.get(robotConfig.motors.leftMotor2.toString());
         baseMotor3  = hwMap.dcMotor.get(robotConfig.motors.rightMotor1.toString());
         baseMotor4  = hwMap.dcMotor.get(robotConfig.motors.rightMotor2.toString());
+
+        motorControllerExMotor1 = (DcMotorControllerEx)baseMotor1.getController();
+        motorControllerExMotor2 = (DcMotorControllerEx)baseMotor2.getController();
+        motorControllerExMotor3 = (DcMotorControllerEx)baseMotor3.getController();
+        motorControllerExMotor4 = (DcMotorControllerEx)baseMotor4.getController();
 
         setHardwareDriveDirections(baseConfig, motorTypes);
         // Set all motors to zero power
@@ -779,6 +816,54 @@ public class HardwareDriveMotors
         setHardwareDriveLeft2MotorPower(wheelSpeeds[1] * Range.clip(speedToMultplayBy, -1.0, 1.0));
         setHardwareDriveRight1MotorPower(wheelSpeeds[2] * Range.clip(speedToMultplayBy, -1.0, 1.0));
         setHardwareDriveRight2MotorPower(wheelSpeeds[3] * Range.clip(speedToMultplayBy, -1.0, 1.0));
+    }
+
+    public PIDFCoefficients getMotorPIDF (int Motor){
+        PIDFCoefficients pidOrig = new PIDFCoefficients();
+        int motorIndex1 = ((DcMotorEx)baseMotor1).getPortNumber();
+        int motorIndex2 = ((DcMotorEx)baseMotor2).getPortNumber();
+        int motorIndex3 = ((DcMotorEx)baseMotor3).getPortNumber();
+        int motorIndex4 = ((DcMotorEx)baseMotor4).getPortNumber();
+        // get the PID coefficients for the RUN_USING_ENCODER  modes.
+        switch (Motor) {
+            case 1:
+                pidOrig = motorControllerExMotor1.getPIDFCoefficients(motorIndex1, DcMotor.RunMode.RUN_USING_ENCODER);
+                break;
+            case 2:
+                pidOrig = motorControllerExMotor2.getPIDFCoefficients(motorIndex2, DcMotor.RunMode.RUN_USING_ENCODER);
+                break;
+            case 3:
+                pidOrig = motorControllerExMotor3.getPIDFCoefficients(motorIndex3, DcMotor.RunMode.RUN_USING_ENCODER);
+                break;
+            case 4:
+                pidOrig = motorControllerExMotor4.getPIDFCoefficients(motorIndex4, DcMotor.RunMode.RUN_USING_ENCODER);
+                break;
+
+        }
+        return pidOrig;
+    }
+
+    public void setMotorPIDF (PIDFCoefficients pidNew, int Motor){
+        int motorIndex1 = ((DcMotorEx)baseMotor1).getPortNumber();
+        int motorIndex2 = ((DcMotorEx)baseMotor2).getPortNumber();
+        int motorIndex3 = ((DcMotorEx)baseMotor3).getPortNumber();
+        int motorIndex4 = ((DcMotorEx)baseMotor4).getPortNumber();
+        // get the PID coefficients for the RUN_USING_ENCODER  modes.
+        switch (Motor) {
+            case 1:
+                motorControllerExMotor1.setPIDFCoefficients(motorIndex1, DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+                break;
+            case 2:
+                motorControllerExMotor2.setPIDFCoefficients(motorIndex2, DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+                break;
+            case 3:
+                motorControllerExMotor3.setPIDFCoefficients(motorIndex3, DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+                break;
+            case 4:
+                motorControllerExMotor4.setPIDFCoefficients(motorIndex4, DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+                break;
+
+        }
     }
     /**
      * FROM https://github.com/wpilibsuite/allwpilib/blob/master/wpilibj/src/main/java/edu/wpi/first/wpilibj/RobotDrive.java

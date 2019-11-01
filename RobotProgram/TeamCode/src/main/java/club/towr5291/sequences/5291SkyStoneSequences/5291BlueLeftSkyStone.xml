@@ -1,9 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <Step>
+        <Timeout>2</Timeout>
+        <Command>DRIVE</Command>
+        <Distance>-34</Distance>
+        <Speed>1</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>0</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+    <Step>
         <Timeout>3</Timeout>
-        <Command>Delay</Command>
-        <Distance>13</Distance>
+        <Command>GRAB</Command>
+        <Distance>1</Distance>
+        <Speed>1</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>1</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+    <Step>
+        <Timeout>2</Timeout>
+        <Command>Drive</Command>
+        <Distance>34</Distance>
+        <Speed>1</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>0</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+    <Step>
+        <Timeout>3</Timeout>
+        <Command>TANKTURNGYRO</Command>
+        <Distance>340</Distance>
+        <Speed>1</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>1</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>5</Parm6>
+    </Step>
+    <Step>
+        <Timeout>3</Timeout>
+        <Command>GRAB</Command>
+        <Distance>0</Distance>
         <Speed>1</Speed>
         <Parallel>false</Parallel>
         <Lastpos>false</Lastpos>
@@ -16,22 +72,22 @@
     </Step>
     <Step>
         <Timeout>3</Timeout>
-        <Command>Drive</Command>
-        <Distance>10</Distance>
+        <Command>TANKTURNGYRO</Command>
+        <Distance>270</Distance>
         <Speed>1</Speed>
         <Parallel>false</Parallel>
         <Lastpos>false</Lastpos>
-        <Parm1>0</Parm1>
+        <Parm1>1</Parm1>
         <Parm2>0</Parm2>
         <Parm3>0</Parm3>
         <Parm4>0</Parm4>
         <Parm5>0</Parm5>
-        <Parm6>0</Parm6>
+        <Parm6>2</Parm6>
     </Step>
     <Step>
         <Timeout>3</Timeout>
-        <Command>Drive</Command>
-        <Distance>10</Distance>
+        <Command>STRAFE</Command>
+        <Distance>5</Distance>
         <Speed>1</Speed>
         <Parallel>false</Parallel>
         <Lastpos>false</Lastpos>
@@ -40,6 +96,34 @@
         <Parm3>0</Parm3>
         <Parm4>0</Parm4>
         <Parm5>0</Parm5>
-        <Parm6>0</Parm6>
+        <Parm6>2</Parm6>
+    </Step>
+    <Step>
+        <Timeout>5</Timeout>
+        <Command>TAPE</Command>
+        <Distance>5</Distance>
+        <Speed>0.9</Speed>
+        <Parallel>true</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>3000</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>2</Parm6>
+    </Step>
+    <Step>
+        <Timeout>5</Timeout>
+        <Command>DRIVE</Command>
+        <Distance>72</Distance>
+        <Speed>1</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>3000</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>5</Parm6>
     </Step>
 </resources>

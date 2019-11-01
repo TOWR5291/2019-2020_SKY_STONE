@@ -7,10 +7,12 @@ import android.util.Log;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import club.towr5291.functions.FileLogger;
 import club.towr5291.libraries.LibraryMotorType;
@@ -113,8 +115,17 @@ public class ConceptRobotBasicMotorTest extends LinearOpMode {
 
         robotDrive.setHardwareDriveRunWithoutEncoders();
 
+        PIDFCoefficients getMotorPIDFMotor1;
+        PIDFCoefficients getMotorPIDFMotor2;
+        PIDFCoefficients getMotorPIDFMotor3;
+        PIDFCoefficients getMotorPIDFMotor4;
         // wait for the start button to be pressed.
         waitForStart();
+
+        getMotorPIDFMotor1 = robotDrive.getMotorPIDF(1);
+        getMotorPIDFMotor2 = robotDrive.getMotorPIDF(2);
+        getMotorPIDFMotor3 = robotDrive.getMotorPIDF(3);
+        getMotorPIDFMotor4 = robotDrive.getMotorPIDF(4);
 
         // while the op mode is active, loop and read the light levels.
         // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
@@ -127,10 +138,15 @@ public class ConceptRobotBasicMotorTest extends LinearOpMode {
 
             robotDrive.setHardwareDrivePower(dblLeftMotor1, dblLeftMotor2, dblRightMotor1, dblRightMotor2);
             telemetry.clearAll();
-            telemetry.addLine("Motor1" + robotDrive.baseMotor1.getCurrentPosition());
-            telemetry.addLine("Motor2" + robotDrive.baseMotor2.getCurrentPosition());
-            telemetry.addLine("Motor3" + robotDrive.baseMotor3.getCurrentPosition());
-            telemetry.addLine("Motor4" + robotDrive.baseMotor4.getCurrentPosition());
+
+            telemetry.addLine("Motor1 " + robotDrive.baseMotor1.getCurrentPosition());
+            telemetry.addLine("Motor2 " + robotDrive.baseMotor2.getCurrentPosition());
+            telemetry.addLine("Motor3 " + robotDrive.baseMotor3.getCurrentPosition());
+            telemetry.addLine("Motor4 " + robotDrive.baseMotor4.getCurrentPosition());
+            telemetry.addData("P,I,D,F (orig Motor 1)", "%.04f, %.04f, %.0f, %.0f", getMotorPIDFMotor1.p, getMotorPIDFMotor1.i, getMotorPIDFMotor1.d, getMotorPIDFMotor1.f);
+            telemetry.addData("P,I,D,F (orig Motor 2)", "%.04f, %.04f, %.0f, %.0f", getMotorPIDFMotor2.p, getMotorPIDFMotor2.i, getMotorPIDFMotor2.d, getMotorPIDFMotor2.f);
+            telemetry.addData("P,I,D,F (orig Motor 3)", "%.04f, %.04f, %.0f, %.0f", getMotorPIDFMotor3.p, getMotorPIDFMotor3.i, getMotorPIDFMotor3.d, getMotorPIDFMotor3.f);
+            telemetry.addData("P,I,D,F (orig Motor 4)", "%.04f, %.04f, %.0f, %.0f", getMotorPIDFMotor4.p, getMotorPIDFMotor4.i, getMotorPIDFMotor4.d, getMotorPIDFMotor4.f);
 
             telemetry.update();
         }
