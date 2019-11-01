@@ -459,10 +459,10 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         fileLogger.writeEvent("(orig Motor 2) P " + getMotorPIDFMotor2.p + ", I " + getMotorPIDFMotor2.i + ", D " + getMotorPIDFMotor2.d + ", F " + getMotorPIDFMotor2.f);
         fileLogger.writeEvent("(orig Motor 3) P " + getMotorPIDFMotor3.p + ", I " + getMotorPIDFMotor3.i + ", D " + getMotorPIDFMotor3.d + ", F " + getMotorPIDFMotor3.f);
         fileLogger.writeEvent("(orig Motor 4) P " + getMotorPIDFMotor4.p + ", I " + getMotorPIDFMotor4.i + ", D " + getMotorPIDFMotor4.d + ", F " + getMotorPIDFMotor4.f);
-        newMotorPIDFMotor1.p = getMotorPIDFMotor1.p + 21;
-        newMotorPIDFMotor2.p = getMotorPIDFMotor2.p + 21;
-        newMotorPIDFMotor3.p = getMotorPIDFMotor3.p + 21;
-        newMotorPIDFMotor4.p = getMotorPIDFMotor4.p + 21;
+        newMotorPIDFMotor1.p = getMotorPIDFMotor1.p + 20.5;
+        newMotorPIDFMotor2.p = getMotorPIDFMotor2.p + 20.5;
+        newMotorPIDFMotor3.p = getMotorPIDFMotor3.p + 20.5;
+        newMotorPIDFMotor4.p = getMotorPIDFMotor4.p + 20.5;
         newMotorPIDFMotor1.i = getMotorPIDFMotor1.i + 0.037;
         newMotorPIDFMotor2.i = getMotorPIDFMotor2.i + 0.037;
         newMotorPIDFMotor3.i = getMotorPIDFMotor3.i + 0.037;
@@ -630,6 +630,11 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     mintCurrentStateStep = Constants.stepState.STATE_INIT;
                     break;
                 case STATE_TIMEOUT:
+                    robotArms.intakeMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    robotArms.liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    robotDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    robotArms.intakeMotor1.setPower(0);
+                    robotArms.liftMotor1.setPower(0);
                     robotDrive.setHardwareDrivePower(0);
                     //  Transition to a new state.
                     mintCurrentStateStep = Constants.stepState.STATE_FINISHED;
@@ -638,6 +643,13 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     dashboard.displayPrintf(1, LABEL_WIDTH,"STATE", "ERROR WAITING TO FINISH " + mintCurrentStep);
                     break;
                 case STATE_FINISHED:
+                    robotArms.intakeMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    robotArms.liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    robotDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    robotArms.intakeMotor1.setPower(0);
+                    robotArms.liftMotor1.setPower(0);
+                    robotDrive.setHardwareDrivePower(0);
+                    robotDrive.setHardwareDriveRunWithoutEncoders();
                     robotDrive.setHardwareDrivePower(0);
                     imu.close();
                     //stop the logging
@@ -2146,8 +2158,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 fileLogger.writeEvent(3,"Running, Zero Neg Crossing Setting = " + blnCrossZeroNegative);
                 fileLogger.writeEvent(3,"Running, Zero Pos Crossing Setting = " + blnCrossZeroPositive);
 
-                if (blnCrossZeroPositive && (adafruitIMUHeading >= 270) )
-                    adafruitIMUHeading = adafruitIMUHeading - 360;
+                //if (blnCrossZeroPositive && (adafruitIMUHeading >= 270) )
+                //    adafruitIMUHeading = adafruitIMUHeading - 360;
                 //else if (blnCrossZeroNegative && (adafruitIMUHeading >= 270))
                 //    adafruitIMUHeading = adafruitIMUHeading - 360;
 
