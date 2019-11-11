@@ -182,9 +182,10 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
     private Constants.stepState mintCurrentStateMoveLift;                       // Current State of the Move lift
     private Constants.stepState mintCurrentStateInTake;                         // Current State of the Move lift
     private Constants.stepState mintCurrentStateFindGold;                       // Current State of Finding Gold
-    private Constants.stepState mintCurrentStateWyattsGyroDrive;                //Wyatt Gyro Function
+    private Constants.stepState mintCurrentStateWyattsGyroDrive;                // Wyatt Gyro Function
     private Constants.stepState mintCurrentStateTapeMeasure;                    // Control Tape Measure
     private Constants.stepState mintCurrentStateGrabFoundation;                 // Control Servo to move foundation
+    private Constants.stepState mintCurrentStateGrabBlock;                      // Control arm to grab block
 
     private int mintFindGoldLoop = 0;                                           //there can only be 3 positions so count how many times we try
     private boolean mboolFoundGold = false;
@@ -388,8 +389,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         fileLogger.writeEvent(1, "Robot Motor Ratio       " + ourRobotConfig.getRobotMotorRatio());
         fileLogger.writeEvent(1, "Robot Motor Direction   " + ourRobotConfig.getRobotMotorDirection());
         fileLogger.writeEvent(1, "Robot Motor Counts PR   " + ourRobotConfig.getCounts_Per_Rev());
-        fileLogger.writeEvent(3, "Configuring Robot Parameters - Finished");
-        fileLogger.writeEvent(3, "Loading Autonomous Steps - Start");
+        fileLogger.writeEvent(1, "Configuring Robot Parameters - Finished");
+        fileLogger.writeEvent(1, "Loading Autonomous Steps - Start");
 
         dashboard.displayPrintf(1, "initRobot Loading Steps " + ourRobotConfig.getAllianceColor() + " Team " + ourRobotConfig.getTeamNumber());
         dashboard.displayPrintf(2, "initRobot SharePreferences!");
@@ -401,8 +402,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         dashboard.displayPrintf(8, "Robot Motor Type      " + ourRobotConfig.getRobotMotorType());
         dashboard.displayPrintf(9, "Robot Motor Ratio      " + ourRobotConfig.getRobotMotorRatio());
         dashboard.displayPrintf(10, "Robot Motor Direction " + ourRobotConfig.getRobotMotorDirection());
-        dashboard.displayPrintf(11, "Robot Motor Counts PR   " + ourRobotConfig.getCounts_Per_Rev());
-        dashboard.displayPrintf(12, "Debug Level       " + debug);
+        dashboard.displayPrintf(11, "Robot Motor Counts PR " + ourRobotConfig.getCounts_Per_Rev());
+        dashboard.displayPrintf(12, "Debug Level           " + debug);
 
         //load the sequence based on alliance colour and team
         autonomousStepsFile.ReadStepFile(ourRobotConfig);
@@ -555,6 +556,16 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         imu.stopAccelerationIntegration();
 
         dblStartVoltage = getBatteryVoltage();
+
+        //move the right block arm to a stashed position
+        robotArms.rightWristServo.setPosition(0.4);
+        robotArms.rightArmServo.setPosition(1);
+        robotArms.rightClampServo.setPosition(0);
+
+        //move the right block arm to a stashed position
+        robotArms.leftWristServo.setPosition(0.4);
+        robotArms.leftArmServo.setPosition(1);
+        robotArms.leftClampServo.setPosition(0);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -771,10 +782,13 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 WyattsGyroDrive();
                 break;
             case "GRAB":
-                GrabFoundation();
+                grabFoundation();
                 break;
             case "TAPE":
-                TapeMeasure();
+                tapeMeasure();
+                break;
+            case "GRABBLOCK":
+                grabBlock();
                 break;
         }
     }
@@ -869,9 +883,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 towr5291TextToSpeech.Speak("Running Wyatt's Gyro Drive", debug);
                 break;
             case "FNC":  //  Run a special Function with Parms
-
                 break;
-
             case "GRAB":
                 mintCurrentStateGrabFoundation       = Constants.stepState.STATE_INIT;
                 towr5291TextToSpeech.Speak("Grabbing Foundation", debug);
@@ -879,6 +891,10 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             case "TAPE":
                 mintCurrentStateTapeMeasure          = Constants.stepState.STATE_INIT;
                 towr5291TextToSpeech.Speak("Tape Measure", debug);
+                break;
+            case "GRABBLOCK":
+                mintCurrentStateGrabBlock          = Constants.stepState.STATE_INIT;
+                towr5291TextToSpeech.Speak("Grab Block", debug);
                 break;
             }
 
@@ -2300,8 +2316,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         }
     }
 
-
-    private void GrabFoundation(){
+    private void grabFoundation(){
         fileLogger.setEventTag("GrabFoundation()");
 
         switch (mintCurrentStateGrabFoundation){
@@ -2322,18 +2337,47 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             }
     }
 
-    private void TapeMeasure(){
-        fileLogger.setEventTag("TapeMeasure()");
+    private void grabBlock(){
+        fileLogger.setEventTag("GrabFoundation()");
+
+        switch (mintCurrentStateGrabBlock){
+            case STATE_INIT:
+                fileLogger.writeEvent(2,"Initialised");
+                fileLogger.writeEvent(2,"State: " + String.valueOf(mdblRobotParm1));
+                mintCurrentStateGrabBlock = Constants.stepState.STATE_RUNNING;
+                break;
+            case STATE_RUNNING:
+                switch ((int)mdblRobotParm1) {
+                    case 1:
+                        if (mStateTime.milliseconds() > .05) {
+                            robotArms.rightWristServo.setPosition(0.94);
+                            robotArms.rightArmServo.setPosition(0.15);
+                            robotArms.rightClampServo.setPosition(0.39);
+                            mintCurrentStateGrabBlock = Constants.stepState.STATE_COMPLETE;
+                            deleteParallelStep();
+                        } else if (mStateTime.milliseconds() > .0) {
+                            robotArms.rightWristServo.setPosition(1);
+                            robotArms.rightArmServo.setPosition(0.15);
+                            robotArms.rightClampServo.setPosition(0);
+                        }
+                        break;
+                }
+                break;
+        }
+    }
+
+    private void tapeMeasure(){
+        fileLogger.setEventTag("tapeMeasure()");
 
         switch (mintCurrentStateTapeMeasure){
             case STATE_INIT:
                 fileLogger.writeEvent(2,"Initialised");
                 fileLogger.writeEvent(2,"Power: " + String.valueOf(mdblStepSpeed));
-                robotArms.tapeServo.setPosition(mdblStepSpeed);
+                robotArms.tapeMotor.setPower(mdblStepSpeed);
                 mintCurrentStateTapeMeasure = Constants.stepState.STATE_RUNNING;
                 break;
             case STATE_RUNNING:
-                robotArms.tapeServo.setPosition(mdblStepSpeed);
+                robotArms.tapeMotor.setPower(mdblStepSpeed);
                 fileLogger.writeEvent(2,"Running");
                 fileLogger.writeEvent(2,"Power: " + String.valueOf(mdblStepSpeed));
                 if (mdblRobotParm1 == 0) {
@@ -2345,7 +2389,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
 
                 if (mStateTime.milliseconds() >= mdblRobotParm1)
                 {
-                    robotArms.tapeServo.setPosition(0);
+                    robotArms.tapeMotor.setPower(0);
                     fileLogger.writeEvent(1,"Timer Complete.......");
                     mintCurrentStateTapeMeasure = Constants.stepState.STATE_COMPLETE;
                     deleteParallelStep();
@@ -2353,7 +2397,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 }//check timeout value
 
                 if (mStateTime.seconds() > mdblStepTimeout) {
-                    robotArms.tapeServo.setPosition(0);
+                    robotArms.tapeMotor.setPower(0);
                     fileLogger.writeEvent(1,"Timeout:- " + mStateTime.seconds());
                     //  Transition to a new state.
                     mintCurrentStateTapeMeasure = Constants.stepState.STATE_COMPLETE;
@@ -3021,7 +3065,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             (mintCurrentStateRadiusTurn             == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateWyattsGyroDrive        == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateGrabFoundation         == Constants.stepState.STATE_COMPLETE) &&
-            (mintCurrentStateTapeMeasure            == Constants.stepState.STATE_COMPLETE)) {
+            (mintCurrentStateTapeMeasure            == Constants.stepState.STATE_COMPLETE) &&
+            (mintCurrentStateGrabBlock              == Constants.stepState.STATE_COMPLETE)) {
             return true;
         }
         return false;
@@ -3047,5 +3092,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         mintCurrentStateWyattsGyroDrive     = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateGrabFoundation      = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateTapeMeasure         = Constants.stepState.STATE_COMPLETE;
+        mintCurrentStateGrabBlock           = Constants.stepState.STATE_COMPLETE;
     }
 }

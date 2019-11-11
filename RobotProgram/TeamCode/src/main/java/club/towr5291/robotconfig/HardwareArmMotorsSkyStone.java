@@ -23,12 +23,18 @@ public class HardwareArmMotorsSkyStone
 {
     public ElapsedTime elapse = new ElapsedTime();
     /* Public OpMode members. */
-    public DcMotor  liftMotor1      = null;
-    public DcMotor  intakeMotor1    = null;
-    public Servo    grabServo       = null;
-    public Servo    wristServo      = null;
-    public Servo    foundationServo = null;
-    public Servo    tapeServo       = null;
+    public DcMotor  liftMotor1        = null;
+    public DcMotor  intakeMotor1      = null;
+    public DcMotor  tapeMotor         = null;
+    public Servo    grabServo         = null;
+    public Servo    wristServo        = null;
+    public Servo    foundationServo   = null;
+    public Servo    rightArmServo     = null;
+    public Servo    rightWristServo   = null;
+    public Servo    rightClampServo   = null;
+    public Servo    leftArmServo      = null;
+    public Servo    leftWristServo    = null;
+    public Servo    leftClampServo    = null;
 
     /* local OpMode members. */
     HardwareMap hwMap               =  null;
@@ -48,16 +54,21 @@ public class HardwareArmMotorsSkyStone
         // Define and Initialize Motors
         this.liftMotor1         = hwMap.dcMotor.get("liftMotor1");
         this.intakeMotor1       = hwMap.dcMotor.get("intakeMotor1");
+        this.tapeMotor          = hwMap.dcMotor.get("tapeMotor");
         this.grabServo          = hwMap.servo.get("grabServo");
         this.wristServo         = hwMap.servo.get("wristServo");
         this.foundationServo    = hwMap.servo.get("foundationServo");
-        this.tapeServo          = hwMap.servo.get("tapeServo");
+        this.rightArmServo      = hwMap.servo.get("rightArmServo");
+        this.rightWristServo    = hwMap.servo.get("rightWristServo");
+        this.rightClampServo    = hwMap.servo.get("rightClampServo");
+        this.leftArmServo       = hwMap.servo.get("leftArmServo");
+        this.leftWristServo     = hwMap.servo.get("leftWristServo");
+        this.leftClampServo     = hwMap.servo.get("leftClampServo");
 
         setHardwareArmDirections();
 
         liftMotor1.setPower(0);
         this.intakeMotor1.setPower(0);
-        //this.grabServo.setPosition(1);
         this.liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.intakeMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -65,6 +76,7 @@ public class HardwareArmMotorsSkyStone
     public void setHardwareArmDirections(){
         liftMotor1.setDirection(DcMotor.Direction.FORWARD);
         intakeMotor1.setDirection(DcMotorSimple.Direction.FORWARD);
+        tapeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void setHardwareArmDirections(DcMotor.Direction direction){
@@ -91,5 +103,6 @@ public class HardwareArmMotorsSkyStone
     public void allMotorsStop(){
         this.liftMotor1.setPower(0);
         this.intakeMotor1.setPower(0);
+        this.tapeMotor.setPower(0);
     }
 }

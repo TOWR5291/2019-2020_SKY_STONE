@@ -104,6 +104,13 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
         fileLogger.writeEvent(1,"","Wait For Start ");
 
         dashboard.displayPrintf(1, "Waiting for Start");
+
+        //move the right block arm to a stashed position
+        robotArms.rightWristServo.setPosition(1);
+        robotArms.rightArmServo.setPosition(0.4);
+        robotArms.rightClampServo.setPosition(0);
+
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         dashboard.clearDisplay();
@@ -147,17 +154,25 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
 
             //send the tape measure out
             if (gamepad2.dpad_up)
-                robotArms.tapeServo.setPosition(.9);
+                robotArms.tapeMotor.setPower(1);
             else if (gamepad2.dpad_down)
-                robotArms.tapeServo.setPosition(.1);
+                robotArms.tapeMotor.setPower(-0.5);
             else
-                robotArms.tapeServo.setPosition(0);
+                robotArms.tapeMotor.setPower(0);
             //Foundation Arm
 
             if (gamepad2.left_bumper)
                 robotArms.foundationServo.setPosition(0);
             else if (gamepad2.right_bumper)
                 robotArms.foundationServo.setPosition(1);
+
+            //move the right block arm to a stached position
+            //robotArms.rightArmServo.setPosition((gamepad2.right_stick_x / 2) + 0.5 );
+            //if (gamepad2.dpad_left)
+            //    robotArms.rightClampServo.setPosition(0);
+            //else if (gamepad2.dpad_right)
+            //    robotArms.rightClampServo.setPosition(1);
+            //robotArms.rightWristServo.setPosition(1);
 
         }
         //stop the logging
