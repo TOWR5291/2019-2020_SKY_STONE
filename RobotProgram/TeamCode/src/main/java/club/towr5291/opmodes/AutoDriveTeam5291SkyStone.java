@@ -558,13 +558,13 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         dblStartVoltage = getBatteryVoltage();
 
         //move the right block arm to a stashed position
-        robotArms.rightWristServo.setPosition(0.4);
-        robotArms.rightArmServo.setPosition(1);
+        robotArms.rightWristServo.setPosition(0.12);
+        robotArms.rightArmServo.setPosition(0.41);
         robotArms.rightClampServo.setPosition(0);
 
         //move the right block arm to a stashed position
-        robotArms.leftWristServo.setPosition(0.4);
-        robotArms.leftArmServo.setPosition(1);
+        robotArms.leftWristServo.setPosition(0.12);
+        robotArms.leftArmServo.setPosition(0.41);
         robotArms.leftClampServo.setPosition(0);
 
         // Wait for the game to start (driver presses PLAY)
@@ -2344,21 +2344,23 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             case STATE_INIT:
                 fileLogger.writeEvent(2,"Initialised");
                 fileLogger.writeEvent(2,"State: " + String.valueOf(mdblRobotParm1));
+                fileLogger.writeEvent(2,"Timer: " + String.valueOf(mStateTime.milliseconds()));
                 mintCurrentStateGrabBlock = Constants.stepState.STATE_RUNNING;
                 break;
             case STATE_RUNNING:
+                fileLogger.writeEvent(2,"Timer: " + String.valueOf(mStateTime.milliseconds()));
                 switch ((int)mdblRobotParm1) {
                     case 1:
-                        if (mStateTime.milliseconds() > .05) {
+                        if (mStateTime.milliseconds() > 2000) {
                             robotArms.rightWristServo.setPosition(0.94);
-                            robotArms.rightArmServo.setPosition(0.15);
-                            robotArms.rightClampServo.setPosition(0.39);
+                            robotArms.rightArmServo.setPosition(0.0);
+                            robotArms.rightClampServo.setPosition(0.7);
                             mintCurrentStateGrabBlock = Constants.stepState.STATE_COMPLETE;
                             deleteParallelStep();
-                        } else if (mStateTime.milliseconds() > .0) {
-                            robotArms.rightWristServo.setPosition(1);
-                            robotArms.rightArmServo.setPosition(0.15);
-                            robotArms.rightClampServo.setPosition(0);
+                        } else if (mStateTime.milliseconds() > 0) {
+                            robotArms.rightWristServo.setPosition(0.94);
+                            robotArms.rightArmServo.setPosition(0.41);
+                            robotArms.rightClampServo.setPosition(0.7);
                         }
                         break;
                 }
