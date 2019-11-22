@@ -167,7 +167,7 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
                 robotArms.foundationServo.setPosition(1);
 
             //move the right block arm to a stached position
-            +robotArms.rightArmServo.setPosition((gamepad2.right_stick_x / 2) + 0.5 );
+            robotArms.rightArmServo.setPosition((gamepad2.right_stick_x / 2) + 0.5 );
             if (gamepad2.dpad_left)
                 robotArms.rightClampServo.setPosition(0);
             else if (gamepad2.dpad_right)
