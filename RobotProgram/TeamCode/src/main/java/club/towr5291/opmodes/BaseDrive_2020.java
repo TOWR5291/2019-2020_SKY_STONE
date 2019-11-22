@@ -49,7 +49,7 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
     private ElapsedTime runtime                     = new ElapsedTime();
     private robotConfig ourRobotConfig;
 
-    public double HOLDINGTILTMOTORPOWER = .2;
+    public double HOLDINGTILTMOTORPOWER = .4;
     private int debug;
 
     private static TOWRDashBoard dashboard = null;
@@ -186,7 +186,7 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
 
     public void liftMotorPower(){
 
-        if ((gamepad2.left_stick_y == 0)) {
+        if ((gamepad2.left_stick_y < .1 && gamepad2.left_stick_y > -0.1)) {
             if ((hold == false)) {
                 fileLogger.writeEvent(8, "Hold is Now true");
                 fileLogger.writeEvent(8,"Run using encoders now in hold function in the movement of the arm");

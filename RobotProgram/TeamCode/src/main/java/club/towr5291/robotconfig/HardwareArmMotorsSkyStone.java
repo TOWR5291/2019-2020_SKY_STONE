@@ -1,7 +1,9 @@
 package club.towr5291.robotconfig;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -36,6 +38,11 @@ public class HardwareArmMotorsSkyStone
     public Servo    leftWristServo    = null;
     public Servo    leftClampServo    = null;
 
+    public DistanceSensor leftFrontDistance = null;
+    public DistanceSensor leftBackDistance = null;
+    public DistanceSensor rightFrontDistance = null;
+    public DistanceSensor rightBackDistance = null;
+
     /* local OpMode members. */
     HardwareMap hwMap               =  null;
     private TOWRDashBoard dashBoard = null;
@@ -64,6 +71,11 @@ public class HardwareArmMotorsSkyStone
         this.leftArmServo       = hwMap.servo.get("leftArmServo");
         this.leftWristServo     = hwMap.servo.get("leftWristServo");
         this.leftClampServo     = hwMap.servo.get("leftClampServo");
+
+//        this.leftFrontDistance  = hwMap.get(DistanceSensor.class, "leftFrontDistance");
+//        this.leftBackDistance   = hwMap.get(DistanceSensor.class, "leftBackDistance");
+//        this.rightFrontDistance = hwMap.get(DistanceSensor.class, "rightFrontDistance");
+//        this.rightBackDistance  = hwMap.get(DistanceSensor.class, "rightBackDistance");
 
         setHardwareArmDirections();
 
@@ -104,5 +116,21 @@ public class HardwareArmMotorsSkyStone
         this.liftMotor1.setPower(0);
         this.intakeMotor1.setPower(0);
         this.tapeMotor.setPower(0);
+    }
+
+    public DistanceSensor getLeftFrontDistance() {
+        return leftFrontDistance;
+    }
+
+    public DistanceSensor getLeftBackDistance() {
+        return leftBackDistance;
+    }
+
+    public DistanceSensor getRightFrontDistance() {
+        return rightFrontDistance;
+    }
+
+    public DistanceSensor getRightBackDistance() {
+        return rightBackDistance;
     }
 }
