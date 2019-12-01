@@ -1,19 +1,19 @@
 The target system is: Android - 1 - armv7-a
 The host system is: Windows - 10.0.18362 - AMD64
 Determining if the C compiler works passed with the following output:
-Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_0aebc"
-[1/2] Building C object CMakeFiles/cmTC_0aebc.dir/testCCompiler.c.o
-[2/2] Linking C executable cmTC_0aebc
+Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_e0fa0"
+[1/2] Building C object CMakeFiles/cmTC_e0fa0.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_e0fa0
 
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_cdbdb"
-[1/2] Building C object CMakeFiles/cmTC_cdbdb.dir/CMakeCCompilerABI.c.o
-[2/2] Linking C executable cmTC_cdbdb
+Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_264da"
+[1/2] Building C object CMakeFiles/cmTC_264da.dir/CMakeCCompilerABI.c.o
+[2/2] Linking C executable cmTC_264da
 Android (5220042 based on r346389c) clang version 8.0.7 (https://android.googlesource.com/toolchain/clang b55f2d4ebfd35bf643d27dbca1bb228957008617) (https://android.googlesource.com/toolchain/llvm 3c393fe7a7e13b0fba4ac75a01aa683d7a5b11cd) (based on LLVM 8.0.7svn)
 Target: armv7-none-linux-android21
 Thread model: posix
@@ -25,16 +25,16 @@ Candidate multilib: armv7-a;@march=armv7-a
 Candidate multilib: armv7-a/thumb;@march=armv7-a@mthumb
 Candidate multilib: .;
 Selected multilib: armv7-a/thumb;@march=armv7-a@mthumb
- "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin\\ld" --sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot -pie -EL -z now -z relro -X --hash-style=both --enable-new-dtags --eh-frame-hdr -m armelf_linux_eabi -dynamic-linker /system/bin/linker -o cmTC_cdbdb "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtbegin_dynamic.o" "-LC:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\toolchains\\llvm\\prebuilt\\windows-x86_64\\lib64\\clang\\8.0.7\\lib\\linux\\arm" -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/../lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21 -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/../../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib --exclude-libs libgcc.a --exclude-libs libatomic.a --build-id --warn-shared-textrel --fatal-warnings --exclude-libs libunwind.a --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_cdbdb.dir/CMakeCCompilerABI.c.o -lgcc -ldl -lc -lgcc -ldl "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtend_android.o"
+ "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin\\ld" --sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot -pie -EL -z now -z relro -X --hash-style=both --enable-new-dtags --eh-frame-hdr -m armelf_linux_eabi -dynamic-linker /system/bin/linker -o cmTC_264da "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtbegin_dynamic.o" "-LC:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\toolchains\\llvm\\prebuilt\\windows-x86_64\\lib64\\clang\\8.0.7\\lib\\linux\\arm" -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/../lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21 -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/../../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib --exclude-libs libgcc.a --exclude-libs libatomic.a --build-id --warn-shared-textrel --fatal-warnings --exclude-libs libunwind.a --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_264da.dir/CMakeCCompilerABI.c.o -lgcc -ldl -lc -lgcc -ldl "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtend_android.o"
 
 
 Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(arm-linux-androideabi-ld\.exe|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_cdbdb"]
-  ignore line: [[1/2] Building C object CMakeFiles/cmTC_cdbdb.dir/CMakeCCompilerABI.c.o]
-  ignore line: [[2/2] Linking C executable cmTC_cdbdb]
+  ignore line: [Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_264da"]
+  ignore line: [[1/2] Building C object CMakeFiles/cmTC_264da.dir/CMakeCCompilerABI.c.o]
+  ignore line: [[2/2] Linking C executable cmTC_264da]
   ignore line: [Android (5220042 based on r346389c) clang version 8.0.7 (https://android.googlesource.com/toolchain/clang b55f2d4ebfd35bf643d27dbca1bb228957008617) (https://android.googlesource.com/toolchain/llvm 3c393fe7a7e13b0fba4ac75a01aa683d7a5b11cd) (based on LLVM 8.0.7svn)]
   ignore line: [Target: armv7-none-linux-android21]
   ignore line: [Thread model: posix]
@@ -51,7 +51,7 @@ Parsed C implicit link information from above output:
   ignore line: []
   ignore line: [Selected multilib: armv7-a/thumb]
   ignore line: [@march=armv7-a@mthumb]
-  link line: [ "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin\\ld" --sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot -pie -EL -z now -z relro -X --hash-style=both --enable-new-dtags --eh-frame-hdr -m armelf_linux_eabi -dynamic-linker /system/bin/linker -o cmTC_cdbdb "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtbegin_dynamic.o" "-LC:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\toolchains\\llvm\\prebuilt\\windows-x86_64\\lib64\\clang\\8.0.7\\lib\\linux\\arm" -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/../lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21 -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/../../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib --exclude-libs libgcc.a --exclude-libs libatomic.a --build-id --warn-shared-textrel --fatal-warnings --exclude-libs libunwind.a --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_cdbdb.dir/CMakeCCompilerABI.c.o -lgcc -ldl -lc -lgcc -ldl "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtend_android.o"]
+  link line: [ "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin\\ld" --sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot -pie -EL -z now -z relro -X --hash-style=both --enable-new-dtags --eh-frame-hdr -m armelf_linux_eabi -dynamic-linker /system/bin/linker -o cmTC_264da "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtbegin_dynamic.o" "-LC:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\toolchains\\llvm\\prebuilt\\windows-x86_64\\lib64\\clang\\8.0.7\\lib\\linux\\arm" -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/../lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21 -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/../../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib --exclude-libs libgcc.a --exclude-libs libatomic.a --build-id --warn-shared-textrel --fatal-warnings --exclude-libs libunwind.a --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_264da.dir/CMakeCCompilerABI.c.o -lgcc -ldl -lc -lgcc -ldl "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtend_android.o"]
     arg [C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin\ld] ==> ignore
     arg [--sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot] ==> ignore
     arg [-pie] ==> ignore
@@ -67,7 +67,7 @@ Parsed C implicit link information from above output:
     arg [-dynamic-linker] ==> ignore
     arg [/system/bin/linker] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_cdbdb] ==> ignore
+    arg [cmTC_264da] ==> ignore
     arg [C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\crtbegin_dynamic.o] ==> ignore
     arg [-LC:\Users\lilah\AppData\Local\Android\Sdk\ndk-bundle\toolchains\llvm\prebuilt\windows-x86_64\lib64\clang\8.0.7\lib\linux\arm] ==> dir [C:\Users\lilah\AppData\Local\Android\Sdk\ndk-bundle\toolchains\llvm\prebuilt\windows-x86_64\lib64\clang\8.0.7\lib\linux\arm]
     arg [-LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb] ==> dir [C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb]
@@ -90,7 +90,7 @@ Parsed C implicit link information from above output:
     arg [--no-undefined] ==> ignore
     arg [-znoexecstack] ==> ignore
     arg [--gc-sections] ==> ignore
-    arg [CMakeFiles/cmTC_cdbdb.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_264da.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lgcc] ==> lib [gcc]
     arg [-ldl] ==> lib [dl]
     arg [-lc] ==> lib [c]
@@ -116,11 +116,11 @@ Parsed C implicit link information from above output:
 
 
 Detecting C [-std=c11] compiler features compiled with the following output:
-Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_0c451"
-[1/2] Building C object CMakeFiles/cmTC_0c451.dir/feature_tests.c.o
-[2/2] Linking C executable cmTC_0c451
+Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_a79a8"
+[1/2] Building C object CMakeFiles/cmTC_a79a8.dir/feature_tests.c.o
+[2/2] Linking C executable cmTC_a79a8
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -130,11 +130,11 @@ Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bi
 
 
 Detecting C [-std=c99] compiler features compiled with the following output:
-Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_8f4f6"
-[1/2] Building C object CMakeFiles/cmTC_8f4f6.dir/feature_tests.c.o
-[2/2] Linking C executable cmTC_8f4f6
+Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_a8699"
+[1/2] Building C object CMakeFiles/cmTC_a8699.dir/feature_tests.c.o
+[2/2] Linking C executable cmTC_a8699
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -144,11 +144,11 @@ Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bi
 
 
 Detecting C [-std=c90] compiler features compiled with the following output:
-Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_b5a29"
-[1/2] Building C object CMakeFiles/cmTC_b5a29.dir/feature_tests.c.o
-[2/2] Linking C executable cmTC_b5a29
+Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_97a61"
+[1/2] Building C object CMakeFiles/cmTC_97a61.dir/feature_tests.c.o
+[2/2] Linking C executable cmTC_97a61
 
 
     Feature record: C_FEATURE:1c_function_prototypes
@@ -156,19 +156,19 @@ Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bi
     Feature record: C_FEATURE:0c_static_assert
     Feature record: C_FEATURE:0c_variadic_macros
 Determining if the CXX compiler works passed with the following output:
-Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_f1c84"
-[1/2] Building CXX object CMakeFiles/cmTC_f1c84.dir/testCXXCompiler.cxx.o
-[2/2] Linking CXX executable cmTC_f1c84
+Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_e8c99"
+[1/2] Building CXX object CMakeFiles/cmTC_e8c99.dir/testCXXCompiler.cxx.o
+[2/2] Linking CXX executable cmTC_e8c99
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_62920"
-[1/2] Building CXX object CMakeFiles/cmTC_62920.dir/CMakeCXXCompilerABI.cpp.o
-[2/2] Linking CXX executable cmTC_62920
+Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_39bf5"
+[1/2] Building CXX object CMakeFiles/cmTC_39bf5.dir/CMakeCXXCompilerABI.cpp.o
+[2/2] Linking CXX executable cmTC_39bf5
 Android (5220042 based on r346389c) clang version 8.0.7 (https://android.googlesource.com/toolchain/clang b55f2d4ebfd35bf643d27dbca1bb228957008617) (https://android.googlesource.com/toolchain/llvm 3c393fe7a7e13b0fba4ac75a01aa683d7a5b11cd) (based on LLVM 8.0.7svn)
 Target: armv7-none-linux-android21
 Thread model: posix
@@ -180,16 +180,16 @@ Candidate multilib: armv7-a;@march=armv7-a
 Candidate multilib: armv7-a/thumb;@march=armv7-a@mthumb
 Candidate multilib: .;
 Selected multilib: armv7-a/thumb;@march=armv7-a@mthumb
- "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin\\ld" --sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot -pie -EL -z now -z relro -X --hash-style=both --enable-new-dtags --eh-frame-hdr -m armelf_linux_eabi -dynamic-linker /system/bin/linker -o cmTC_62920 "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtbegin_dynamic.o" "-LC:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\toolchains\\llvm\\prebuilt\\windows-x86_64\\lib64\\clang\\8.0.7\\lib\\linux\\arm" -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/../lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21 -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/../../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib --exclude-libs libgcc.a --exclude-libs libatomic.a --build-id --warn-shared-textrel --fatal-warnings --exclude-libs libunwind.a --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_62920.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lm -lgcc -ldl -lc -lgcc -ldl "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtend_android.o"
+ "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin\\ld" --sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot -pie -EL -z now -z relro -X --hash-style=both --enable-new-dtags --eh-frame-hdr -m armelf_linux_eabi -dynamic-linker /system/bin/linker -o cmTC_39bf5 "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtbegin_dynamic.o" "-LC:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\toolchains\\llvm\\prebuilt\\windows-x86_64\\lib64\\clang\\8.0.7\\lib\\linux\\arm" -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/../lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21 -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/../../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib --exclude-libs libgcc.a --exclude-libs libatomic.a --build-id --warn-shared-textrel --fatal-warnings --exclude-libs libunwind.a --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_39bf5.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lm -lgcc -ldl -lc -lgcc -ldl "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtend_android.o"
 
 
 Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(arm-linux-androideabi-ld\.exe|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_62920"]
-  ignore line: [[1/2] Building CXX object CMakeFiles/cmTC_62920.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [[2/2] Linking CXX executable cmTC_62920]
+  ignore line: [Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_39bf5"]
+  ignore line: [[1/2] Building CXX object CMakeFiles/cmTC_39bf5.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [[2/2] Linking CXX executable cmTC_39bf5]
   ignore line: [Android (5220042 based on r346389c) clang version 8.0.7 (https://android.googlesource.com/toolchain/clang b55f2d4ebfd35bf643d27dbca1bb228957008617) (https://android.googlesource.com/toolchain/llvm 3c393fe7a7e13b0fba4ac75a01aa683d7a5b11cd) (based on LLVM 8.0.7svn)]
   ignore line: [Target: armv7-none-linux-android21]
   ignore line: [Thread model: posix]
@@ -206,7 +206,7 @@ Parsed CXX implicit link information from above output:
   ignore line: []
   ignore line: [Selected multilib: armv7-a/thumb]
   ignore line: [@march=armv7-a@mthumb]
-  link line: [ "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin\\ld" --sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot -pie -EL -z now -z relro -X --hash-style=both --enable-new-dtags --eh-frame-hdr -m armelf_linux_eabi -dynamic-linker /system/bin/linker -o cmTC_62920 "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtbegin_dynamic.o" "-LC:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\toolchains\\llvm\\prebuilt\\windows-x86_64\\lib64\\clang\\8.0.7\\lib\\linux\\arm" -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/../lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21 -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/../../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib --exclude-libs libgcc.a --exclude-libs libatomic.a --build-id --warn-shared-textrel --fatal-warnings --exclude-libs libunwind.a --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_62920.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lm -lgcc -ldl -lc -lgcc -ldl "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtend_android.o"]
+  link line: [ "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin\\ld" --sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot -pie -EL -z now -z relro -X --hash-style=both --enable-new-dtags --eh-frame-hdr -m armelf_linux_eabi -dynamic-linker /system/bin/linker -o cmTC_39bf5 "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtbegin_dynamic.o" "-LC:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\toolchains\\llvm\\prebuilt\\windows-x86_64\\lib64\\clang\\8.0.7\\lib\\linux\\arm" -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/../lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21 -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/../../lib -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/lib/armv7-a/thumb -LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib --exclude-libs libgcc.a --exclude-libs libatomic.a --build-id --warn-shared-textrel --fatal-warnings --exclude-libs libunwind.a --no-undefined -z noexecstack --gc-sections CMakeFiles/cmTC_39bf5.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lm -lgcc -ldl -lc -lgcc -ldl "C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\\crtend_android.o"]
     arg [C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/../../../../arm-linux-androideabi/bin\ld] ==> ignore
     arg [--sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot] ==> ignore
     arg [-pie] ==> ignore
@@ -222,7 +222,7 @@ Parsed CXX implicit link information from above output:
     arg [-dynamic-linker] ==> ignore
     arg [/system/bin/linker] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_62920] ==> ignore
+    arg [cmTC_39bf5] ==> ignore
     arg [C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/lib/arm-linux-androideabi/21\crtbegin_dynamic.o] ==> ignore
     arg [-LC:\Users\lilah\AppData\Local\Android\Sdk\ndk-bundle\toolchains\llvm\prebuilt\windows-x86_64\lib64\clang\8.0.7\lib\linux\arm] ==> dir [C:\Users\lilah\AppData\Local\Android\Sdk\ndk-bundle\toolchains\llvm\prebuilt\windows-x86_64\lib64\clang\8.0.7\lib\linux\arm]
     arg [-LC:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb] ==> dir [C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/armv7-a/thumb]
@@ -245,7 +245,7 @@ Parsed CXX implicit link information from above output:
     arg [--no-undefined] ==> ignore
     arg [-znoexecstack] ==> ignore
     arg [--gc-sections] ==> ignore
-    arg [CMakeFiles/cmTC_62920.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_39bf5.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lc++] ==> lib [c++]
     arg [-lm] ==> lib [m]
     arg [-lgcc] ==> lib [gcc]
@@ -273,11 +273,11 @@ Parsed CXX implicit link information from above output:
 
 
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
-Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_45e95"
-[1/2] Building CXX object CMakeFiles/cmTC_45e95.dir/feature_tests.cxx.o
-[2/2] Linking CXX executable cmTC_45e95
+Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_50885"
+[1/2] Building CXX object CMakeFiles/cmTC_50885.dir/feature_tests.cxx.o
+[2/2] Linking CXX executable cmTC_50885
 
 
     Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers
@@ -340,11 +340,11 @@ Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bi
 
 
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
-Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_5ba88"
-[1/2] Building CXX object CMakeFiles/cmTC_5ba88.dir/feature_tests.cxx.o
-[2/2] Linking CXX executable cmTC_5ba88
+Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_a3dc0"
+[1/2] Building CXX object CMakeFiles/cmTC_a3dc0.dir/feature_tests.cxx.o
+[2/2] Linking CXX executable cmTC_a3dc0
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
@@ -407,11 +407,11 @@ Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bi
 
 
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
-Change Dir: C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
+Change Dir: C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_db407"
-[1/2] Building CXX object CMakeFiles/cmTC_db407.dir/feature_tests.cxx.o
-[2/2] Linking CXX executable cmTC_db407
+Run Build Command:"C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe" "cmTC_2900b"
+[1/2] Building CXX object CMakeFiles/cmTC_2900b.dir/feature_tests.cxx.o
+[2/2] Linking CXX executable cmTC_2900b
 
 
     Feature record: CXX_FEATURE:0cxx_aggregate_default_initializers
