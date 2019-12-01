@@ -1,8 +1,0 @@
-Executable : C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe
-arguments : 
---build
-C:\Users\lilah\Documents\FTCPrograms\2019-2020_SKY_STONE\RobotProgram\openCVLibrary411\.externalNativeBuild\cmake\debug\x86
---target
-opencv_jni_shared
-jvmArgs : 
-

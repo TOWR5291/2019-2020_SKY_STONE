@@ -83,7 +83,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 @TeleOp(name="SKYSTONE Vuforia Nav Webcam", group ="Concept")
-@Disabled
+//@Disabled
 public class ConceptVuforiaSkyStoneNavigationWebcam extends LinearOpMode {
 
     // IMPORTANT: If you are using a USB WebCam, you must select CAMERA_CHOICE = BACK; and PHONE_IS_PORTRAIT = false;
@@ -102,8 +102,7 @@ public class ConceptVuforiaSkyStoneNavigationWebcam extends LinearOpMode {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY =
-            " --- YOUR NEW VUFORIA KEY GOES HERE  --- ";
+    private static final String VUFORIA_KEY = "AVnlHKP/////AAABmU5kpwBUw0KGkmPKLAjP2fthurq7h6D9ULkmkt8zlkqRmNOdUk3BsiLm+o93UF/GumwUEhMEUD2R5SCnKb2GeULtLWeSCLjIRYEGSAfOAnt4vVHboCAvwrOlUykc1WESQrw2sbO+jhb/rw6RVR8v3416VgUUO0AHKPN1M47o0PZO17pIYXVcUYByKSc7fqmm/Lld/XdYbCNBwRJnTFgautU/GsLx193RQSN4GAAtW4yOIyLRC8Ezy6zRIqm2RQdxFh9puI0cB/tDc0oZVtSPBg69MEVmEpP0HloGstMtIgFLpp56eH4rmO/ngHsmIVZ0XbSSvAp68QLdKc6IYYJYQTthftLcP6N4z/avQfOwp1wU";
 
     // Since ImageTarget trackables use mm to specifiy their dimensions, we must use mm for all the physical dimension.
     // We will define some constants and conversions here
@@ -143,7 +142,7 @@ public class ConceptVuforiaSkyStoneNavigationWebcam extends LinearOpMode {
         /*
          * Retrieve the camera we are to use.
          */
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        webcamName = hardwareMap.get(WebcamName.class, "Webcam1");
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
