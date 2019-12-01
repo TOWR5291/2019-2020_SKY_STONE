@@ -1,0 +1,3 @@
+C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/opencv_jni_shared.dir
+C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/release/x86_64/CMakeFiles/rebuild_cache.dir
