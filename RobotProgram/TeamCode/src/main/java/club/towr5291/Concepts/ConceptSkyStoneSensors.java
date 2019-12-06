@@ -59,7 +59,6 @@ public class ConceptSkyStoneSensors extends LinearOpMode {
 
     private HardwareSensorsSkyStone sensors       = new HardwareSensorsSkyStone();
 
-
     @Override
     public void runOpMode() {
 
@@ -74,12 +73,27 @@ public class ConceptSkyStoneSensors extends LinearOpMode {
         while(opModeIsActive()) {
             // generic DistanceSensor methods.
             //telemetry.addData("deviceName",sensorRange.getDeviceName() );
-            telemetry.addData("range Front Left  ", String.format("%.01f cm", sensors.distanceFrontLeftCM()));
-            telemetry.addData("range Front Right ", String.format("%.01f cm", sensors.distanceFrontRightCM()));
-            telemetry.addData("range Rear Left   ", String.format("%.01f cm", sensors.distanceRearLeftCM()));
-            telemetry.addData("range Rear Right  ", String.format("%.01f cm", sensors.distanceRearRightCM()));
-            telemetry.addData("range Side Left   ", String.format("%.01f cm", sensors.distanceSideLeftCM()));
-            telemetry.addData("range Side Right  ", String.format("%.01f cm", sensors.distanceSideRightCM()));
+            boolean blackLeft  = (sensors.distanceColorSideLeft().alpha() / sensors.distanceColorSideLeft().red()) > 2.9 ? true : false;
+            boolean blackRight = (sensors.distanceColorSideRight().alpha() / sensors.distanceColorSideRight().red()) > 2.9 ? true : false;
+
+            telemetry.addData("range Front Left       ", String.format("%.01f cm", sensors.distanceFrontLeftCM()));
+            telemetry.addData("range Front Right      ", String.format("%.01f cm", sensors.distanceFrontRightCM()));
+            telemetry.addData("range Rear Left        ", String.format("%.01f cm", sensors.distanceRearLeftCM()));
+            telemetry.addData("range Rear Right       ", String.format("%.01f cm", sensors.distanceRearRightCM()));
+            telemetry.addData("range Side Left        ", String.format("%.01f cm", sensors.distanceSideLeftCM()));
+            telemetry.addData("range Side Right       ", String.format("%.01f cm", sensors.distanceSideRightCM()));
+            telemetry.addData("range Side Left        ", String.format("%.01f cm", sensors.distanceColorSideLeftCM()));
+            telemetry.addData("Color Side Left Alpha  ", sensors.distanceColorSideLeft().alpha());
+            telemetry.addData("Color Side Left Red    ", sensors.distanceColorSideLeft().red());
+            telemetry.addData("Color Side Left Green  ", sensors.distanceColorSideLeft().green());
+            telemetry.addData("Color Side Left Blue   ", sensors.distanceColorSideLeft().blue());
+            telemetry.addData("range Side Right       ", String.format("%.01f cm", sensors.distanceColorSideRightCM()));
+            telemetry.addData("Color Side Right Alpha ", sensors.distanceColorSideRight().alpha());
+            telemetry.addData("Color Side Right Red   ", sensors.distanceColorSideRight().red());
+            telemetry.addData("Color Side Right Green ", sensors.distanceColorSideRight().green());
+            telemetry.addData("Color Side Right Blue  ", sensors.distanceColorSideRight().blue());
+            telemetry.addData("Color Side Left BLACK  ", blackLeft);
+            telemetry.addData("Color Side Right BLACK ", blackRight);
 
             // Rev2mDistanceSensor specific methods.
             //telemetry.addData("ID", String.format("%x", sensorTimeOfFlight.getModelID()));

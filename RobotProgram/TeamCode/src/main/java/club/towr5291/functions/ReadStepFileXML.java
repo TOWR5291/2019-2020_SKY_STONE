@@ -59,21 +59,29 @@ public class ReadStepFileXML {
                 if (step.getNodeName().equalsIgnoreCase("Step")) {
                     Element eElement = (Element) step;
                     System.out.println("Found Step :");
-
-                    loadSteps(
-                            Double.parseDouble(eElement.getElementsByTagName("Timeout").item(0).getTextContent()),
-                            eElement.getElementsByTagName("Command").item(0).getTextContent(),
-                            Double.parseDouble(eElement.getElementsByTagName("Distance").item(0).getTextContent()),
-                            Double.parseDouble(eElement.getElementsByTagName("Speed").item(0).getTextContent()),
-                            Boolean.parseBoolean(eElement.getElementsByTagName("Parallel").item(0).getTextContent()),
-                            Boolean.parseBoolean(eElement.getElementsByTagName("Lastpos").item(0).getTextContent()),
-                            Double.parseDouble(eElement.getElementsByTagName("Parm1").item(0).getTextContent()),
-                            Double.parseDouble(eElement.getElementsByTagName("Parm2").item(0).getTextContent()),
-                            Double.parseDouble(eElement.getElementsByTagName("Parm3").item(0).getTextContent()),
-                            Double.parseDouble(eElement.getElementsByTagName("Parm4").item(0).getTextContent()),
-                            Double.parseDouble(eElement.getElementsByTagName("Parm5").item(0).getTextContent()),
-                            Double.parseDouble(eElement.getElementsByTagName("Parm6").item(0).getTextContent())
-                    );
+                    int bypassedStep = 0;
+                    try {
+                        bypassedStep = Integer.parseInt(eElement.getElementsByTagName("bypassed").item(0).getTextContent());
+                        System.out.println("bypassedStep :" + bypassedStep);
+                    } catch(Exception e) {
+                        bypassedStep = 0;
+                    }
+                    if (bypassedStep == 0) {
+                        loadSteps(
+                                Double.parseDouble(eElement.getElementsByTagName("Timeout").item(0).getTextContent()),
+                                eElement.getElementsByTagName("Command").item(0).getTextContent(),
+                                Double.parseDouble(eElement.getElementsByTagName("Distance").item(0).getTextContent()),
+                                Double.parseDouble(eElement.getElementsByTagName("Speed").item(0).getTextContent()),
+                                Boolean.parseBoolean(eElement.getElementsByTagName("Parallel").item(0).getTextContent()),
+                                Boolean.parseBoolean(eElement.getElementsByTagName("Lastpos").item(0).getTextContent()),
+                                Double.parseDouble(eElement.getElementsByTagName("Parm1").item(0).getTextContent()),
+                                Double.parseDouble(eElement.getElementsByTagName("Parm2").item(0).getTextContent()),
+                                Double.parseDouble(eElement.getElementsByTagName("Parm3").item(0).getTextContent()),
+                                Double.parseDouble(eElement.getElementsByTagName("Parm4").item(0).getTextContent()),
+                                Double.parseDouble(eElement.getElementsByTagName("Parm5").item(0).getTextContent()),
+                                Double.parseDouble(eElement.getElementsByTagName("Parm6").item(0).getTextContent())
+                        );
+                    }
                 }
             }
 

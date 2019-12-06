@@ -98,7 +98,27 @@ public class HardwareSensorsSkyStone
         return sensorRangeSideRight.getDistance(DistanceUnit.CM);
     }
     public double distanceSideRightIN(){
-        return sensorRangeRearRight.getDistance(DistanceUnit.INCH);
+        return sensorRangeSideRight.getDistance(DistanceUnit.INCH);
+    }
+
+    public double distanceColorSideRightCM(){
+        return sensorColorDistanceRight.getDistance(DistanceUnit.CM);
+    }
+    public double distanceColorSideRightIN(){
+        return sensorColorDistanceRight.getDistance(DistanceUnit.INCH);
+    }
+
+    public double distanceColorSideLeftCM(){
+        return sensorColorDistanceLeft.getDistance(DistanceUnit.CM);
+    }
+    public double distanceColorSideLeftIN(){
+        return sensorColorDistanceLeft.getDistance(DistanceUnit.INCH);
+    }
+    public ColorSensor distanceColorSideRight() {
+        return sensorColorRight;
+    }
+    public ColorSensor distanceColorSideLeft() {
+        return sensorColorLeft;
     }
 }
 

@@ -121,7 +121,7 @@
         <Parm6>1</Parm6>
     </Step>
     <Step>
-        <comment>Turn an angle, if parm 1 is set then turn to a direction relative to the start agle</comment>
+        <comment>Turn an angle, if parm 1 is set then turn to a direction relative to the start angle</comment>
         <Timeout>3</Timeout>
         <Command>TANKTURNGYRO</Command>
         <Distance>95</Distance>

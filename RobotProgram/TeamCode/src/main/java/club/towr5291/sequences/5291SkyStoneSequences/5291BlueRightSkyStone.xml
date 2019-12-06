@@ -1,12 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   
     <Step>
-        <comment>Drives a distance with set speed, parm 1 (Turns on) parm 2 (error) parm3 (Gain) are used for gyro correct, Parm 6 is the distance near the end where the loop ends and goes to next step  </comment>
-        <Timeout>2</Timeout>
-        <Command>TAPE</Command>
+        <comment>Strafe left or right an estimated distance, parm 1 how close to object to stop moving towards, parm 2 how far from object to stop going away, negative distance is left, pos is right</comment>
+        <bypassed>0</bypassed>
+        <Timeout>3</Timeout>
+        <Command>STRAFE</Command>
+        <Distance>-26</Distance>
+        <Speed>0.5</Speed>
+        <Parallel>true</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>7</Parm1>
+        <Parm2>23</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+    <Step>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Rotate arm to within outside perimiter of robot
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
         <Distance>0</Distance>
-        <Speed>1</Speed>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>1</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+    <Step>
+        <comment>Turn an angle, if parm 1 is set then turn to a direction relative to the start angle</comment>
+        <bypassed>0</bypassed>
+        <Timeout>2</Timeout>
+        <Command>TANKTURNGYRO</Command>
+        <Distance>0</Distance>
+        <Speed>0.6</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>1</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+    <Step>
+        <comment>Timer for Delaying, Parm 1 is the value to delay in milliseconds</comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>DELAY</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>100</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+    <Step>
+        <comment>Drives a distance with set speed,
+            parm 1 (Turns GYRO on)
+            parm 2 (error) parm3 (Gain) are used for gyro correct,
+            parm 3 finds SkyStone (1 for first SkyStone, 2 calculate second SkyStone)
+            Parm 6 is the distance near the end where the loop ends and goes to next step
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>4</Timeout>
+        <Command>DRIVE</Command>
+        <Distance>24</Distance>
+        <Speed>0.55</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>0</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>1</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+    <Step>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Rotate arm to within outside perimiter of robot
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>2</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+    <Step>
+        <comment>Timer for Delaying, Parm 1 is the value to delay in milliseconds</comment>
+        <bypassed>0</bypassed>
+        <Timeout>2</Timeout>
+        <Command>DELAY</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
         <Parallel>false</Parallel>
         <Lastpos>false</Lastpos>
         <Parm1>500</Parm1>
@@ -15,5 +128,69 @@
         <Parm4>0</Parm4>
         <Parm5>0</Parm5>
         <Parm6>1</Parm6>
+    </Step>
+    <Step>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Rotate arm to within outside perimiter of robot
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>3</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+    <Step>
+        <comment>Drives a distance with set speed,
+            parm 1 (Turns GYRO on)
+            parm 2 (error) parm3 (Gain) are used for gyro correct,
+            parm 3 finds SkyStone
+            Parm 6 is the distance near the end where the loop ends and goes to next step  </comment>
+        <bypassed>1</bypassed>
+        <Timeout>2</Timeout>
+        <Command>Drive</Command>
+        <Distance>24</Distance>
+        <Speed>0.5</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>0</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>1</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+    <Step>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Rotate arm to within outside perimiter of robot
+        </comment>
+        <bypassed>1</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>0</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
     </Step>
 </resources>

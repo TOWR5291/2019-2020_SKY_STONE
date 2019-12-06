@@ -72,27 +72,21 @@ public class HardwareArmMotorsSkyStone
         this.leftWristServo     = hwMap.servo.get("leftWristServo");
         this.leftClampServo     = hwMap.servo.get("leftClampServo");
 
-//        this.leftFrontDistance  = hwMap.get(DistanceSensor.class, "leftFrontDistance");
-//        this.leftBackDistance   = hwMap.get(DistanceSensor.class, "leftBackDistance");
-//        this.rightFrontDistance = hwMap.get(DistanceSensor.class, "rightFrontDistance");
-//        this.rightBackDistance  = hwMap.get(DistanceSensor.class, "rightBackDistance");
-
         setHardwareArmDirections();
 
         liftMotor1.setPower(0);
         this.intakeMotor1.setPower(0);
         this.liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.intakeMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
     }
 
     public void setHardwareArmDirections(){
-        liftMotor1.setDirection(DcMotor.Direction.FORWARD);
-        intakeMotor1.setDirection(DcMotorSimple.Direction.FORWARD);
-        tapeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-    }
-
-    public void setHardwareArmDirections(DcMotor.Direction direction){
-        liftMotor1.setDirection(direction);
+        this.liftMotor1.setDirection(DcMotor.Direction.FORWARD);
+        this.intakeMotor1.setDirection(DcMotorSimple.Direction.FORWARD);
+        this.tapeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.leftArmServo.setDirection(Servo.Direction.REVERSE);
+        this.leftClampServo.setDirection(Servo.Direction.REVERSE);
     }
 
     public void setHardwareLiftMotorResetEncoders() {

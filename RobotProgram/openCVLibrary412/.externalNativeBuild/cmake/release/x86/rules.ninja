@@ -42,7 +42,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe -HC:\Users\lilah\Documents\FTCPrograms\TESTSkyStone\RobotProgram\openCVLibrary412\libcxx_helper -BC:\Users\lilah\Documents\FTCPrograms\TESTSkyStone\RobotProgram\openCVLibrary412\.externalNativeBuild\cmake\release\x86
+  command = C:\Users\lilah\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe -HC:\Users\lilah\Documents\FTCPrograms\2019-2020_SKY_STONE\RobotProgram\openCVLibrary412\libcxx_helper -BC:\Users\lilah\Documents\FTCPrograms\2019-2020_SKY_STONE\RobotProgram\openCVLibrary412\.externalNativeBuild\cmake\release\x86
   description = Re-running CMake...
   generator = 1
 

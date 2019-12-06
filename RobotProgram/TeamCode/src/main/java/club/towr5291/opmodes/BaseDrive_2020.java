@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -101,21 +102,32 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
         robotDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         robotArms.init(hardwareMap, dashboard);
+
+        //run positions Teleop
+        //start position for within 18 inches
+        robotArms.rightWristServo.setPosition(1);
+        robotArms.rightArmServo.setPosition(0.0);
+        robotArms.rightClampServo.setPosition(0.15);
+        robotArms.leftWristServo.setPosition(0.05);
+        robotArms.leftArmServo.setPosition(0.0);
+        robotArms.leftClampServo.setPosition(0.15);
+
         fileLogger.writeEvent(1,"","Wait For Start ");
 
         dashboard.displayPrintf(1, "Waiting for Start");
 
-        //move the right block arm to a stashed position
-        robotArms.rightWristServo.setPosition(1);
-        robotArms.rightArmServo.setPosition(0.4);
-        robotArms.rightClampServo.setPosition(0);
-
-
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         dashboard.clearDisplay();
-
         fileLogger.writeEvent("Starting Loop");
+
+        robotArms.rightWristServo.setPosition(.60);
+        robotArms.rightArmServo.setPosition(0.0);
+        robotArms.rightClampServo.setPosition(0.3);
+        //robotArms.leftWristServo.setPosition(0.05);
+        robotArms.leftWristServo.setPosition(1);
+        robotArms.leftArmServo.setPosition(0.65);
+        robotArms.leftClampServo.setPosition(0.3);
 
         //dashboard.clearDisplay();
 
@@ -166,12 +178,17 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
             else if (gamepad2.right_bumper)
                 robotArms.foundationServo.setPosition(1);
 
-            //move the right block arm to a stached position
+            //move the left block arm to a stached position
+            robotArms.leftArmServo.setPosition((gamepad2.right_stick_x / 2) + 0.5 );
             robotArms.rightArmServo.setPosition((gamepad2.right_stick_x / 2) + 0.5 );
-            if (gamepad2.dpad_left)
+            if (gamepad2.dpad_left) {
                 robotArms.rightClampServo.setPosition(0);
-            else if (gamepad2.dpad_right)
+                robotArms.leftClampServo.setPosition(0);
+            } else if (gamepad2.dpad_right) {
                 robotArms.rightClampServo.setPosition(1);
+                robotArms.leftClampServo.setPosition(1);
+            }
+            robotArms.leftWristServo.setPosition(0);
             robotArms.rightWristServo.setPosition(1);
 
         }

@@ -59,7 +59,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.teamcode.R;
 import org.opencv.core.Mat;
@@ -76,13 +75,14 @@ import club.towr5291.functions.TOWR5291Utils;
 import club.towr5291.libraries.ImageCaptureOCV;
 import club.towr5291.libraries.LibraryMotorType;
 import club.towr5291.libraries.LibraryStateSegAutoRoverRuckus;
-import club.towr5291.libraries.LibraryTensorFlowRoverRuckus;
-import club.towr5291.libraries.LibraryVuforiaRoverRuckus;
+//import club.towr5291.libraries.LibraryTensorFlowRoverRuckus;
+//import club.towr5291.libraries.LibraryVuforiaRoverRuckus;
 import club.towr5291.libraries.TOWRDashBoard;
 import club.towr5291.libraries.robotConfig;
 import club.towr5291.libraries.robotConfigSettings;
 import club.towr5291.robotconfig.HardwareArmMotorsSkyStone;
 import club.towr5291.robotconfig.HardwareDriveMotors;
+import club.towr5291.robotconfig.HardwareSensorsSkyStone;
 
 //Qualcomm Imports
 //FTC Imports
@@ -185,8 +185,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
     private Constants.stepState mintCurrentStateGrabFoundation;                 // Control Servo to move foundation
     private Constants.stepState mintCurrentStateGrabBlock;                      // Control arm to grab block
 
-    private int mintFindGoldLoop = 0;                                           //there can only be 3 positions so count how many times we try
-    private boolean mboolFoundGold = false;
+    private boolean mboolFoundSkyStone = false;
 
     private double mdblTeamMarkerDrop = .8;
     private double mdblTeamMarkerHome = 0;
@@ -195,8 +194,11 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
     private HashMap<String, Integer> mintActiveStepsCopy = new HashMap<>();
 
     //motors
+    // load all the robot configurations for this season
     private HardwareDriveMotors robotDrive          = new HardwareDriveMotors();   // Use 5291's hardware
     private HardwareArmMotorsSkyStone robotArms     = new HardwareArmMotorsSkyStone();   // Use 5291's hardware
+    private HardwareSensorsSkyStone sensors         = new HardwareSensorsSkyStone();
+
     PIDFCoefficients getMotorPIDFMotor1;
     PIDFCoefficients getMotorPIDFMotor2;
     PIDFCoefficients getMotorPIDFMotor3;
@@ -287,10 +289,10 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
     private HashMap<String, String> powerTable = new HashMap<String, String>();
     private ReadStepFileXML autonomousStepsFile = new ReadStepFileXML();
 
-    private SkyStoneOCV elementColour = new SkyStoneOCV();
+    //private SkyStoneOCV elementColour = new SkyStoneOCV();
 
-    private ImageCaptureOCV imageCaptureOCV = new ImageCaptureOCV();
-    private LibraryTensorFlowRoverRuckus tensorFlowRoverRuckus = new LibraryTensorFlowRoverRuckus();
+    //private ImageCaptureOCV imageCaptureOCV = new ImageCaptureOCV();
+    //private LibraryTensorFlowRoverRuckus tensorFlowRoverRuckus = new LibraryTensorFlowRoverRuckus();
 
     private int mintNumberColourTries = 0;
     private Constants.ObjectColours mColour;
@@ -368,10 +370,10 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
 
         switch (ourRobotConfig.getAllianceStartPosition()){
             case "Left":
-                imuStartCorrectionVar = -45;
+                imuStartCorrectionVar = 0;
                 break;
             default:
-                imuStartCorrectionVar = 45;
+                imuStartCorrectionVar = 0;
                 break;
         }
 
@@ -439,6 +441,12 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
 
         fileLogger.writeEvent(3, "Configuring Adafruit IMU - Finished");
         fileLogger.writeEvent(3, "Configuring Motors Base - Start");
+
+        dashboard.displayPrintf(10, "initRobot BaseDrive Loading");
+
+        dashboard.displayPrintf(10, "initRobot Sensors Loading");
+        //init all the sensors
+        sensors.init(hardwareMap);
 
         dashboard.displayPrintf(10, "initRobot BaseDrive Loading");
 
@@ -515,38 +523,16 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
 
         mblnNextStepLastPos = false;
 
-        fileLogger.writeEvent(3, "Resetting State Engine - Finish");
-        fileLogger.writeEvent(3, "Configuring Vuforia - Start");
-
-        dashboard.displayPrintf(10, "initRobot VUFORIA Loading");
-
-        towr5291TextToSpeech.Speak("Loading OpenCV & Vuforia", debug);
+        //towr5291TextToSpeech.Speak("Loading OpenCV & Vuforia", debug);
         //init openCV
-        initOpenCv();
-        dashboard.displayPrintf(1, "initRobot OpenCV!");
-        fileLogger.writeEvent(3, "OpenCV Started");
+        //initOpenCv();
+        //dashboard.displayPrintf(1, "initRobot OpenCV!");
+        //fileLogger.writeEvent(3, "OpenCV Started");
 
-        //load all the vuforia stuff
-        LibraryVuforiaRoverRuckus RoverRuckusVuforia = new LibraryVuforiaRoverRuckus();
-        VuforiaTrackables RoverRuckusTrackables;
+        //fileLogger.writeEvent(3,"MAIN","Configured Vuforia - About to Activate");
+        //dashboard.displayPrintf(10, "Configured Vuforia - About to Activate");
 
-        //if (vuforiaWebcam) {
-            robotWebcam = hardwareMap.get(WebcamName.class, "Webcam1");
-            RoverRuckusTrackables = RoverRuckusVuforia.LibraryVuforiaRoverRuckus(hardwareMap, ourRobotConfig, robotWebcam, false);
-        //} else{
-            //RoverRuckusTrackables = RoverRuckusVuforia.LibraryVuforiaRoverRuckus(hardwareMap, ourRobotConfig, false);
-        //}
-
-        imageCaptureOCV.initImageCaptureOCV(RoverRuckusVuforia, dashboard, fileLogger);
-        //tensorFlowRoverRuckus.initTensorFlow(RoverRuckusVuforia.getVuforiaLocalizer(), hardwareMap, fileLogger, "RoverRuckus.tflite", "GOLD", "SILVER", true);
-
-        fileLogger.writeEvent(3,"MAIN","Configured Vuforia - About to Activate");
-        dashboard.displayPrintf(10, "Configured Vuforia - About to Activate");
-
-        //activate vuforia
-        RoverRuckusTrackables.activate();
-
-        fileLogger.writeEvent(3,"MAIN", "Activated Vuforia");
+        //fileLogger.writeEvent(3,"MAIN", "Activated Vuforia");
 
         towr5291TextToSpeech.Speak("Completed Loading, Waiting for Start", debug);
         dashboard.displayPrintf(10, "Init - Complete, Wait for Start");
@@ -556,14 +542,16 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         dblStartVoltage = getBatteryVoltage();
 
         //move the right block arm to a stashed position
-        robotArms.rightWristServo.setPosition(0.12);
-        robotArms.rightArmServo.setPosition(0.41);
-        robotArms.rightClampServo.setPosition(0);
+        //start position for within 18 inches
+        robotArms.rightWristServo.setPosition(1);
+        robotArms.rightArmServo.setPosition(0.0);
+        robotArms.rightClampServo.setPosition(0.15);
+        robotArms.leftWristServo.setPosition(0.05);
+        robotArms.leftArmServo.setPosition(0.0);
+        robotArms.leftClampServo.setPosition(0.15);
 
-        //move the right block arm to a stashed position
-        robotArms.leftWristServo.setPosition(0.12);
-        robotArms.leftArmServo.setPosition(0.41);
-        robotArms.leftClampServo.setPosition(0);
+        //used for SkyStone Detection
+        mLocation = Constants.ObjectColours.OBJECT_NONE;
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -669,8 +657,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                         fileLogger.close();
                         fileLogger = null;
                     }
-                    //deactivate vuforia
-                    RoverRuckusTrackables.deactivate();
                     dashboard.displayPrintf(1, LABEL_WIDTH,"STATE", "FINISHED " + mintCurrentStep);
                     break;
             }
@@ -785,7 +771,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             case "TAPE":
                 tapeMeasure();
                 break;
-            case "GRABBLOCK":
+            case "STONEARM":
                 grabBlock();
                 break;
         }
@@ -890,7 +876,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 mintCurrentStateTapeMeasure          = Constants.stepState.STATE_INIT;
                 towr5291TextToSpeech.Speak("Tape Measure", debug);
                 break;
-            case "GRABBLOCK":
+            case "STONEARM":
                 mintCurrentStateGrabBlock          = Constants.stepState.STATE_INIT;
                 towr5291TextToSpeech.Speak("Grab Block", debug);
                 break;
@@ -939,7 +925,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
 
         switch (mintCurrentStateDriveHeading) {
             case STATE_INIT:
-
                 // set motor controller to mode
                 robotDrive.setHardwareDriveRunUsingEncoders();
                 mblnDisableVisionProcessing = true;  //disable vision processing
@@ -956,6 +941,10 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     mintStartPositionRight1 = robotDrive.baseMotor3.getCurrentPosition();
                     mintStartPositionRight2 = robotDrive.baseMotor4.getCurrentPosition();
                 }
+
+                fileLogger.writeEvent(2,"mStepLeftStart1 :- " + mintStartPositionLeft1 + " mStepLeftStart2 :- " + mintStartPositionLeft2);
+                fileLogger.writeEvent(2,"mStepRightStart1:- " + mintStartPositionRight1 + " mStepRightStart2:- " + mintStartPositionRight2);
+
                 mblnNextStepLastPos = false;
 
                 mintStepLeftTarget1 = mintStartPositionLeft1 - (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH());
@@ -980,12 +969,12 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
 
                 // set motor controller to mode, Turn On RUN_TO_POSITION
                 robotDrive.setHardwareDriveRunToPosition();
-
-                mintCurrentStateDriveHeading = Constants.stepState.STATE_RUNNING;
                 robotDrive.setHardwareDrivePower(Math.abs(mdblStepSpeed));
 
                 dblStepSpeedTempRight = mdblStepSpeed;
                 dblStepSpeedTempLeft = mdblStepSpeed;
+
+                mintCurrentStateDriveHeading = Constants.stepState.STATE_RUNNING;
                 break;
 
             case STATE_START:
@@ -1063,7 +1052,49 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                         dblStepSpeedTempLeft /= dblMaxSpeed;
                         dblStepSpeedTempRight /= dblMaxSpeed;
                     }
+                } else if (mdblRobotParm3 == 1) {
+                    //error
+                    //find the first skystone, and move to the middle of it
+                    if (findSkystone()) {
+                        //calculate where
+                        double frontDistance = ((sensors.distanceFrontLeftCM() + sensors.distanceFrontLeftCM() ) / 2);
+                        if ((frontDistance > 96) && (frontDistance < 104)) {
+                            mLocation = Constants.ObjectColours.OBJECT_SKYSTONE_LEFT;
+                            fileLogger.writeEvent(3,"SkyStone LEFT " + (frontDistance));
+                            mboolFoundSkyStone = true;
+                            break;
+                        } else if ((frontDistance > 79) && (frontDistance < 87)) {
+                            mLocation = Constants.ObjectColours.OBJECT_SKYSTONE_CENTER;
+                            fileLogger.writeEvent(3,"SkyStone CENTER " + (frontDistance));
+                            mboolFoundSkyStone = true;
+                            break;
+                        } else if ((frontDistance > 59) && (frontDistance < 67)) {
+                            mLocation = Constants.ObjectColours.OBJECT_SKYSTONE_RIGHT;
+                            fileLogger.writeEvent(3,"SkyStone RIGHT " + (frontDistance));
+                            mboolFoundSkyStone = true;
+                            break;
+                        } else {
+                            mboolFoundSkyStone = false;
+                        }
+                        if (mboolFoundSkyStone) {
+                            fileLogger.writeEvent(3,"FoundSkyStone Exiting ");
+                            robotDrive.setHardwareDrivePower(0);
+                            /*robotDrive.baseMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            robotDrive.baseMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            robotDrive.baseMotor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            robotDrive.baseMotor4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            robotDrive.baseMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            robotDrive.baseMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            robotDrive.baseMotor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            robotDrive.baseMotor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+*/
+                            mintCurrentStateDriveHeading = Constants.stepState.STATE_COMPLETE;
+                            deleteParallelStep();
+                            break;
+                        }
+                    }
                 }
+
                 fileLogger.writeEvent(3,"dblDistanceToEnd " + dblDistanceToEnd);
 
                 if (mblnRobotLastPos) {
@@ -1690,10 +1721,10 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 }
                 mblnNextStepLastPos = false;
 
-                mintStepLeftTarget1 = mintStartPositionLeft1 - (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_LEFT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_FRONT_OFFSET());
-                mintStepLeftTarget2 = mintStartPositionLeft2 + (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_LEFT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_REAR_OFFSET());
-                mintStepRightTarget1 = mintStartPositionRight1 + (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_RIGHT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_FRONT_OFFSET());
-                mintStepRightTarget2 = mintStartPositionRight2 - (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_RIGHT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_REAR_OFFSET());
+                mintStepLeftTarget1 = mintStartPositionLeft1 - (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_LEFT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_REAR_OFFSET());
+                mintStepLeftTarget2 = mintStartPositionLeft2 + (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_LEFT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_FRONT_OFFSET());
+                mintStepRightTarget1 = mintStartPositionRight1 + (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_RIGHT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_REAR_OFFSET());
+                mintStepRightTarget2 = mintStartPositionRight2 - (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_RIGHT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_FRONT_OFFSET());
 
                 //store the encoder positions so next step can calculate destination
                 mintLastEncoderDestinationLeft1 = mintStepLeftTarget1;
@@ -1712,7 +1743,11 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 rdblSpeed = mdblStepSpeed;
 
                 // set power on motor controller to start moving
-                robotDrive.setHardwareDrivePower(rdblSpeed);  //set motor power
+                //robotDrive.setHardwareDrivePower(rdblSpeed);  //set motor power
+                robotDrive.setHardwareDriveLeft1MotorPower(rdblSpeed);
+                robotDrive.setHardwareDriveLeft2MotorPower(rdblSpeed);
+                robotDrive.setHardwareDriveRight1MotorPower(rdblSpeed);
+                robotDrive.setHardwareDriveRight2MotorPower(rdblSpeed);
                 mintCurrentStateMecanumStrafe = Constants.stepState.STATE_RUNNING;
             }
             break;
@@ -1724,7 +1759,10 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 robotDrive.baseMotor2.setTargetPosition(mintStepLeftTarget2);
                 robotDrive.baseMotor3.setTargetPosition(mintStepRightTarget1);
                 robotDrive.baseMotor4.setTargetPosition(mintStepRightTarget2);
-                robotDrive.setHardwareDrivePower(rdblSpeed);  //set motor power
+                robotDrive.setHardwareDriveLeft1MotorPower(rdblSpeed);
+                robotDrive.setHardwareDriveLeft2MotorPower(rdblSpeed * 1.12);
+                robotDrive.setHardwareDriveRight1MotorPower(rdblSpeed);
+                robotDrive.setHardwareDriveRight2MotorPower(rdblSpeed * 1.12);
 
                 double adafruitIMUHeading;
 
@@ -1774,6 +1812,48 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
 
                 //double dblDistanceToEnd = Math.max(Math.max(Math.max(Math.abs(dblDistanceToEndLeft1),Math.abs(dblDistanceToEndRight1)),Math.abs(dblDistanceToEndLeft2)),Math.abs(dblDistanceToEndRight2));
                 double dblDistanceToEnd = Math.abs(Math.abs(mdblStepDistance) - Math.abs(dblDistanceFromStart));
+
+                //parm 1 is strafe until we are close to a wall of this distance using distance sensors
+                if ((mdblRobotParm1 > 0) || (mdblRobotParm2 > 0)) {
+                    //check which way we are strafing
+                    double distanceToTarget = 0;
+                    double distanceFromWall = 0;
+                    double distanceToTargetC = 0;
+                    double distanceFromWallC = 0;
+                    if (mdblStepDistance < 0) {
+                        //less than is left
+                        distanceToTarget  = sensors.distanceSideLeftIN();
+                        distanceFromWall  = sensors.distanceSideRightIN();
+                        distanceToTargetC = sensors.distanceColorSideLeftIN();
+                        distanceFromWallC = sensors.distanceColorSideRightIN();
+                    } else {
+                        //greater than is right
+                        distanceToTarget  = sensors.distanceSideRightIN();
+                        distanceFromWall  = sensors.distanceSideLeftIN();
+                        distanceToTargetC = sensors.distanceColorSideRightIN();
+                        distanceFromWallC = sensors.distanceColorSideLeftIN();
+                    }
+                    fileLogger.writeEvent(3,"Measuring Distance To ObjectR...." + (distanceToTarget));
+                    fileLogger.writeEvent(3,"Measuring Distance From WallR...." + (distanceFromWall));
+                    fileLogger.writeEvent(3,"Measuring Distance To ObjectC...." + (distanceToTargetC));
+                    fileLogger.writeEvent(3,"Measuring Distance From WallC...." + (distanceFromWallC));
+
+                    if ((Math.abs(mdblRobotParm1) >= distanceToTarget) && (mdblRobotParm1 > 0)) {
+                        fileLogger.writeEvent(3,"Complete closeEnough......." + (distanceToTarget));
+                        mblnNextStepLastPos = true;
+                        mblnDisableVisionProcessing = false;  //enable vision processing
+                        mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
+                        deleteParallelStep();
+                        break;
+                    } else if ((Math.abs(mdblRobotParm2) <= distanceFromWall) && (mdblRobotParm2 > 0)) {
+                        fileLogger.writeEvent(3,"Complete farEnough......." + (distanceFromWall));
+                        mblnNextStepLastPos = true;
+                        mblnDisableVisionProcessing = false;  //enable vision processing
+                        mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
+                        deleteParallelStep();
+                        break;
+                    }
+                }
 
                 if (mblnRobotLastPos) {
                     if (Math.abs(dblDistanceToEnd) <= mdblRobotParm6) {
@@ -1826,10 +1906,27 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 if (Math.abs(dblDistanceToEnd) <= 0.5) {
                     fileLogger.writeEvent(3,"mblnRobotLastPos Complete Near END " + Math.abs(dblDistanceToEnd));
                     mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
+                    robotDrive.setHardwareDrivePower(0);
+                    /*robotDrive.baseMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robotDrive.baseMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robotDrive.baseMotor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robotDrive.baseMotor4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robotDrive.baseMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robotDrive.baseMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robotDrive.baseMotor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robotDrive.baseMotor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/
                     deleteParallelStep();
                     break;
                 } else if (!robotDrive.getHardwareBaseDriveBusy()) {
-                    //robotDrive.setHardwareDrivePower(0);
+                    robotDrive.setHardwareDrivePower(0);
+                    /*robotDrive.baseMotor1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robotDrive.baseMotor2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robotDrive.baseMotor3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robotDrive.baseMotor4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    robotDrive.baseMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robotDrive.baseMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robotDrive.baseMotor3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robotDrive.baseMotor4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/
                     fileLogger.writeEvent(1, "Complete         ");
                     mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
                     deleteParallelStep();
@@ -1841,176 +1938,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             if (mStateTime.seconds() > mdblStepTimeout) {
                 fileLogger.writeEvent(1, "Timeout:- " + mStateTime.seconds());
                 //  Transition to a new state.
-                mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
-                deleteParallelStep();
-                break;
-            }
-            break;
-        }
-    }
-
-    private void MecanumStrafeTime() {
-        fileLogger.setEventTag("MecanumStrafeTime()");
-
-        double dblDistanceToEndLeft1;
-        double dblDistanceToEndLeft2;
-        double dblDistanceToEndRight1;
-        double dblDistanceToEndRight2;
-        double dblDistanceFromStartLeft1;
-        double dblDistanceFromStartLeft2;
-        double dblDistanceFromStartRight1;
-        double dblDistanceFromStartRight2;
-
-        int intLeft1MotorEncoderPosition;
-        int intLeft2MotorEncoderPosition;
-        int intRight1MotorEncoderPosition;
-        int intRight2MotorEncoderPosition;
-        double rdblSpeed;
-
-        switch (mintCurrentStateMecanumStrafe) {
-            case STATE_INIT: {
-                double adafruitIMUHeading;
-                double currentHeading;
-                PIDLEFT1 = new TOWR5291PID(runtime,0,0,3,3,0);
-                PIDLEFT2 = new TOWR5291PID(runtime,0,0,3,3,0);
-                PIDRIGHT1 = new TOWR5291PID(runtime,0,0,3,3,0);
-                PIDRIGHT2 = new TOWR5291PID(runtime,0,0,3,3,0);
-
-                mblnDisableVisionProcessing = true;  //disable vision processing
-
-                // Get Current Encoder positions
-                if (mblnNextStepLastPos) {
-                    mintStartPositionLeft1 = mintLastEncoderDestinationLeft1;
-                    mintStartPositionLeft2 = mintLastEncoderDestinationLeft2;
-                    mintStartPositionRight1 = mintLastEncoderDestinationRight1;
-                    mintStartPositionRight2 = mintLastEncoderDestinationRight2;
-                } else {
-                    mintStartPositionLeft1 = robotDrive.baseMotor1.getCurrentPosition();
-                    mintStartPositionLeft2 = robotDrive.baseMotor2.getCurrentPosition();
-                    mintStartPositionRight1 = robotDrive.baseMotor3.getCurrentPosition();
-                    mintStartPositionRight2 = robotDrive.baseMotor4.getCurrentPosition();
-                }
-                mblnNextStepLastPos = false;
-
-                mintStepLeftTarget1 = mintStartPositionLeft1 - (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_LEFT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_FRONT_OFFSET());
-                mintStepLeftTarget2 = mintStartPositionLeft2 + (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_LEFT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_REAR_OFFSET());
-                mintStepRightTarget1 = mintStartPositionRight1 + (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_RIGHT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_FRONT_OFFSET());
-                mintStepRightTarget2 = mintStartPositionRight2 - (int) (mdblStepDistance * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_RIGHT_OFFSET() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE() * ourRobotConfig.getCOUNTS_PER_INCH_STRAFE_REAR_OFFSET());
-
-                //store the encoder positions so next step can calculate destination
-                mintLastEncoderDestinationLeft1 = mintStepLeftTarget1;
-                mintLastEncoderDestinationLeft2 = mintStepLeftTarget2;
-                mintLastEncoderDestinationRight1 = mintStepRightTarget1;
-                mintLastEncoderDestinationRight2 = mintStepRightTarget2;
-
-                // set motor controller to mode
-                robotDrive.setHardwareDriveRunWithoutEncoders();
-                if (mdblStepDistance > 0) {
-                    intdirection = 1;
-                } else {
-                    intdirection = 1;
-                }
-
-                // set power on motor controller to start moving
-                //robotDrive.setHardwareDrivePower(rdblSpeed);  //set motor power
-                robotDrive.baseMotor1.setPower(mdblStepSpeed * intdirection);
-                robotDrive.baseMotor2.setPower(-mdblStepSpeed * intdirection);
-                robotDrive.baseMotor3.setPower(-mdblStepSpeed * intdirection);
-                robotDrive.baseMotor4.setPower(mdblStepSpeed * intdirection);
-
-                mintCurrentStateMecanumStrafe = Constants.stepState.STATE_RUNNING;
-            }
-            break;
-            case STATE_RUNNING: {
-                intLeft1MotorEncoderPosition = robotDrive.baseMotor1.getCurrentPosition();
-                intLeft2MotorEncoderPosition = robotDrive.baseMotor2.getCurrentPosition();
-                intRight1MotorEncoderPosition = robotDrive.baseMotor3.getCurrentPosition();
-                intRight2MotorEncoderPosition = robotDrive.baseMotor4.getCurrentPosition();
-
-                double correctionleft1 = PIDLEFT1.PIDCorrection(runtime,mintStepLeftTarget1, intLeft1MotorEncoderPosition);
-                double correctionleft2 = PIDLEFT2.PIDCorrection(runtime,mintStepLeftTarget2, intLeft2MotorEncoderPosition);
-                double correctionright1 = PIDRIGHT1.PIDCorrection(runtime,mintStepRightTarget1, intRight1MotorEncoderPosition);
-                double correctionright2 = PIDRIGHT2.PIDCorrection(runtime,mintStepRightTarget2, intRight2MotorEncoderPosition);
-
-                robotDrive.baseMotor1.setPower(mdblStepSpeed * correctionleft1 * intdirection);
-                robotDrive.baseMotor2.setPower(mdblStepSpeed * correctionleft2 * intdirection);
-                robotDrive.baseMotor3.setPower(mdblStepSpeed * correctionright1 * intdirection);
-                robotDrive.baseMotor4.setPower(mdblStepSpeed * correctionright2 * intdirection);
-
-                //robotDrive.baseMotor1.setPower(mdblStepSpeed * intdirection);
-                //robotDrive.baseMotor2.setPower(mdblStepSpeed * intdirection);
-                //robotDrive.baseMotor3.setPower(mdblStepSpeed * intdirection);
-                //robotDrive.baseMotor4.setPower(mdblStepSpeed * intdirection);
-
-                //determine how close to target we are
-                dblDistanceToEndLeft1 = (mintStepLeftTarget1 - intLeft1MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
-                dblDistanceToEndLeft2 = (mintStepLeftTarget2 - intLeft2MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
-                dblDistanceToEndRight1 = (mintStepRightTarget1 - intRight1MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
-                dblDistanceToEndRight2 = (mintStepRightTarget2 - intRight2MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
-
-                dblDistanceFromStartLeft1 = (mintStartPositionLeft1 + intLeft1MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
-                dblDistanceFromStartLeft2 = (mintStartPositionLeft1 + intLeft2MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
-                dblDistanceFromStartRight1 = (mintStartPositionRight1 + intRight1MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
-                dblDistanceFromStartRight2 = (mintStartPositionRight2 + intRight2MotorEncoderPosition) / ourRobotConfig.getCOUNTS_PER_INCH();
-
-                fileLogger.writeEvent(3, "Timer- " + mStateTime.milliseconds() + " Left1Distance:- " + dblDistanceFromStartLeft1);
-                fileLogger.writeEvent(3, "Timer- " + mStateTime.milliseconds() + " Left2Distance:- " + dblDistanceFromStartLeft2);
-                fileLogger.writeEvent(3, "Timer- " + mStateTime.milliseconds() + " Right1Distance:- " + dblDistanceFromStartRight1);
-                fileLogger.writeEvent(3, "Timer- " + mStateTime.milliseconds() + " Right2Distance:- " + dblDistanceFromStartRight2);
-
-                fileLogger.writeEvent(3, "Current LPosition1:- " + intLeft1MotorEncoderPosition + " LTarget1:- " + mintStepLeftTarget1);
-                fileLogger.writeEvent(3, "Current LPosition2:- " + intLeft2MotorEncoderPosition + " LTarget2:- " + mintStepLeftTarget2);
-                fileLogger.writeEvent(3, "Current RPosition1:- " + intRight1MotorEncoderPosition + " RTarget1:- " + mintStepRightTarget1);
-                fileLogger.writeEvent(3, "Current RPosition2:- " + intRight2MotorEncoderPosition + " RTarget2:- " + mintStepRightTarget2);
-
-                dashboard.displayPrintf(4,  "Mecanum Strafe Positions moving " + mdblStepDistance);
-                dashboard.displayPrintf(5, LABEL_WIDTH, "Left  Target: ", "Running to %7d :%7d", mintStepLeftTarget1, mintStepLeftTarget2);
-                dashboard.displayPrintf(6, LABEL_WIDTH, "Left  Actual: ", "Running at %7d :%7d", intLeft1MotorEncoderPosition, intLeft2MotorEncoderPosition);
-                dashboard.displayPrintf(7, LABEL_WIDTH, "Right Target: ", "Running to %7d :%7d", mintStepRightTarget1, mintStepRightTarget2);
-                dashboard.displayPrintf(8, LABEL_WIDTH, "Right Actual: ", "Running at %7d :%7d", intRight1MotorEncoderPosition, intRight2MotorEncoderPosition);
-
-                double dblDistanceToEnd = Math.max(Math.max(Math.max(Math.abs(dblDistanceToEndLeft1),Math.abs(dblDistanceToEndRight1)),Math.abs(dblDistanceToEndLeft2)),Math.abs(dblDistanceToEndRight2));
-
-                if (mdblRobotParm1 > 0) {
-                    if (mStateTime.milliseconds() > mdblRobotParm1) {
-                        fileLogger.writeEvent(3, "Complete Early ......." + dblDistanceToEnd);
-                        fileLogger.writeEvent(3, "mblnRobotLastPos Complete Near END ");
-                        mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
-                        robotDrive.setHardwareDrivePower(0);
-                        robotDrive.setHardwareDriveRunUsingEncoders();
-                        deleteParallelStep();
-                        break;
-                    }
-                }
-
-                if (mblnRobotLastPos) {
-                    if (Math.abs(dblDistanceToEnd) <= mdblRobotParm6) {
-                        fileLogger.writeEvent(3,"Complete NextStepLasp......." + dblDistanceToEnd);
-                        mblnNextStepLastPos = true;
-                        mblnDisableVisionProcessing = false;  //enable vision processing
-                        mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
-                        robotDrive.setHardwareDrivePower(0);
-                        robotDrive.setHardwareDriveRunUsingEncoders();
-                        deleteParallelStep();
-                        break;
-                    }
-                } else if (Math.abs(dblDistanceToEnd) <= mdblRobotParm6) {
-                    fileLogger.writeEvent(3,"Complete Early ......." + dblDistanceToEnd);
-                    fileLogger.writeEvent(3,"mblnRobotLastPos Complete Near END ");
-                    mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
-                    robotDrive.setHardwareDrivePower(0);
-                    robotDrive.setHardwareDriveRunUsingEncoders();
-                    deleteParallelStep();
-                    break;
-                }
-
-            } //end Case Running
-            //check timeout value
-            if (mStateTime.seconds() > mdblStepTimeout) {
-                fileLogger.writeEvent(1, "Timeout:- " + mStateTime.seconds());
-                //  Transition to a new state.
-                robotDrive.setHardwareDrivePower(0);
-                robotDrive.setHardwareDriveRunUsingEncoders();
                 mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
                 deleteParallelStep();
                 break;
@@ -2105,7 +2032,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         fileLogger.setEventTag("TankTurnGyroHeading()");
         switch (mintCurrentStateTankTurnGyroHeading) {
             case STATE_INIT: {
-                double gain = 0.032;
+                double gain = 0.09;
                 if (dblStartVoltage > 13.1){
                     gain = gain;
                 } else if (dblStartVoltage > 12.8) {
@@ -2188,8 +2115,12 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     fileLogger.writeEvent(3,"mdblTankTurnGyroRequiredHeading....." + mdblTankTurnGyroRequiredHeading);
                     //fileLogger.writeEvent(3,"Correction....." + Math.sin(mdblTankTurnGyroRequiredHeading * (Math.PI / 180.0)));
                     //double correction = PID1.PIDCorrection(runtime,Math.sin(adafruitIMUHeading * (Math.PI / 180.0)), Math.sin(mdblTankTurnGyroRequiredHeading * (Math.PI / 180.0)));
-                    double correction = PID1.PIDCorrection(runtime,adafruitIMUHeading, mdblTankTurnGyroRequiredHeading);
-
+                    double correction = 0;
+                    if (blnCrossZeroNegative) {
+                        correction = PID1.PIDCorrection(runtime, Math.abs(adafruitIMUHeading - 360), mdblTankTurnGyroRequiredHeading);
+                    } else {
+                        correction = PID1.PIDCorrection(runtime, adafruitIMUHeading, mdblTankTurnGyroRequiredHeading);
+                    }
                     fileLogger.writeEvent(3,"Correction....." + correction);
                     //if (Math.abs(adafruitIMUHeading - mdblRobotTurnAngle) > 180){
                     if ((Math.abs(mdblTankTurnGyroRequiredHeading - Math.abs(mdblRobotTurnAngle)) > 180) || (blnCrossZeroNegative)){
@@ -2205,7 +2136,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 } else {
                     robotDrive.setHardwareDriveLeftMotorPower(0);
                     robotDrive.setHardwareDriveRightMotorPower(0);
-                    robotDrive.setHardwareDriveRunWithoutEncoders();
+                    robotDrive.setHardwareDriveRunUsingEncoders();
                     fileLogger.writeEvent(1, "TankTurnGyro()", "Complete Near Enough:- " + Math.abs(mdblTankTurnGyroRequiredHeading - adafruitIMUHeading) + " Range:- " + mdblRobotParm6);
                     //  Transition to a new state.
                     mintCurrentStateTankTurnGyroHeading = Constants.stepState.STATE_COMPLETE;
@@ -2348,19 +2279,62 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             case STATE_RUNNING:
                 fileLogger.writeEvent(2,"Timer: " + String.valueOf(mStateTime.milliseconds()));
                 switch ((int)mdblRobotParm1) {
-                    case 1:
-                        if (mStateTime.milliseconds() > 2000) {
-                            robotArms.rightWristServo.setPosition(0.94);
+                    case 0:
+                        if (ourRobotConfig.getAllianceColor().equals("Red")) {
+                            //red alliance
+                            robotArms.rightWristServo.setPosition(1);
                             robotArms.rightArmServo.setPosition(0.0);
-                            robotArms.rightClampServo.setPosition(0.7);
-                            mintCurrentStateGrabBlock = Constants.stepState.STATE_COMPLETE;
-                            deleteParallelStep();
-                        } else if (mStateTime.milliseconds() > 0) {
-                            robotArms.rightWristServo.setPosition(0.94);
-                            robotArms.rightArmServo.setPosition(0.41);
-                            robotArms.rightClampServo.setPosition(0.7);
+                            robotArms.rightClampServo.setPosition(0.15);
+                        } else {
+                            //blue alliance
+                            robotArms.leftWristServo.setPosition(0.05);
+                            robotArms.leftArmServo.setPosition(0);
+                            robotArms.leftClampServo.setPosition(0.15);
                         }
+                        mintCurrentStateGrabBlock = Constants.stepState.STATE_COMPLETE;
+                        deleteParallelStep();
                         break;
+                    case 1:
+                        if (ourRobotConfig.getAllianceColor().equals("Red")) {
+                            //red alliance
+                            //robotArms.rightArmServo.setPosition(1);
+                            //robotArms.rightClampServo.setPosition(1);
+                        } else {
+                            //blue alliance
+                            robotArms.leftArmServo.setPosition(1);
+                            robotArms.leftClampServo.setPosition(1);
+                        }
+                        mintCurrentStateGrabBlock = Constants.stepState.STATE_COMPLETE;
+                        deleteParallelStep();
+                        break;
+                    case 2:
+                        if (ourRobotConfig.getAllianceColor().equals("Red")) {
+                            //red alliance
+                            //robotArms.rightClampServo.setPosition(0);
+                        } else {
+                            //blue alliance
+                            robotArms.leftClampServo.setPosition(0);
+                        }
+                        mintCurrentStateGrabBlock = Constants.stepState.STATE_COMPLETE;
+                        deleteParallelStep();
+                        break;
+                    case 3:
+                        if (ourRobotConfig.getAllianceColor().equals("Red")) {
+                            //red alliance
+                            //robotArms.rightClampServo.setPosition(0);
+                        } else {
+                            //blue alliance
+                            robotArms.leftArmServo.setPosition(0);
+                        }
+                        mintCurrentStateGrabBlock = Constants.stepState.STATE_COMPLETE;
+                        deleteParallelStep();
+                        break;
+                }
+                if (mStateTime.seconds() > mdblStepTimeout) {
+                    fileLogger.writeEvent(1,"Timeout:- " + mStateTime.seconds());
+                    //  Transition to a new state.
+                    mintCurrentStateGrabBlock = Constants.stepState.STATE_COMPLETE;
+                    deleteParallelStep();
                 }
                 break;
         }
@@ -2407,35 +2381,33 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         }
     }
 
-    private void findSkystone(){
-        fileLogger.setEventTag("findGold()");
+    private boolean findSkystone() {
+        String tag = fileLogger.getEventTag();
+        fileLogger.setEventTag("findSkystone()");
+        fileLogger.writeEvent(3, "Initialised");
+        boolean black = false;
+        if (ourRobotConfig.getAllianceColor().equals("Red")) {
+            //red alliance
+            black = (sensors.distanceColorSideRight().alpha() / sensors.distanceColorSideRight().red()) > 2.9 ? true : false;
+            fileLogger.writeEvent(3, "In Alliance RED, FOUND BLACK " + black);
+        } else {
+            //blue alliance
+            black = (sensors.distanceColorSideLeft().alpha() / sensors.distanceColorSideLeft().red()) > 2.9 ? true : false;
+            fileLogger.writeEvent(3, "In Alliance BLUE, FOUND BLACK " + black);
+        }
+        fileLogger.setEventTag(tag);
+        return black;
+    }
+
+    private void garbage() {
         switch (mintCurrentStateFindSkystone){
             case STATE_INIT:
                 if (mStateTime.milliseconds() > mdblRobotParm1) {
                     fileLogger.writeEvent(3, "Initialised");
-                    mintFindGoldLoop = (int) mdblRobotParm6;
-                    mboolFoundGold = false;
+                    mboolFoundSkyStone = false;
                     mColour = Constants.ObjectColours.OBJECT_NONE;
                     mLocation = Constants.ObjectColours.OBJECT_NONE;
-                    imageCaptureOCV.takeImage(new ImageCaptureOCV.OnImageCapture() {
-                        @Override
-                        public void OnImageCaptureVoid(Mat mat) {
-                            //find Skystone Position
-                            if (mColour == Constants.ObjectColours.OBJECT_NONE)  //was quad 3
-                                if (elementColour.SkyStoneOCV(fileLogger, dashboard, mat, 0, false, 9, false) == Constants.ObjectColours.OBJECT_SKYSTONE_LEFT) {
-                                    mColour = Constants.ObjectColours.OBJECT_SKYSTONE_LEFT;
-                                    mLocation = Constants.ObjectColours.OBJECT_SKYSTONE_LEFT;
-                                }
-                            if (mColour == Constants.ObjectColours.OBJECT_NONE) { //was quad 4
-                                if (elementColour.SkyStoneOCV(fileLogger, dashboard, mat, 0, false, 8, false) == Constants.ObjectColours.OBJECT_RED) {
-                                    mColour = Constants.ObjectColours.OBJECT_RED;
-                                    mLocation = Constants.ObjectColours.OBJECT_RED_LEFT;
-                                }
-                            }
-                        }
-                    });
                     mintNumberColourTries = 0;
-                    //if mintFindGoldLoop is 1 then we look ahead, 2 look right, 3 look left
                     mintCurrentStateFindSkystone = Constants.stepState.STATE_RUNNING;
                 }
                 break;
@@ -2625,42 +2597,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                             }
                             break;
                     }
-
-                    //need to insert the next steps
-                    //if we found gold we need to move forward and knock it off
-                    //need to check findloopgold value to see if we have turned
-//                    if (mColour == Constants.ObjectColours.OBJECT_RED) {
-//                        fileLogger.writeEvent(3,"Found GOLD - Current Bearing " + getAdafruitHeading());
-//                        mboolFoundGold = true;
-//                        switch (mintFindGoldLoop) {
-//                            case 1:
-//                                autonomousStepsFile.insertSteps(3, "TANKTURN", -45,mdblStepSpeed, false, false, 0, 0, 0, 0, 0, 0,  mintCurrentStep + 1);
-//                                break;
-//                            case 2:
-//                                autonomousStepsFile.insertSteps(3, "TANKTURN", 45,mdblStepSpeed, false, false, 0, 0, 0, 0, 0, 0,  mintCurrentStep + 1);
-//                                break;
-//                        }
-//                        //autonomousStepsFile.insertSteps(3, "DRIVE", 18,mdblStepSpeed, false, false, 0, 0, 0, 0, 0, 0,  mintCurrentStep + 1);
-//                        //autonomousStepsFile.insertSteps(3, "DRIVE", -18,mdblStepSpeed, false, true, 0, 0, 0, 0, 0, 0,  mintCurrentStep + 1);
-//                    } else {
-//                        fileLogger.writeEvent(3,"Found NOTHING ");
-//                        switch (mintFindGoldLoop) {
-//                            case 0:
-//                                fileLogger.writeEvent(3,"Case 0 : Turn to see if we can find it - Current Bearing " + getAdafruitHeading());
-//                                autonomousStepsFile.insertSteps(3, "FINDGOLD", 0,mdblStepSpeed, false, false, 0, 0, 0, 0, 0, 1,  mintCurrentStep + 1);
-//                                autonomousStepsFile.insertSteps(3, "TANKTURN", 45,mdblStepSpeed, false, false, 0, 0, 0, 0, 0, 0,  mintCurrentStep + 1);
-//                                break;
-//                            case 1:
-//                                fileLogger.writeEvent(3,"Case 1 : Turn other way to see if we can find it - Current Bearing " + getAdafruitHeading());
-//                                autonomousStepsFile.insertSteps(3, "FINDGOLD", 0,mdblStepSpeed, false, false, 0, 0, 0, 0, 0, 2,  mintCurrentStep + 1);
-//                                autonomousStepsFile.insertSteps(3, "TANKTURN", -90,mdblStepSpeed, false, false, 0, 0, 0, 0, 0, 0,  mintCurrentStep + 1);
-//                                break;
-//                            case 2:   //no gold found, just turn around and leave
-//                                fileLogger.writeEvent(3,"Case 2 : We Found Nothing, so get back straight and finish ");
-//                                autonomousStepsFile.insertSteps(3, "TANKTURN", 45,mdblStepSpeed, false, false, 0, 0, 0, 0, 0, 0,  mintCurrentStep + 1);
-//                                break;
-//                        }
-//                    }
 
                     //  Transition to a new state.
                     mintCurrentStateFindSkystone = Constants.stepState.STATE_COMPLETE;

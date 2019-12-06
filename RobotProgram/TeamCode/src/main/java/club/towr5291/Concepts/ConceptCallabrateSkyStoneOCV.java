@@ -54,7 +54,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
  */
 
 @TeleOp(name="Concept OCV SkyStone Calibrate", group="5291Test")
-//@Disabled
+@Disabled
 public class ConceptCallabrateSkyStoneOCV extends OpModeMasterLinear
 {
     //set up TAG for logging prefic, this info will appear first in every log statemend

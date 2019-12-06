@@ -64,6 +64,9 @@ public class FileLogger {
     public void setEventTag(String event) {
         this.eventTag = event;
     }
+    public String getEventTag() {
+        return this.eventTag;
+    }
 
     public boolean getLogdEnabled() {
         return this.enableLogd;

@@ -70,8 +70,8 @@ public class ConceptSensorBNO055IMU extends LinearOpMode
     Orientation angles;
     Acceleration gravity;
 
-    private int imuStartCorrectionVar = -45;
-    private int imuMountCorrectionVar = 90;
+    private int imuStartCorrectionVar = 0;
+    private int imuMountCorrectionVar = 0;
 
     //----------------------------------------------------------------------------------------------
     // Main logic

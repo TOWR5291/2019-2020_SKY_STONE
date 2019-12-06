@@ -2,11 +2,11 @@
 {
 	"buildFiles" : 
 	[
-		"C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/libcxx_helper/CMakeLists.txt"
+		"C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/libcxx_helper/CMakeLists.txt"
 	],
 	"cleanCommands" : 
 	[
-		"C:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\lilah\\Documents\\FTCPrograms\\TESTSkyStone\\RobotProgram\\openCVLibrary412\\.externalNativeBuild\\cmake\\release\\x86_64 --target clean"
+		"C:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\lilah\\Documents\\FTCPrograms\\2019-2020_SKY_STONE\\RobotProgram\\openCVLibrary412\\.externalNativeBuild\\cmake\\release\\x86_64 --target clean"
 	],
 	"cppFileExtensions" : [ "cpp" ],
 	"libraries" : 
@@ -15,18 +15,18 @@
 		{
 			"abi" : "x86_64",
 			"artifactName" : "opencv_jni_shared",
-			"buildCommand" : "C:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\lilah\\Documents\\FTCPrograms\\TESTSkyStone\\RobotProgram\\openCVLibrary412\\.externalNativeBuild\\cmake\\release\\x86_64 --target opencv_jni_shared",
+			"buildCommand" : "C:\\Users\\lilah\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\lilah\\Documents\\FTCPrograms\\2019-2020_SKY_STONE\\RobotProgram\\openCVLibrary412\\.externalNativeBuild\\cmake\\release\\x86_64 --target opencv_jni_shared",
 			"buildType" : "release",
 			"files" : 
 			[
 				
 				{
 					"flags" : "  --target=x86_64-none-linux-android21 --gcc-toolchain=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/lilah/AppData/Local/Android/Sdk/ndk-bundle/toolchains/llvm/prebuilt/windows-x86_64/sysroot    -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -fno-addrsig -Wa,--noexecstack -Wformat -Werror=format-security   -O2 -DNDEBUG  -fPIC    -c ",
-					"src" : "C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/libcxx_helper/dummy.cpp",
-					"workingDirectory" : "C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/release/x86_64"
+					"src" : "C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/libcxx_helper/dummy.cpp",
+					"workingDirectory" : "C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/release/x86_64"
 				}
 			],
-			"output" : "C:/Users/lilah/Documents/FTCPrograms/TESTSkyStone/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/release/x86_64/libopencv_jni_shared.a",
+			"output" : "C:/Users/lilah/Documents/FTCPrograms/2019-2020_SKY_STONE/RobotProgram/openCVLibrary412/.externalNativeBuild/cmake/release/x86_64/libopencv_jni_shared.a",
 			"toolchain" : "217952065"
 		}
 	},

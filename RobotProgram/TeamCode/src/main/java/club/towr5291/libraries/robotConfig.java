@@ -229,7 +229,7 @@ public class robotConfig {
                 WHEEL_DIAMETER_INCHES = 4.0;                                                 // For figuring circumference
                 WHEEL_ACTUAL_FUDGE = 0.95;                                                      // Fine tuning amount
                 COUNTS_PER_INCH = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415)) * WHEEL_ACTUAL_FUDGE * REVERSE_DIRECTION;
-                COUNTS_PER_INCH_STRAFE_FRONT_OFFSET = 1;
+                COUNTS_PER_INCH_STRAFE_FRONT_OFFSET = 1.3;
                 COUNTS_PER_INCH_STRAFE_REAR_OFFSET = 1;
                 COUNTS_PER_INCH_STRAFE_LEFT_OFFSET = 1;
                 COUNTS_PER_INCH_STRAFE_RIGHT_OFFSET = 1;
