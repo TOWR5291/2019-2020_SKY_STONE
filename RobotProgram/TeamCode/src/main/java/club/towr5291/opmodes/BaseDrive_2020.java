@@ -178,19 +178,6 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
             else if (gamepad2.right_bumper)
                 robotArms.foundationServo.setPosition(1);
 
-            //move the left block arm to a stached position
-            robotArms.leftArmServo.setPosition((gamepad2.right_stick_x / 2) + 0.5 );
-            robotArms.rightArmServo.setPosition((gamepad2.right_stick_x / 2) + 0.5 );
-            if (gamepad2.dpad_left) {
-                robotArms.rightClampServo.setPosition(0);
-                robotArms.leftClampServo.setPosition(0);
-            } else if (gamepad2.dpad_right) {
-                robotArms.rightClampServo.setPosition(1);
-                robotArms.leftClampServo.setPosition(1);
-            }
-            robotArms.leftWristServo.setPosition(0);
-            robotArms.rightWristServo.setPosition(1);
-
         }
         //stop the logging
         if (fileLogger != null) {

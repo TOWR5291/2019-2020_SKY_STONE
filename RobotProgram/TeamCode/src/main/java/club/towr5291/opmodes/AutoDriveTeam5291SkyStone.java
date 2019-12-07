@@ -63,6 +63,7 @@ import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 import org.firstinspires.ftc.teamcode.R;
 import org.opencv.core.Mat;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import club.towr5291.functions.Constants;
@@ -179,7 +180,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
     private Constants.stepState mintCurrentStepDelay;                           // Current State of Delay (robot doing nothing)
     private Constants.stepState mintCurrentStateMoveLift;                       // Current State of the Move lift
     private Constants.stepState mintCurrentStateInTake;                         // Current State of the Move lift
-    private Constants.stepState mintCurrentStateFindSkystone;                       // Current State of Finding Gold
+    private Constants.stepState mintCurrentStateNextStone;                       // Current State of Finding Gold
     private Constants.stepState mintCurrentStateWyattsGyroDrive;                // Wyatt Gyro Function
     private Constants.stepState mintCurrentStateTapeMeasure;                    // Control Tape Measure
     private Constants.stepState mintCurrentStateGrabFoundation;                 // Control Servo to move foundation
@@ -261,6 +262,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
     private boolean blnMotorStall2 = false;
     private boolean blnMotorStall3 = false;
     private boolean blnMotorStall4 = false;
+    private Boolean stones[] = {true,true,true,true,true,true};
 
     private boolean mblnNextStepLastPos;                     //used to detect using encoders or previous calc'd position
     private int mintStepDelay;                               //used when decoding the step, this will indicate how long the delay is on ms.
@@ -759,8 +761,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             case "INTAKE":
                 SetIntake();
                 break;
-            case "FINDSKYSTONE":
-                findSkystone();
+            case "NEXTSTONE":
+                nextStone();
                 break;
             case "WYATTGYRO":
                 WyattsGyroDrive();
@@ -858,8 +860,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 mintCurrentStateInTake              = Constants.stepState.STATE_INIT;
                 towr5291TextToSpeech.Speak("Running Set Intake", debug);
                 break;
-            case "FINDSKYSTONE":
-                mintCurrentStateFindSkystone            = Constants.stepState.STATE_INIT;
+            case "NEXTSTONE":
+                mintCurrentStateNextStone            = Constants.stepState.STATE_INIT;
                 towr5291TextToSpeech.Speak("Running Find Skystone", debug);
                 break;
             case "WYATTGYRO":
@@ -1026,15 +1028,15 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                 //dblDistanceToEnd = Math.max(Math.max(Math.max(Math.abs(dblDistanceToEndLeft1),Math.abs(dblDistanceToEndRight1)),Math.abs(dblDistanceToEndLeft2)),Math.abs(dblDistanceToEndRight2));
                 dblDistanceToEnd = Math.abs(Math.abs(mdblStepDistance) - Math.abs(dblDistanceFromStart));
 
-                //parameter 1 or 4 is use gyro for direction,  setting either of these to 1 will get gyro correction
+                //parameter 1 use gyro for direction,  setting either of these to 1 will get gyro correction
                 // if parameter 1 is true
-                // parameter 2 is the error
+                // parameter 2 is the heading
                 // parameter 3 is the gain coefficient
-                if ((mdblRobotParm1 == 1) || (mdblRobotParm4 == 1)) {
+                if ((mdblRobotParm1 == 1)) {
                     //use Gyro to run heading
                     // adjust relative speed based on heading error.
-                    dblError = getDriveError(mdblRobotParm1);
-                    dblSteer = getDriveSteer(dblError, mdblRobotParm1);
+                    dblError = getDriveError(mdblRobotParm2);
+                    dblSteer = getDriveSteer(dblError, mdblRobotParm3);
                     fileLogger.writeEvent(3,"dblError " + dblError);
                     fileLogger.writeEvent(3,"dblSteer " + dblSteer);
                     fileLogger.writeEvent(3, "runningDriveHeadingStep", "Heading " + mdblRobotParm2);
@@ -1052,8 +1054,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                         dblStepSpeedTempLeft /= dblMaxSpeed;
                         dblStepSpeedTempRight /= dblMaxSpeed;
                     }
-                } else if (mdblRobotParm3 == 1) {
-                    //error
+                }
+                if (mdblRobotParm4 == 1) {
                     //find the first skystone, and move to the middle of it
                     if (findSkystone()) {
                         //calculate where
@@ -1061,18 +1063,23 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                         if ((frontDistance > 96) && (frontDistance < 104)) {
                             mLocation = Constants.ObjectColours.OBJECT_SKYSTONE_LEFT;
                             fileLogger.writeEvent(3,"SkyStone LEFT " + (frontDistance));
+                            stones[0] = false;
                             mboolFoundSkyStone = true;
-                            break;
                         } else if ((frontDistance > 79) && (frontDistance < 87)) {
                             mLocation = Constants.ObjectColours.OBJECT_SKYSTONE_CENTER;
                             fileLogger.writeEvent(3,"SkyStone CENTER " + (frontDistance));
+                            stones[1] = false;
                             mboolFoundSkyStone = true;
-                            break;
                         } else if ((frontDistance > 59) && (frontDistance < 67)) {
                             mLocation = Constants.ObjectColours.OBJECT_SKYSTONE_RIGHT;
                             fileLogger.writeEvent(3,"SkyStone RIGHT " + (frontDistance));
+                            stones[2] = false;
                             mboolFoundSkyStone = true;
-                            break;
+                        } else if ((frontDistance > 39) && (frontDistance < 49)) {
+                            mLocation = Constants.ObjectColours.OBJECT_SKYSTONE_LEFT;
+                            fileLogger.writeEvent(3,"SkyStone RIGHT " + (frontDistance));
+                            stones[3] = false;
+                            mboolFoundSkyStone = true;
                         } else {
                             mboolFoundSkyStone = false;
                         }
@@ -1092,6 +1099,44 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                             deleteParallelStep();
                             break;
                         }
+                    }
+                }
+
+                //Parm 5 is stop when distance from wall is close enough.  this parm is the distance as well
+                //based on the direction of travel
+                if (mdblRobotParm5 > 0 ) {
+                    //Stop at the distance from the wall
+                    double wallDistance;
+                    if (mdblStepDistance > 0) {
+                        wallDistance = ((sensors.distanceFrontLeftIN() + sensors.distanceFrontLeftIN()) / 2);
+                    } else {
+                        wallDistance = ((sensors.distanceRearLeftIN() + sensors.distanceRearLeftIN() ) / 2);
+                    }
+                    fileLogger.writeEvent(3,"Distance From Wall " + wallDistance);
+
+                    if (wallDistance <= mdblRobotParm5) {
+                        fileLogger.writeEvent(3,"Distance Met Exiting ");
+                        robotDrive.setHardwareDrivePower(0);
+                        mintCurrentStateDriveHeading = Constants.stepState.STATE_COMPLETE;
+                        deleteParallelStep();
+                        break;
+                    }
+                } else if (mdblRobotParm5 < 0 ) {
+                    //Stop at the distance from the wall
+                    double wallDistance;
+                    if (mdblStepDistance < 0) {
+                        wallDistance = ((sensors.distanceFrontLeftIN() + sensors.distanceFrontLeftIN()) / 2);
+                    } else {
+                        wallDistance = ((sensors.distanceRearLeftIN() + sensors.distanceRearLeftIN() ) / 2);
+                    }
+                    fileLogger.writeEvent(3,"Distance From Rev Wall " + wallDistance);
+
+                    if (wallDistance <= mdblRobotParm5) {
+                        fileLogger.writeEvent(3,"Distance Met Rev Exiting ");
+                        robotDrive.setHardwareDrivePower(0);
+                        mintCurrentStateDriveHeading = Constants.stepState.STATE_COMPLETE;
+                        deleteParallelStep();
+                        break;
                     }
                 }
 
@@ -1839,15 +1884,17 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     fileLogger.writeEvent(3,"Measuring Distance From WallC...." + (distanceFromWallC));
 
                     if ((Math.abs(mdblRobotParm1) >= distanceToTarget) && (mdblRobotParm1 > 0)) {
+                        robotDrive.setHardwareDrivePower(0);
                         fileLogger.writeEvent(3,"Complete closeEnough......." + (distanceToTarget));
-                        mblnNextStepLastPos = true;
+                        mblnNextStepLastPos = false;
                         mblnDisableVisionProcessing = false;  //enable vision processing
                         mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
                         deleteParallelStep();
                         break;
                     } else if ((Math.abs(mdblRobotParm2) <= distanceFromWall) && (mdblRobotParm2 > 0)) {
+                        robotDrive.setHardwareDrivePower(0);
                         fileLogger.writeEvent(3,"Complete farEnough......." + (distanceFromWall));
-                        mblnNextStepLastPos = true;
+                        mblnNextStepLastPos = false;
                         mblnDisableVisionProcessing = false;  //enable vision processing
                         mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
                         deleteParallelStep();
@@ -1936,6 +1983,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             } //end Case Running
             //check timeout value
             if (mStateTime.seconds() > mdblStepTimeout) {
+                robotDrive.setHardwareDrivePower(0);
                 fileLogger.writeEvent(1, "Timeout:- " + mStateTime.seconds());
                 //  Transition to a new state.
                 mintCurrentStateMecanumStrafe = Constants.stepState.STATE_COMPLETE;
@@ -2297,8 +2345,8 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     case 1:
                         if (ourRobotConfig.getAllianceColor().equals("Red")) {
                             //red alliance
-                            //robotArms.rightArmServo.setPosition(1);
-                            //robotArms.rightClampServo.setPosition(1);
+                            robotArms.rightArmServo.setPosition(1);
+                            robotArms.rightClampServo.setPosition(1);
                         } else {
                             //blue alliance
                             robotArms.leftArmServo.setPosition(1);
@@ -2310,7 +2358,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     case 2:
                         if (ourRobotConfig.getAllianceColor().equals("Red")) {
                             //red alliance
-                            //robotArms.rightClampServo.setPosition(0);
+                            robotArms.rightClampServo.setPosition(0);
                         } else {
                             //blue alliance
                             robotArms.leftClampServo.setPosition(0);
@@ -2321,10 +2369,32 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     case 3:
                         if (ourRobotConfig.getAllianceColor().equals("Red")) {
                             //red alliance
-                            //robotArms.rightClampServo.setPosition(0);
+                            robotArms.rightArmServo.setPosition(0);
                         } else {
                             //blue alliance
                             robotArms.leftArmServo.setPosition(0);
+                        }
+                        mintCurrentStateGrabBlock = Constants.stepState.STATE_COMPLETE;
+                        deleteParallelStep();
+                        break;
+                    case 4:
+                        if (ourRobotConfig.getAllianceColor().equals("Red")) {
+                            //red alliance
+                            robotArms.rightArmServo.setPosition(1);
+                        } else {
+                            //blue alliance
+                            robotArms.leftArmServo.setPosition(1);
+                        }
+                        mintCurrentStateGrabBlock = Constants.stepState.STATE_COMPLETE;
+                        deleteParallelStep();
+                        break;
+                    case 5:
+                        if (ourRobotConfig.getAllianceColor().equals("Red")) {
+                            //red alliance
+                            robotArms.rightClampServo.setPosition(0.6);
+                        } else {
+                            //blue alliance
+                            robotArms.leftClampServo.setPosition(0.6);
                         }
                         mintCurrentStateGrabBlock = Constants.stepState.STATE_COMPLETE;
                         deleteParallelStep();
@@ -2399,8 +2469,95 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         return black;
     }
 
+    private void pickStone (int stone) {
+        switch (stone) {
+            case 0:
+                autonomousStepsFile.insertSteps(2, "DRIVE", 70, 0.5, false, false, 0, 0, 0, 0, 41, 2, mintCurrentStep + 1);
+                break;
+            case 1:
+                autonomousStepsFile.insertSteps(2, "DRIVE", 70, 0.5, false, false, 0, 0, 0, 0, 33, 2, mintCurrentStep + 1);
+                break;
+            case 2:
+                autonomousStepsFile.insertSteps(2, "DRIVE", 70, 0.5, false, false, 0, 0, 0, 0, 25, 2, mintCurrentStep + 1);
+                break;
+            case 3:
+                autonomousStepsFile.insertSteps(2, "DRIVE", 70, 0.5, false, false, 0, 0, 0, 0, 17, 2, mintCurrentStep + 1);
+                break;
+            case 4:
+                autonomousStepsFile.insertSteps(2, "DRIVE", 70, 0.5, false, false, 0, 0, 0, 0, 9, 2, mintCurrentStep + 1);
+                break;
+            case 5:
+                autonomousStepsFile.insertSteps(2, "DRIVE", 70, 0.5, false, false, 0, 0, 0, 0, 1, 2, mintCurrentStep + 1);
+                break;
+            case 99:
+                if (stones[0]) {
+                    pickStone(0);
+                } else if (stones[1]) {
+                    pickStone(1);
+                } else if (stones[2]) {
+                    pickStone(2);
+                } else if (stones[3]) {
+                    pickStone(3);
+                } else if (stones[4]){
+                    pickStone(4);
+                } else {
+                    pickStone(5);
+                }
+                break;
+        }
+        stones[stone] = false;
+    }
+
+    private void nextStone() {
+        switch (mintCurrentStateNextStone) {
+            case STATE_INIT:
+                fileLogger.writeEvent(3, "Initialised");
+                switch (mLocation) {
+                    case OBJECT_SKYSTONE_LEFT:
+                        //need to check which left was take, the first left or the second left
+                        if (stones[0]) {
+                            pickStone(0);
+                        } else if (stones[3]) {
+                            pickStone(3);
+                        } else {
+                            pickStone(99);
+                        }
+                        break;
+                    case OBJECT_SKYSTONE_CENTER:
+                        if (stones[1]) {
+                            pickStone(1);
+                        } else if (stones[4]) {
+                            pickStone(4);
+                        } else {
+                            pickStone(99);
+                        }
+                        break;
+                    case OBJECT_SKYSTONE_RIGHT:
+                        if (stones[2]) {
+                            pickStone(2);
+                        } else if (stones[5]) {
+                            pickStone(5);
+                        } else {
+                            pickStone(99);
+                        }
+                        break;
+                }
+                mintCurrentStateNextStone = Constants.stepState.STATE_COMPLETE;
+                deleteParallelStep();
+                //check timeout value
+                if (mStateTime.seconds() > mdblStepTimeout) {
+                    fileLogger.writeEvent(1,"Timeout:- " + mStateTime.seconds());
+                    //  Transition to a new state.
+                    mintCurrentStateNextStone = Constants.stepState.STATE_COMPLETE;
+                    deleteParallelStep();
+                }
+                break;
+        }
+
+    }
+
     private void garbage() {
-        switch (mintCurrentStateFindSkystone){
+        switch (mintCurrentStateNextStone){
             case STATE_INIT:
                 if (mStateTime.milliseconds() > mdblRobotParm1) {
                     fileLogger.writeEvent(3, "Initialised");
@@ -2408,7 +2565,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     mColour = Constants.ObjectColours.OBJECT_NONE;
                     mLocation = Constants.ObjectColours.OBJECT_NONE;
                     mintNumberColourTries = 0;
-                    mintCurrentStateFindSkystone = Constants.stepState.STATE_RUNNING;
+                    mintCurrentStateNextStone = Constants.stepState.STATE_RUNNING;
                 }
                 break;
             case STATE_RUNNING:
@@ -2599,14 +2756,14 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
                     }
 
                     //  Transition to a new state.
-                    mintCurrentStateFindSkystone = Constants.stepState.STATE_COMPLETE;
+                    mintCurrentStateNextStone = Constants.stepState.STATE_COMPLETE;
                     deleteParallelStep();
                 }
                 //check timeout value
                 if (mStateTime.seconds() > mdblStepTimeout) {
                     fileLogger.writeEvent(1,"Timeout:- " + mStateTime.seconds());
                     //  Transition to a new state.
-                    mintCurrentStateFindSkystone = Constants.stepState.STATE_COMPLETE;
+                    mintCurrentStateNextStone = Constants.stepState.STATE_COMPLETE;
                     deleteParallelStep();
                 }
                 break;
@@ -2896,8 +3053,6 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         fileLogger.setEventTag("getDriveError()");
         double robotError;
         double robotErrorIMU;
-        double robotErrorGyro;
-        double MRgyroHeading;
         double adafruitIMUHeading;
 
         adafruitIMUHeading = getAdafruitHeading();
@@ -2988,7 +3143,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
             (mintCurrentStateMecanumStrafe          == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateMoveLift               == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateInTake                 == Constants.stepState.STATE_COMPLETE) &&
-            (mintCurrentStateFindSkystone               == Constants.stepState.STATE_COMPLETE) &&
+            (mintCurrentStateNextStone               == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateRadiusTurn             == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateWyattsGyroDrive        == Constants.stepState.STATE_COMPLETE) &&
             (mintCurrentStateGrabFoundation         == Constants.stepState.STATE_COMPLETE) &&
@@ -3014,7 +3169,7 @@ public class AutoDriveTeam5291SkyStone extends OpModeMasterLinear {
         mintCurrentStateMecanumStrafe       = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateMoveLift            = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateInTake              = Constants.stepState.STATE_COMPLETE;
-        mintCurrentStateFindSkystone            = Constants.stepState.STATE_COMPLETE;
+        mintCurrentStateNextStone            = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateRadiusTurn          = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateWyattsGyroDrive     = Constants.stepState.STATE_COMPLETE;
         mintCurrentStateGrabFoundation      = Constants.stepState.STATE_COMPLETE;
