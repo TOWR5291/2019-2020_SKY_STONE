@@ -18,6 +18,7 @@ import club.towr5291.functions.FileLogger;
 import club.towr5291.libraries.LibraryMotorType;
 import club.towr5291.libraries.robotConfigSettings;
 import club.towr5291.robotconfig.HardwareArmMotors;
+import club.towr5291.robotconfig.HardwareArmMotorsSkyStone;
 import club.towr5291.robotconfig.HardwareDriveMotors;
 
 /**
@@ -70,6 +71,7 @@ public class ConceptRobotBasicMotorTest extends LinearOpMode {
     //motors
     // Declare OpMode members.
     private HardwareDriveMotors robotDrive      = new HardwareDriveMotors();   // Use a Pushbot's hardware
+    private HardwareArmMotorsSkyStone robotArms          = new HardwareArmMotorsSkyStone();
 
     //mode selection stuff
     public int mode = 0;
@@ -112,6 +114,7 @@ public class ConceptRobotBasicMotorTest extends LinearOpMode {
         fileLogger.writeEvent("TEST", "Log Started");// First Line Add To Log
 
         robotDrive.init(fileLogger,hardwareMap, robotConfigSettings.robotConfigChoice.valueOf(robotConfig), LibraryMotorType.MotorTypes.valueOf(motorType));
+        robotArms.init(hardwareMap, null);
 
         robotDrive.setHardwareDriveRunWithoutEncoders();
 
@@ -138,6 +141,15 @@ public class ConceptRobotBasicMotorTest extends LinearOpMode {
 
             robotDrive.setHardwareDrivePower(dblLeftMotor1, dblLeftMotor2, dblRightMotor1, dblRightMotor2);
             telemetry.clearAll();
+            robotArms.leftWristServo.setPosition(1);
+            robotArms.rightWristServo.setPosition(.60);
+
+
+            robotArms.leftArmServo.setPosition(.7);
+            robotArms.rightArmServo.setPosition(0);
+
+            robotArms.leftClampServo.setPosition(0.1);
+            robotArms.rightClampServo.setPosition(0.3);
 
             telemetry.addLine("Motor1 " + robotDrive.baseMotor1.getCurrentPosition());
             telemetry.addLine("Motor2 " + robotDrive.baseMotor2.getCurrentPosition());
@@ -147,6 +159,12 @@ public class ConceptRobotBasicMotorTest extends LinearOpMode {
             telemetry.addData("P,I,D,F (orig Motor 2)", "%.04f, %.04f, %.0f, %.0f", getMotorPIDFMotor2.p, getMotorPIDFMotor2.i, getMotorPIDFMotor2.d, getMotorPIDFMotor2.f);
             telemetry.addData("P,I,D,F (orig Motor 3)", "%.04f, %.04f, %.0f, %.0f", getMotorPIDFMotor3.p, getMotorPIDFMotor3.i, getMotorPIDFMotor3.d, getMotorPIDFMotor3.f);
             telemetry.addData("P,I,D,F (orig Motor 4)", "%.04f, %.04f, %.0f, %.0f", getMotorPIDFMotor4.p, getMotorPIDFMotor4.i, getMotorPIDFMotor4.d, getMotorPIDFMotor4.f);
+            telemetry.addLine("Left Wrist " + robotArms.leftWristServo.getPosition());
+            telemetry.addLine("Left Arm   " + robotArms.leftArmServo.getPosition());
+            telemetry.addLine("Left Grab  " + robotArms.leftClampServo.getPosition());
+            telemetry.addLine("Left Wrist " + robotArms.rightWristServo.getPosition());
+            telemetry.addLine("Left Arm   " + robotArms.rightArmServo.getPosition());
+            telemetry.addLine("Left Grab  " + robotArms.rightClampServo.getPosition());
 
             telemetry.update();
         }

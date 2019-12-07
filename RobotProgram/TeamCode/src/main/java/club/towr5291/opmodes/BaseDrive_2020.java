@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -18,16 +17,12 @@ import club.towr5291.functions.FileLogger;
 import club.towr5291.functions.TOWR5291Tick;
 import club.towr5291.functions.TOWR5291Toggle;
 import club.towr5291.libraries.LibraryMotorType;
-import club.towr5291.libraries.TOWR5291LEDControl;
 import club.towr5291.libraries.TOWRDashBoard;
 import club.towr5291.libraries.robotConfig;
 import club.towr5291.libraries.robotConfigSettings;
-import club.towr5291.robotconfig.HardwareArmMotorsRoverRuckus;
 import club.towr5291.robotconfig.HardwareArmMotorsSkyStone;
 import club.towr5291.robotconfig.HardwareDriveMotors;
-import club.towr5291.robotconfig.HardwareSensorsRoverRuckus;
 
-import static club.towr5291.functions.Constants.stepState.STATE_COMPLETE;
 
 /*
     made by Wyatt Ashley on 8/2/2018
@@ -50,7 +45,7 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
     private ElapsedTime runtime                     = new ElapsedTime();
     private robotConfig ourRobotConfig;
 
-    public double HOLDINGTILTMOTORPOWER = .4;
+    public double HOLDINGTILTMOTORPOWER = .5;
     private int debug;
 
     private static TOWRDashBoard dashboard = null;
@@ -92,7 +87,7 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
         fileLogger.writeEvent(1,"Alliance Start Position", ourRobotConfig.getAllianceStartPosition());
         fileLogger.writeEvent(1,"Delay", String.valueOf(ourRobotConfig.getDelay()));
         fileLogger.writeEvent(1,"Robot Base Config", ourRobotConfig.getRobotConfigBase());
-        fileLogger.writeEvent(1, "Robot Motor Type", ourRobotConfig.getRobotMotorType());
+        fileLogger.writeEvent(1,"Robot Motor Type", ourRobotConfig.getRobotMotorType());
         fileLogger.writeEvent(1,"Team Number", ourRobotConfig.getTeamNumber());
 
         robotDrive.init(fileLogger, hardwareMap, robotConfigSettings.robotConfigChoice.valueOf(ourRobotConfig.getRobotConfigBase()), LibraryMotorType.MotorTypes.valueOf(ourRobotConfig.getRobotMotorType()));// Starting robot Hardware map
@@ -116,22 +111,21 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
 
         dashboard.displayPrintf(1, "Waiting for Start");
 
+        robotArms.liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         dashboard.clearDisplay();
         fileLogger.writeEvent("Starting Loop");
 
-        robotArms.rightWristServo.setPosition(.60);
-        robotArms.rightArmServo.setPosition(0.0);
-        robotArms.rightClampServo.setPosition(0.3);
-        //robotArms.leftWristServo.setPosition(0.05);
         robotArms.leftWristServo.setPosition(1);
-        robotArms.leftArmServo.setPosition(0.65);
-        robotArms.leftClampServo.setPosition(0.3);
+        robotArms.rightWristServo.setPosition(.60);
+        robotArms.leftArmServo.setPosition(.7);
+        robotArms.rightArmServo.setPosition(0);
+        robotArms.leftClampServo.setPosition(0.1);
+        robotArms.rightClampServo.setPosition(0.3);
 
-        //dashboard.clearDisplay();
-
-        robotArms.liftMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        dashboard.clearDisplay();
 
         dashboard.displayPrintf(3, "Controller A Options");
         dashboard.displayPrintf(4, "--------------------");
@@ -152,6 +146,7 @@ public class BaseDrive_2020 extends OpModeMasterLinear {
 
             liftMotorPower();
             robotArms.intakeMotor1.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
+
             // grab the block
             if (gamepad2.a)
                 robotArms.grabServo.setPosition(0);
