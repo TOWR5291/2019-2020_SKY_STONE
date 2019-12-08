@@ -1,18 +1,340 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <Step>
-        <comment>Drives a distance with set speed, parm 1 (Turns on) parm 2 (error) parm3 (Gain) are used for gyro correct, Parm 6 is the distance near the end where the loop ends and goes to next step  </comment>
-        <Timeout>2</Timeout>
-        <Command>TAPE</Command>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Swing arm to front
+            parm 1 = 5 Swing arm to side
+            parm 1 = 8 Arm Down to place on foundation
+            parm 1 = 9 Open Claw to release Stone
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
         <Distance>0</Distance>
-        <Speed>1</Speed>
+        <Speed>0</Speed>
         <Parallel>false</Parallel>
         <Lastpos>false</Lastpos>
-        <Parm1>500</Parm1>
+        <Parm1>1</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+
+    <Step>
+        <comment>Timer for Delaying, Parm 1 is the value to delay in milliseconds</comment>
+        <bypassed>0</bypassed>
+        <Timeout>2</Timeout>
+        <Command>DELAY</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>2000</Parm1>
         <Parm2>0</Parm2>
         <Parm3>0</Parm3>
         <Parm4>0</Parm4>
         <Parm5>0</Parm5>
         <Parm6>1</Parm6>
     </Step>
+
+
+    <Step>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Swing arm to front
+            parm 1 = 5 Swing arm to side
+            parm 1 = 8 Arm Down to place on foundation
+            parm 1 = 9 Open Claw to release Stone
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>2</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+
+
+    <Step>
+        <comment>Timer for Delaying, Parm 1 is the value to delay in milliseconds</comment>
+        <bypassed>0</bypassed>
+        <Timeout>2</Timeout>
+        <Command>DELAY</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>2000</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+
+    <Step>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Swing arm to front
+            parm 1 = 5 Swing arm to side
+            parm 1 = 8 Arm Down to place on foundation
+            parm 1 = 9 Open Claw to release Stone
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>3</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+
+    <Step>
+        <comment>Timer for Delaying, Parm 1 is the value to delay in milliseconds</comment>
+        <bypassed>0</bypassed>
+        <Timeout>2</Timeout>
+        <Command>DELAY</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>2000</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+
+
+    <Step>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Swing arm to front
+            parm 1 = 5 Swing arm to side
+            parm 1 = 8 Arm Down to place on foundation
+            parm 1 = 9 Open Claw to release Stone
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>4</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+
+
+    <Step>
+        <comment>Timer for Delaying, Parm 1 is the value to delay in milliseconds</comment>
+        <bypassed>0</bypassed>
+        <Timeout>2</Timeout>
+        <Command>DELAY</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>2000</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+
+
+    <Step>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Swing arm to front
+            parm 1 = 5 Swing arm to side
+            parm 1 = 8 Arm Down to place on foundation
+            parm 1 = 9 Open Claw to release Stone
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>5</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+
+    <Step>
+        <comment>Timer for Delaying, Parm 1 is the value to delay in milliseconds</comment>
+        <bypassed>0</bypassed>
+        <Timeout>2</Timeout>
+        <Command>DELAY</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>2000</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+
+
+
+    <Step>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Swing arm to front
+            parm 1 = 5 Swing arm to side
+            parm 1 = 8 Arm Down to place on foundation
+            parm 1 = 9 Open Claw to release Stone
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>8</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+
+
+    <Step>
+        <comment>Timer for Delaying, Parm 1 is the value to delay in milliseconds</comment>
+        <bypassed>0</bypassed>
+        <Timeout>2</Timeout>
+        <Command>DELAY</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>2000</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+
+    <Step>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Swing arm to front
+            parm 1 = 5 Swing arm to side
+            parm 1 = 8 Arm Down to place on foundation
+            parm 1 = 9 Open Claw to release Stone
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>9</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+
+
+    <Step>
+        <comment>Timer for Delaying, Parm 1 is the value to delay in milliseconds</comment>
+        <bypassed>0</bypassed>
+        <Timeout>2</Timeout>
+        <Command>DELAY</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>2000</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>1</Parm6>
+    </Step>
+
+    <Step>
+        <comment>Moves the Stone arm to a position
+            parm 1 = 0 Stowed Position
+            parm 1 = 1 Ready to pickup position
+            parm 1 = 2 Claw pickup Stone
+            parm 1 = 3 Arm up with stone grabbed
+            parm 1 = 4 Swing arm to front
+            parm 1 = 5 Swing arm to side
+            parm 1 = 8 Arm Down to place on foundation
+            parm 1 = 9 Open Claw to release Stone
+        </comment>
+        <bypassed>0</bypassed>
+        <Timeout>1</Timeout>
+        <Command>STONEARM</Command>
+        <Distance>0</Distance>
+        <Speed>0</Speed>
+        <Parallel>false</Parallel>
+        <Lastpos>false</Lastpos>
+        <Parm1>0</Parm1>
+        <Parm2>0</Parm2>
+        <Parm3>0</Parm3>
+        <Parm4>0</Parm4>
+        <Parm5>0</Parm5>
+        <Parm6>0</Parm6>
+    </Step>
+
 </resources>
